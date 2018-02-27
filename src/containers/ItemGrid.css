@@ -1,8 +1,19 @@
-section {
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.imgGrid {
   display:flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 5em 0;
+  padding: 3em 0;
+  max-width: 80%
+}
+
+img {
+  margin: 1em;
 }

@@ -11,8 +11,9 @@ function getStore() {
 
 function getState() {
   return {
-    items: InstagramStore.getState(),
+    data: InstagramStore.getState(),
     onAddItem: InstagramActions.addItem,
+    onSetUser: InstagramActions.setUser,
   };
 }
 

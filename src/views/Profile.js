@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ItemGrid} from '../containers';
-
+import './Profile.css';
 const Profile = (props) => {
    
     return (

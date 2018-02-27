@@ -11,9 +11,15 @@ const Actions = {
   addItem(item) {
     InstagramDispatcher.dispatch({
       type: InstagramActionTypes.ADD_ITEM,
-      item
+      item: item
     });
   },
+  setUser(user) {
+    InstagramDispatcher.dispatch({
+      type: InstagramActionTypes.SET_USER,
+      user: user
+    });
+  }
 }
 
 export default Actions;
