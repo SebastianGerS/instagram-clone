@@ -1,18 +1,46 @@
-import {Home} from '../views';
-import { Container } from 'flux/utils';
-import InstagramStore from '../data/Instagram/InstagramStore';
-import InstagramActions from '../data/Instagram/InstagramActions';
+import React, {Component} from 'react';
+import GET_MEDIA_URL from '../data/Instagram//URLs';
+import './ItemGrid.css';
+class ItemGrid extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      
+    };
+  }
+  componentWillMount(){
+    
+    this.fetchImages();
+  }
 
-function getStore() {
-  return [
-    InstagramStore
-  ];
+  render() {
+    const content = [];
+    this.props.inherited.items.forEach(item => { 
+      console.log(item.images);
+      let img = <img src={item.images.low_resolution.url}/>;
+      content.push(img);
+    });
+    return (
+      <section>
+        {content}
+      </section>
+    );
+  }
+  
+fetchImages() {
+  const url = GET_MEDIA_URL;
+  fetch(url)
+  .then(res => res.json())
+  .then(res => {
+
+    res.data.forEach(item => {
+      this.props.inherited.onAddItem(item);
+    });
+  });
 }
 
-function getState() {
-  return {
-    onAuthUser: InstagramActions.authUser,
-  };
+
 }
 
-export default Container.createFunctional(Home, getStore, getState);
+
+export default ItemGrid;

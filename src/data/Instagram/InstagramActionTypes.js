@@ -1,7 +1,6 @@
 const InstagramActionTypes = {
   AUTH_USER: 'AUTH_USER',
-  GET_IMAGES: 'GET_ITEMS',
-  SHOW_IMAGES: 'SHOW_ITEMS'
+  ADD_ITEM: 'ADD_ITEM',
 };
 
 export default InstagramActionTypes;

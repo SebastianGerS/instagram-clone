@@ -8,6 +8,12 @@ const Actions = {
       
     });
   },
+  addItem(item) {
+    InstagramDispatcher.dispatch({
+      type: InstagramActionTypes.ADD_ITEM,
+      item
+    });
+  },
 }
 
 export default Actions;
