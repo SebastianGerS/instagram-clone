@@ -7,7 +7,7 @@ const Root = (props) => {
   return (
     <Switch>
       <Route exact path="/" component={Home}/>
-      <Route exact path="/profile" render={() => <Profile inherited={props.inherited}/>}  />
+      <Route exact path="/profile" render={() => <Profile user={props.user} mediaItems={props.mediaItems}/>}  />
       <Route exact path="/explore" component={Explore}/>
       <Route exact path="/signup" component={SignUp}/>
       <Route exact path="/signin" component={SignIn}/>
