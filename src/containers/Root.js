@@ -1,12 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Home, Profile, Explore, ErrorPage, SignUp, SignIn } from '../views';
-import ProfileContainer from './flowContainers/ProfileContainer';
-const Root = () => {
+
+const Root = (props) => {
+
   return (
     <Switch>
       <Route exact path="/" component={Home}/>
-      <Route exact path="/profile" component={ProfileContainer}/>
+      <Route exact path="/profile" render={() => <Profile inherited={props.inherited}/>}  />
       <Route exact path="/explore" component={Explore}/>
       <Route exact path="/signup" component={SignUp}/>
       <Route exact path="/signin" component={SignIn}/>

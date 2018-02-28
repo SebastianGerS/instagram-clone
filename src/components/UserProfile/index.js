@@ -7,7 +7,6 @@ class UserProfile extends Component {
   }
   
   render() {
-    console.log(this.props.user);
     return (
       <section className="userProfile">
         <figure className="profile-img-container">

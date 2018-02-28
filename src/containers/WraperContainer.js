@@ -1,7 +1,7 @@
-import {Profile} from '../../views';
+import { Wraper } from '../views';
 import { Container } from 'flux/utils';
-import InstagramStore from '../../data/Instagram/InstagramStore';
-import InstagramActions from '../../data/Instagram/InstagramActions';
+import InstagramStore from '../data/Instagram/InstagramStore';
+import InstagramActions from '../data/Instagram/InstagramActions';
 
 function getStore() {
   return [
@@ -17,4 +17,4 @@ function getState() {
   };
 }
 
-export default Container.createFunctional(Profile, getStore, getState);
+export default Container.createFunctional(Wraper, getStore, getState);
