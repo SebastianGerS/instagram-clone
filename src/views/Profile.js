@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {ItemGrid} from '../containers';
 import { UserProfile } from '../components';
 import './Profile.css';
-const Profile = (props) => {
+const Profile = () => {
    
     return (
       <div>
         <h2>Profile page</h2> 
-        <UserProfile user={props.user} />
-        <ItemGrid mediaItems={props.mediaItems} />
+        <UserProfile />
+        <ItemGrid  />
       </div>
     );
  

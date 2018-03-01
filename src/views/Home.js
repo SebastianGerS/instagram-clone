@@ -1,9 +1,10 @@
 import React from 'react';
-
-const Home = () => {
+import {ItemFeed} from '../containers';
+import { UserProfile } from '../components';
+const Home = (props) => {
   return (
     <div>
-      <h2>Home page</h2> 
+     <ItemFeed/>
     </div>
   )
 }

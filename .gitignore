@@ -21,4 +21,4 @@ yarn-debug.log*
 yarn-error.log*
 
 #keys
-src/data/Instagram/URLs.js
+src/data/URLs.js
