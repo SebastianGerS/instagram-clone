@@ -3,6 +3,7 @@ import './ItemGrid.css';
 import {connect} from 'react-redux';
 import {addItem} from '../actions';
 import {GET_MEDIA_URL} from '../data/URLs';
+import uuidv1 from "uuid";
 const mapDispatchToProps = dispatch => {
   return {
     onAddItem: item => dispatch(addItem(item)) 
@@ -28,7 +29,7 @@ class ConnectedItemGrid extends Component {
     const content = [];
     
     this.props.mediaItems.forEach(mediaItem => {
-      let img = <img key={mediaItem.images.low_resolution.url} src={mediaItem.images.low_resolution.url}/>;
+      let img = <img key={uuidv1()} src={mediaItem.images.low_resolution.url}/>;
       content.push(img);
     });
    

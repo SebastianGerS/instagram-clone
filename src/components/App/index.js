@@ -31,7 +31,7 @@ class ConnectedApp extends Component {
       <BrowserRouter>
         <div className="App">
           <Header />
-            <div className="content">
+            <div className="wraper">
               <Root />
             </div>
           <Footer/>

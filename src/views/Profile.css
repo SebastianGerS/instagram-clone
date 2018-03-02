@@ -1,7 +1,22 @@
-div {
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fafafa;
+  width:80%;
+}
+
+.tabs {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgb(239,239,239);
+  width:95%;
+}
+
+.tab.active {
+  color: black;
+  border-top: 1px solid black;
 }
