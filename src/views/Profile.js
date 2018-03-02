@@ -1,9 +1,22 @@
 import React, {Component} from 'react';
 import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
+import {connect} from 'react-redux';
+import {addItem} from '../actions';
+import {GET_MEDIA_URL} from '../data/URLs';
 import './Profile.css';
 
-class Profile extends Component {
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddItem: item => dispatch(addItem(item)) 
+  };
+};
+
+const mapStateToProps = state => {
+  return { mediaItems: state.mediaItems};
+}
+
+class ConnectedProfile extends Component {
 
   constructor() {
     super();
@@ -13,7 +26,11 @@ class Profile extends Component {
     }
 
     this.changeTab = this.changeTab.bind(this);
+    this.fetchImages = this.fetchImages.bind(this);
+  }
 
+  componentWillMount(){
+    this.fetchImages();
   }
 
   changeTab(index) {
@@ -25,15 +42,14 @@ class Profile extends Component {
     });
   }
 
-
   render() {
     
     let content;
 
     if (this.state.activeTab === 0) {
-      content = <ItemGrid  />
-    } else  if(this.state.activeTab === 0) {
-      content = <ItemFeed  />
+      content = <ItemGrid />;
+    } else  if(this.state.activeTab === 1) {
+      content = <ItemFeed />;
     }
 
     return (
@@ -48,6 +64,31 @@ class Profile extends Component {
     );
    }
 
+  fetchImages() {
+  const url = GET_MEDIA_URL;
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {      
+      res.data.forEach(item => {  
+        let toBeAdded = true;
+
+        this.props.mediaItems.forEach(existingItem => {
+          if(item.id === existingItem.id){
+           toBeAdded = false;
+          }
+        });
+
+        if (toBeAdded) {
+          this.props.onAddItem(item);
+        }
+
+      }); 
+    }).catch(error => {
+      console.log(error);
+    });
+  }
 }
+
+const Profile = connect(mapStateToProps,mapDispatchToProps)(ConnectedProfile);
 
 export default Profile;
