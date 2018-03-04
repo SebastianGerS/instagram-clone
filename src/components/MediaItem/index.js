@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
+import uuidv1 from "uuid";
 
 class MediaItem extends Component {
 
@@ -8,19 +9,18 @@ class MediaItem extends Component {
   }
 
   render() {
-    console.log(this.props.mediaItem);
     const comments = []
     const tags = [];
     if (this.props.mediaItem.comments.data) {
       this.props.mediaItem.comments.data.forEach(comment => {
-        let newComment = <p><span className="bold">{comment.from.username}</span> {comment.text}</p>
+        let newComment = <p key={uuidv1()}><span className="bold">{comment.from.username}</span> {comment.text}</p>
         comments.push(newComment);
       });
     }
 
     if (this.props.mediaItem.tags) {
       this.props.mediaItem.tags.forEach(tag => {
-        let newTag = <span>{tag.text}</span>
+        let newTag = <span key={uuidv1()}>{tag.text}</span>
         tags.push(newTag);
       });
     }

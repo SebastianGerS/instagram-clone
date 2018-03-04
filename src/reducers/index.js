@@ -10,42 +10,74 @@ const initialState = {
 
 const Reducer = (state = initialState , action) => {
   switch (action.type) {
-  case ActionTypes.SET_USER:
-    return {...state, user:[...state.user, new User(
-      {
-        id: action.user.id,
-        username: action.user.username,
-        full_name: action.user.full_name,
-        profile_picture: action.user.profile_picture,
-        bio: action.user.bio,
-        website: action.user.website,
-        counts: {
-          media: action.user.counts.media,
-          follows: action.user.counts.follows,
-          followed_by: action.user.counts.followed_by,
+  case ActionTypes.FETCH_USER_START:
+    return {
+      ...state,
+      isFetching: true
+    }
+  case ActionTypes.FETCH_USER_SUCCESS:
+    return {
+      ...state, 
+      user: [...state.user, new User(
+        {
+          id: action.user.id,
+          username: action.user.username,
+          full_name: action.user.full_name,
+          profile_picture: action.user.profile_picture,
+          bio: action.user.bio,
+          website: action.user.website,
+          counts: {
+            media: action.user.counts.media,
+            follows: action.user.counts.follows,
+            followed_by: action.user.counts.followed_by,
+          }
         }
-      }
-    )]};
-  case ActionTypes.ADD_ITEM:
-    return { ...state, mediaItems: [...state.mediaItems,new MediaItem(
-      { 
-        id: action.item.id,
-        images: action.item.images,
-        type: action.item.type,
-        comments: action.item.comments,
-        likes: action.item.likes,
-        tags: [],
-        caption: action.item.caption,
-        user: {
-          username: action.item.user.username,
-          full_name: action.item.user.full_name,
-          profile_picture: action.item.user.profile_picture,
-          id: action.item.user.id
-        },
-        created_time: action.item.created_time,
-        location: action.item.location
-      }
-    )]};
+      )],
+     isLogedin:true
+    };
+  case ActionTypes.FETCH_USER_START:
+    return {
+      ...state,
+      isFetching: false
+    }
+  case ActionTypes.FETCH_MEDIAITEMS_START:
+    return {
+      ...state,
+      isFetching: true
+    }
+  case ActionTypes.FETCH_MEDIAITEMS_SUCCESS:
+    return { 
+      ...state, 
+      mediaItems: [...state.mediaItems,new MediaItem(
+        { 
+          id: action.mediaItem.id,
+          images: action.mediaItem.images,
+          type: action.mediaItem.type,
+          comments: action.mediaItem.comments,
+          likes: action.mediaItem.likes,
+          tags: [],
+          caption: action.mediaItem.caption,
+          user: {
+            username: action.mediaItem.user.username,
+            full_name: action.mediaItem.user.full_name,
+            profile_picture: action.mediaItem.user.profile_picture,
+            id: action.mediaItem.user.id
+          },
+          created_time: action.mediaItem.created_time,
+          location: action.mediaItem.location
+        }
+      )],
+      isFetching: false
+    };
+  case ActionTypes.FETCH_MEDIAITEMS_FAILURE:
+    return {
+      ...state,
+      isFetching: false
+    }
+  case ActionTypes.GET_MEDIA_ITEMS:
+    return {
+      ...state, mediaItems:[...state.mediaItems]
+    };
   default:
     return state;
   }

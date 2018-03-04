@@ -14,30 +14,33 @@ class ConnectedUserProfile extends Component {
 
   render() {
     const content = [];
-    this.props.user.forEach(user => {
-      console.log(user.username);
-      const img =
-          <figure key={uuidv1()}className="profile-img-container">
-            <img className="profile-img" src={user.profile_picture}/>
-          </figure>;
-      const profile = 
-          <div key={uuidv1()} className="info">
-            <div>
-              <h3>{user.username}</h3>
-              <button className="btn-settings">Redigera Profil</button>
-              <button className="btn-mobile-settings"></button>
+    if(this.props.user) {
+      this.props.user.forEach(user => {
+        console.log(user.username);
+        const img =
+            <figure key={uuidv1()}className="profile-img-container">
+              <img className="profile-img" src={user.profile_picture}/>
+            </figure>;
+        const profile = 
+            <div key={uuidv1()} className="info">
+              <div>
+                <h3>{user.username}</h3>
+                <button className="btn-settings">Redigera Profil</button>
+                <button className="btn-mobile-settings"></button>
+              </div>
+              <div>
+              <p><span className="bold">{user.counts.media}</span> Inlägg</p>
+              <p><span className="bold">{user.counts.followed_by}</span> Följare</p>
+              <p><span className="bold">{user.counts.follows}</span> Följer</p>
+              </div>
+              <div>
+                <p className="bold">{user.full_name}</p>
+              </div>
             </div>
-            <div>
-            <p><span className="bold">{user.counts.media}</span> Inlägg</p>
-            <p><span className="bold">{user.counts.followed_by}</span> Följare</p>
-            <p><span className="bold">{user.counts.follows}</span> Följer</p>
-            </div>
-            <div>
-              <p className="bold">{user.full_name}</p>
-            </div>
-          </div>
-      content.push(img,profile);
-    })
+        content.push(img,profile);
+      });
+    }
+   
    
       return (
         <section className="userProfile">
