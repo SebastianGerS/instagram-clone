@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Home, Profile, Explore, ErrorPage, SignUp, SignIn } from '../views';
+import { Home, Profile, Explore, ErrorPage, SignUp } from '../views';
 
 const Root = () => {
 
@@ -9,8 +9,7 @@ const Root = () => {
       <Route exact path="/" component={Home}/>
       <Route exact path="/profile" component={Profile}/>
       <Route exact path="/explore" component={Explore}/>
-      <Route exact path="/signup" component={SignUp}/>
-      <Route exact path="/signin" component={SignIn}/>
+      <Route exact path="/register" component={SignUp}/>
       <Route component={ErrorPage}/>
     </Switch>
   );

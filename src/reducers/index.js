@@ -33,7 +33,17 @@ const Reducer = (state = initialState , action) => {
         images: action.item.images,
         type: action.item.type,
         comments: action.item.comments,
-        likes: action.item.likes
+        likes: action.item.likes,
+        tags: [],
+        caption: action.item.caption,
+        user: {
+          username: action.item.user.username,
+          full_name: action.item.user.full_name,
+          profile_picture: action.item.user.profile_picture,
+          id: action.item.user.id
+        },
+        created_time: action.item.created_time,
+        location: action.item.location
       }
     )]};
   default:

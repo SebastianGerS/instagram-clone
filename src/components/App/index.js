@@ -17,19 +17,16 @@ class ConnectedApp extends Component {
   constructor() {
     super();
     this.state = {
-      
     };
-   
   }
 
   componentWillMount(){
     this.fetchProfile();
   }
   render() {
-
     return (
       <BrowserRouter>
-        <div className="App">
+        <div className="app">
           <Header />
             <div className="wraper">
               <Root />

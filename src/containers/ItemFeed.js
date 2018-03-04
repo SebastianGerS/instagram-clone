@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import './ItemGrid.css';
+import './ItemFeed.css';
+import uuidv1 from "uuid";
+import {MediaItem} from '../components';
 
 class ItemFeed extends Component {
   constructor(props) {
@@ -12,15 +14,16 @@ class ItemFeed extends Component {
   render() {
 
     const content = [];
-    
-    // this.props.mediaItems.forEach(item => {    
-      
-    //   let img = <img key={item.images.low_resolution.url} src={item.images.low_resolution.url}/>;
-    //   content.push(img);
-    // });
+    if(this.props.mediaItems){
+      this.props.mediaItems.forEach(item => {    
+        let mediaItem = <MediaItem key={uuidv1()} mediaItem={item}/>
+        content.push(mediaItem);
+      });
+    }
+  
    
     return ( 
-      <article className="imgGrid">
+      <article className="imgFlow">
         {content}
       </article>
     );
