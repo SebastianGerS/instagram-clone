@@ -46,6 +46,16 @@ export const userRegistered = () => ({
 export const rejectedUserRegistration = () => ({
   type: ActionTypes.USER_REGISTRATION_FAILURE
 });
+
+export const attemptLogin = () => ({
+  type: ActionTypes.USER_LOGIN_START
+});
+export const userLogedin = () => ({
+  type: ActionTypes.USER_LOGIN_SUCCESS
+});
+export const loginFailed = () => ({
+  type: ActionTypes.USER_LOGIN_FAILURE
+});
 export const fetchMediaItems = () => dispatch => {
   dispatch(requestMediaItems());
   const url = GET_MEDIA_URL;
@@ -128,4 +138,25 @@ export const registerUser = (user) => dispatch => {
       console.log(error);
       dispatch(rejectedUserRegistration());
     })
+}
+
+
+export const loginUser = (user) => dispatch => {
+  dispatch(attemptLogin());
+  fetch('/users/login', {
+    method: 'POST', 
+    body: JSON.stringify(user), 
+    headers: {
+    'content-type': 'application/json',
+    'accept': 'application/json'
+    }
+  }).then(res => res.json())
+    .then(user => {
+      dispatch(userLogedin());
+      console.log(user);
+    }).catch(error => {
+      console.log(error);
+      dispatch(loginFailed());
+    })
+
 }

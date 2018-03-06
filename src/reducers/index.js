@@ -93,6 +93,21 @@ const Reducer = (state = initialState , action) => {
       ...state,
       isFetching: false
     };
+    case ActionTypes.USER_LOGIN_START:
+    return {
+      ...state,
+      isFetching: true
+    };
+  case ActionTypes.USER_LOGIN_SUCCESS:
+    return {
+      ...state,
+      isFetching: false
+    };
+  case ActionTypes.USER_LOGIN_FAILURE:
+    return {
+      ...state,
+      isFetching: false
+    };
   default:
     return state;
   }

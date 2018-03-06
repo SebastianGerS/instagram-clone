@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-import {fetchProfile} from '../../actions';
+import {fetchProfile, loginUser } from '../../actions';
 import {connect} from 'react-redux';
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProfile: user => dispatch(fetchProfile(user)) 
+    fetchProfile: user => dispatch(fetchProfile(user)),
+    loginUser: user => dispatch(loginUser(user)),
   };
 };
 
@@ -20,27 +21,41 @@ class ConnectedHeader extends Component {
   constructor() {
     super();
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
+    this.updateStateValue = this.updateStateValue.bind(this);
     this.login = this.login.bind(this);
     this.state = {
-      loginModal: []
+      loginModal: [],
+      email: '',
+      password: ''
     }
   }
   login(e) {
     e.preventDefault();
-
+    if(this.state.email.lenth <= 0 || this.state.password <= 0){
+      return;
+    }
     this.toggleLoginModal();
     this.props.fetchProfile();
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    this.props.loginUser(user);
   }
-  
+  updateStateValue(e) {
+    this.setState({
+        [e.target.name]: e.target.value
+     });
+    }
   toggleLoginModal(){
     let loginModal;
     if (!this.props.isLogedin && this.state.loginModal.length === 0) {
        loginModal = 
       <div className="loginModal">
-        <form className="loginForm">
-          <input type="email" placeholder="Email"/>
-          <input type="password" placeholder="Password"/>
-          <button onClick={(e) => this.login(e)}>loggin</button>
+        <form className="loginForm" onSubmit={(e) => this.login(e)}>
+          <input name='email' type="email" placeholder="Email" onChange={this.updateStateValue}/>
+          <input name='password' type="password" placeholder="Password" onChange={this.updateStateValue}/>
+          <button type="submit">loggin</button>
         </form>
         <div>
           <p>If you do not have an acount please <span className="registerLink"><Link to="/register" onClick={this.toggleLoginModal}>Register</Link></span></p>

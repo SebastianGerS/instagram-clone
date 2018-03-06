@@ -16,7 +16,6 @@ class ConnectedUserProfile extends Component {
     const content = [];
     if(this.props.user) {
       this.props.user.forEach(user => {
-        console.log(user.username);
         const img =
             <figure key={uuidv1()}className="profile-img-container">
               <img className="profile-img" src={user.profile_picture}/>
