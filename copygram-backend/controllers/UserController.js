@@ -10,16 +10,17 @@ router.post('/register', function(req, res) {
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
-    full_name: req.body.full_name,
+    fullname: req.body.fullname,
     profile_picture: undefined,
     bio: undefined,
     website: undefined,
   }, function(error,user) {
       if(error) {
-        return res.status(500).send("error ecured when trying to register new user with " + error);
+        var message = JSON.stringify({error: "error ecured when trying to register new user with " + error});
+        return res.status(500).send(message);
       }
 
-      return res.status(200).send(user);
+      return res.status(200).json(user);
       
   });
 });

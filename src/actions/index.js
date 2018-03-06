@@ -37,6 +37,15 @@ export const rejectedUser = () => ({
   type: ActionTypes.FETCH_USER_FAILURE
 });
 
+export const requestUserRegistration = () => ({
+  type: ActionTypes.USER_REGISTRATION_START
+});
+export const userRegistered = () => ({
+  type: ActionTypes.USER_REGISTRATION_SUCCESS
+});
+export const rejectedUserRegistration = () => ({
+  type: ActionTypes.USER_REGISTRATION_FAILURE
+});
 export const fetchMediaItems = () => dispatch => {
   dispatch(requestMediaItems());
   const url = GET_MEDIA_URL;
@@ -98,3 +107,25 @@ export const fetchProfile = () => dispatch => {
     });
 
 };  
+
+export const registerUser = (user) => dispatch => {
+  dispatch(requestUserRegistration());
+  console.log(user);
+  fetch('/users/register', {
+    method: 'POST', 
+    body: JSON.stringify(user), 
+    headers: {
+    'content-type': 'application/json',
+    'accept': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(userRegistered());
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(rejectedUserRegistration());
+    })
+}

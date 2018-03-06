@@ -5,7 +5,7 @@ var UserSchema = new mongoose.Schema({
   email: String,
   username: String,
   password: {type: String, minlength: [8, 'passwords must be 8 characters or longer']},
-  full_name: String,
+  fullname: String,
   profile_picture: String,
   bio: String,
   website: String,

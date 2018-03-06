@@ -73,10 +73,25 @@ const Reducer = (state = initialState , action) => {
     return {
       ...state,
       isFetching: false
-    }
+    };
   case ActionTypes.GET_MEDIA_ITEMS:
     return {
       ...state, mediaItems:[...state.mediaItems]
+    };
+  case ActionTypes.USER_REGISTRATION_START:
+    return {
+      ...state,
+      isFetching: true
+    };
+  case ActionTypes.USER_REGISTRATION_SUCCESS:
+    return {
+      ...state,
+      isFetching: false
+    };
+  case ActionTypes.USER_REGISTRATION_FAILURE:
+    return {
+      ...state,
+      isFetching: false
     };
   default:
     return state;
