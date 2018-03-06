@@ -12,7 +12,13 @@ class App extends Component {
     this.state = {
     };
   }
-
+  componentDidMount() {
+    fetch('/users')
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+    })
+  }
  
   render() {
     return (

@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/copygram-backend/node_modules
 
 # testing
 /coverage
@@ -22,3 +23,4 @@ yarn-error.log*
 
 #keys
 src/data/URLs.js
+copygram-backend/dbpasswords.js
