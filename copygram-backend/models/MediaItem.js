@@ -1,7 +1,6 @@
-import Immutable from 'immutable';
+var mongoose = require('mongoose');
 
-const MediaItem = Immutable.Record({
-  id: String,
+var MediaItemSchema = mongoose.Schema({
   images: {
     lowResolution: {
       url: String,
@@ -36,7 +35,7 @@ const MediaItem = Immutable.Record({
       }
     ]
   },
-  likes:String,
+  likes: Number,
   tags: [],
   caption: String,
   user: {
@@ -48,5 +47,3 @@ const MediaItem = Immutable.Record({
   createdAt: String,
   location: String
 });
-
-export default MediaItem;

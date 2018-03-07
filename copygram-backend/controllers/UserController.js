@@ -13,13 +13,13 @@ router.post('/register', function(req, res) {
     username: req.body.username,
     password: req.body.password,
     fullname: req.body.fullname,
-    profile_picture: 'https://cdn.pixabay.com/photo/2017/11/16/09/32/matrix-2953869_960_720.jpg',
+    profilePicture: 'https://cdn.pixabay.com/photo/2017/11/16/09/32/matrix-2953869_960_720.jpg',
     bio: '',
     website: '',
     counts: {
       media: 0,
       follows: 0,
-      followed_by: 0,
+      followedBy: 0,
     }
   }, function(error,user) {
     if(error) {

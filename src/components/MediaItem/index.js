@@ -28,14 +28,14 @@ class MediaItem extends Component {
     return(
       <section className="mediaItem">
         <div className="profileBanner">
-          <img src={this.props.mediaItem.user.profile_picture}/>
+          <img src={this.props.mediaItem.user.profilePicture}/>
           <div>
             <p className="bold">{this.props.mediaItem.user.username}</p>
             <p>{this.props.mediaItem.location}</p>
           </div>
         </div>
         <figure className="imgContainer">
-          <img className="img"src={this.props.mediaItem.images.standard_resolution.url}/>
+          <img className="img"src={this.props.mediaItem.images.standardResolution.url}/>
         </figure>
         <div className="itemInfo">
           <div>

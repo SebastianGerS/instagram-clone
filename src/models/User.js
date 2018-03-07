@@ -3,14 +3,14 @@ import Immutable from 'immutable';
 const User = Immutable.Record({
   id: String,
   username: String,
-  full_name: String,
-  profile_picture: String,
+  fullname: String,
+  profilePicture: String,
   bio: String,
   website: String,
   counts: {
-    media: Number || null,
-    follows: Number || null,
-    followed_by: Number || null,
+    media: Number,
+    follows: Number,
+    followedBy: Number,
   }
 });
 

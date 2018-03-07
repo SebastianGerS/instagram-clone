@@ -18,7 +18,7 @@ class ConnectedUserProfile extends Component {
       this.props.user.forEach(user => {
         const img =
             <figure key={uuidv1()}className="profile-img-container">
-              <img className="profile-img" src={user.profile_picture}/>
+              <img className="profile-img" src={user.profilePicture}/>
             </figure>;
         const profile = 
             <div key={uuidv1()} className="info">
@@ -29,7 +29,7 @@ class ConnectedUserProfile extends Component {
               </div>
               <div>
               <p><span className="bold">{user.counts.media}</span> Inlägg</p>
-              <p><span className="bold">{user.counts.followed_by}</span> Följare</p>
+              <p><span className="bold">{user.counts.followedBy}</span> Följare</p>
               <p><span className="bold">{user.counts.follows}</span> Följer</p>
               </div>
               <div>

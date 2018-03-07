@@ -6,13 +6,13 @@ var UserSchema = new mongoose.Schema({
   username: String,
   password: {type: String, minlength: [8, 'passwords must be 8 characters or longer']},
   fullname: String,
-  profile_picture: String,
+  profilePicture: String,
   bio: String,
   website: String,
   counts: {
     media: Number,
     follows: Number,
-    followed_by: Number,
+    followedBy: Number,
   }
 });
 
