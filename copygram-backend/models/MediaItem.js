@@ -47,3 +47,7 @@ var MediaItemSchema = mongoose.Schema({
   createdAt: String,
   location: String
 });
+
+mongoose.model('MediaItem', MediaItemSchema);
+
+module.exports(mongoose.model('MediaItem'));

@@ -123,7 +123,7 @@ export const fetchProfile = () => dispatch => {
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
   console.log(user);
-  fetch('/users/register', {
+  fetch('/auth/register', {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {
@@ -144,7 +144,7 @@ export const registerUser = (user) => dispatch => {
 
 export const loginUser = (user) => dispatch => {
   dispatch(attemptLogin());
-  fetch('/users/login', {
+  fetch('/auth/login', {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {

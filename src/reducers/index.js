@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 
 const initialState = {
   mediaItems:Immutable.OrderedMap(),
-  user: Immutable.OrderedMap(),
+  curentUser: Immutable.OrderedMap(),
   isLogedin: false,
 };
 
@@ -135,7 +135,7 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_LOGIN_SUCCESS:
     return {
       ...state,
-      user: [...state.user, new User(
+      curentUser: [ new User(
         {
           id: action.data.user._id,
           username: action.data.user.username,
