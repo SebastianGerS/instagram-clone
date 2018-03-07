@@ -58,6 +58,9 @@ export const userLogedin = data => ({
 export const loginFailed = () => ({
   type: ActionTypes.USER_LOGIN_FAILURE
 });
+export const logoutUser = () => ({
+  type: ActionTypes.USER_LOGOUT
+});
 export const fetchMediaItems = () => dispatch => {
   dispatch(requestMediaItems());
   const url = GET_MEDIA_URL;

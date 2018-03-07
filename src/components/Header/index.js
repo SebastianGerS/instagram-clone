@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-import {loginUser} from '../../actions';
+import {loginUser, logoutUser} from '../../actions';
 import {connect} from 'react-redux';
+import uuidv1 from "uuid";
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginUser: user => dispatch(loginUser(user))
+    loginUser: user => dispatch(loginUser(user)),
+    logoutUser: () => dispatch(logoutUser())
   };
 };
 
@@ -20,12 +22,15 @@ class ConnectedHeader extends Component {
   constructor() {
     super();
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
+    this.modal = this.modal.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
     this.state = {
-      loginModal: [],
+      modal: [],
       email: '',
-      password: ''
+      password: '',
+      modalIsActive: false
     }
   }
   login(e) {
@@ -40,33 +45,69 @@ class ConnectedHeader extends Component {
     }
     this.props.loginUser(user);
   }
+  logout(e) {
+    e.preventDefault();
+    if (this.props.isLogedin) {
+      this.props.logoutUser();
+      this.toggleLoginModal();
+    }
+  }
   updateStateValue(e) {
     this.setState({
         [e.target.name]: e.target.value
      });
     }
-  toggleLoginModal(){
-    let loginModal;
-    if (!this.props.isLogedin && this.state.loginModal.length === 0) {
-       loginModal = 
-      <div className="loginModal">
-        <form className="loginForm" onSubmit={(e) => this.login(e)}>
-          <input name='email' type="email" placeholder="Email" onChange={this.updateStateValue}/>
-          <input name='password' type="password" placeholder="Password" onChange={this.updateStateValue}/>
-          <button type="submit">loggin</button>
-        </form>
-        <div>
-          <p>If you do not have an acount please <span className="registerLink"><Link to="/register" onClick={this.toggleLoginModal}>Register</Link></span></p>
-        </div>
-      </div>;
-      this.setState({
-        loginModal: [loginModal]
-      });
+  modal() {
+    if(this.state.modalIsActive) {
+      let modal;
+      if (!this.props.isLogedin) {
+         modal = 
+        <div key={uuidv1()} className="loginModal">
+          <form className="loginForm" onSubmit={(e) => this.login(e)}>
+            <input name='email' type="email" placeholder="Email" onChange={this.updateStateValue}/>
+            <input name='password' type="password" placeholder="Password" onChange={this.updateStateValue}/>
+            <button type="submit">loggin</button>
+          </form>
+          <div>
+            <p>If you do not have an acount please <span className="registerLink"><Link to="/register" onClick={this.toggleLoginModal}>Register</Link></span></p>
+          </div>
+        </div>;
+        this.setState({
+          modal: [modal]
+        });
+      } else {
+        modal = 
+        <div key={uuidv1()} className="loginModal">
+            <button onClick={(e) => this.logout(e)}>logout</button>
+        </div>;
+        this.setState({
+          modal: [modal]
+        });
+      }
     } else {
       this.setState({
-        loginModal: []
+        modal: []
       });
     }
+   
+  }
+  toggleLoginModal(){
+    if (this.state.modalIsActive) {
+      this.setState({
+        modalIsActive: false
+      }, () => {
+        this.modal();
+      });
+
+    } else {
+      this.setState({
+        modalIsActive: true
+      }, () => {
+        this.modal();
+      });
+    
+    }
+
   }
   render() {
     return(
@@ -86,7 +127,7 @@ class ConnectedHeader extends Component {
           </ul>
         </nav>
         <button className="userButton" onClick={this.toggleLoginModal}></button>
-        {this.state.loginModal}
+        {this.state.modal}
       </header>
     );
   }

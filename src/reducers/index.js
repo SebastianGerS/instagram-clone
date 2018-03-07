@@ -159,6 +159,13 @@ const Reducer = (state = initialState , action) => {
       ...state,
       isFetching: false
     };
+  case ActionTypes.USER_LOGOUT:
+    return {
+      ...state,
+      curentUser: Immutable.OrderedMap(),
+      isLogedin: false,
+      token: ''
+    };
   default:
     return state;
   }
