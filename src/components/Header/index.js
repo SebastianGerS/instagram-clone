@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-import {fetchProfile, loginUser } from '../../actions';
+import {loginUser} from '../../actions';
 import {connect} from 'react-redux';
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProfile: user => dispatch(fetchProfile(user)),
-    loginUser: user => dispatch(loginUser(user)),
+    loginUser: user => dispatch(loginUser(user))
   };
 };
 
@@ -35,7 +34,6 @@ class ConnectedHeader extends Component {
       return;
     }
     this.toggleLoginModal();
-    this.props.fetchProfile();
     const user = {
       email: this.state.email,
       password: this.state.password

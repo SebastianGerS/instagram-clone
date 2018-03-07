@@ -1,16 +1,16 @@
 import Immutable from 'immutable';
 
 const User = Immutable.Record({
-  id: '',
-  username: '',
-  full_name: '',
-  profile_picture: '',
-  bio: '',
-  website: '',
+  id: String,
+  username: String,
+  full_name: String,
+  profile_picture: String,
+  bio: String,
+  website: String,
   counts: {
-    media: '',
-    follows: '',
-    followed_by: '',
+    media: Number || null,
+    follows: Number || null,
+    followed_by: Number || null,
   }
 });
 

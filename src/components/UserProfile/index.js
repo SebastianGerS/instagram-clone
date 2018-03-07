@@ -39,8 +39,6 @@ class ConnectedUserProfile extends Component {
         content.push(img,profile);
       });
     }
-   
-   
       return (
         <section className="userProfile">
           {content}

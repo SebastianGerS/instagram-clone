@@ -9,6 +9,11 @@ var UserSchema = new mongoose.Schema({
   profile_picture: String,
   bio: String,
   website: String,
+  counts: {
+    media: Number,
+    follows: Number,
+    followed_by: Number,
+  }
 });
 
 UserSchema.pre('save', function(next) {

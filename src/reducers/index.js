@@ -5,7 +5,8 @@ import Immutable from 'immutable';
 
 const initialState = {
   mediaItems:Immutable.OrderedMap(),
-  user: Immutable.OrderedMap()
+  user: Immutable.OrderedMap(),
+  isLogedin: false,
 };
 
 const Reducer = (state = initialState , action) => {
@@ -86,7 +87,24 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_REGISTRATION_SUCCESS:
     return {
       ...state,
-      isFetching: false
+      user: [...state.user, new User(
+        {
+          id: action.data.user._id,
+          username: action.data.user.username,
+          full_name: action.data.user.fullname,
+          profile_picture: action.data.user.profile_picture,
+          bio: action.data.user.bio,
+          website: action.data.user.website,
+          counts: {
+            media: +action.data.user.counts.media,
+            follows: +action.data.user.counts.follows,
+            followed_by: +action.data.user.counts.followed_by,
+          }
+        }
+      )],
+      token: action.data.token,
+      isFetching: false,
+      isLogedin: true
     };
   case ActionTypes.USER_REGISTRATION_FAILURE:
     return {
@@ -101,7 +119,24 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_LOGIN_SUCCESS:
     return {
       ...state,
-      isFetching: false
+      user: [...state.user, new User(
+        {
+          id: action.data.user._id,
+          username: action.data.user.username,
+          full_name: action.data.user.fullname,
+          profile_picture: action.data.user.profile_picture,
+          bio: action.data.user.bio,
+          website: action.data.user.website,
+          counts: {
+            media: +action.data.user.counts.media,
+            follows: +action.data.user.counts.follows,
+            followed_by: +action.data.user.counts.followed_by,
+          }
+        }
+      )],
+      token: action.data.token,
+      isFetching: false,
+      isLogedin: true
     };
   case ActionTypes.USER_LOGIN_FAILURE:
     return {

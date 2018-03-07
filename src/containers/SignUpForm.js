@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
+import {Redirect} from 'react-router-dom';
 import './SignUpForm.css';
 import {connect} from 'react-redux';
 import {registerUser} from '../actions';
+
+const mapStateToProps = state => {
+  return {isLogedin: state.isLogedin};
+}
 
 class connectedSignUpForm extends Component {
 
@@ -38,6 +43,11 @@ class connectedSignUpForm extends Component {
    });
   }
 render() {
+  
+    if (this.props.isLogedin) {
+      return <Redirect to="/" />;
+    }
+  
   return (
     <section>
       <div className="signup">
@@ -56,5 +66,5 @@ render() {
 }
 
 
-const SignUpForm = connect(null)(connectedSignUpForm);
+const SignUpForm = connect(mapStateToProps)(connectedSignUpForm);
 export default SignUpForm;

@@ -40,8 +40,9 @@ export const rejectedUser = () => ({
 export const requestUserRegistration = () => ({
   type: ActionTypes.USER_REGISTRATION_START
 });
-export const userRegistered = () => ({
-  type: ActionTypes.USER_REGISTRATION_SUCCESS
+export const userRegistered = data => ({
+  type: ActionTypes.USER_REGISTRATION_SUCCESS,
+  data: data
 });
 export const rejectedUserRegistration = () => ({
   type: ActionTypes.USER_REGISTRATION_FAILURE
@@ -50,8 +51,9 @@ export const rejectedUserRegistration = () => ({
 export const attemptLogin = () => ({
   type: ActionTypes.USER_LOGIN_START
 });
-export const userLogedin = () => ({
-  type: ActionTypes.USER_LOGIN_SUCCESS
+export const userLogedin = data => ({
+  type: ActionTypes.USER_LOGIN_SUCCESS,
+  data: data
 });
 export const loginFailed = () => ({
   type: ActionTypes.USER_LOGIN_FAILURE
@@ -130,9 +132,8 @@ export const registerUser = (user) => dispatch => {
     }
   })
     .then(res => res.json())
-    .then(res => {
-      console.log(res);
-      dispatch(userRegistered());
+    .then(data => {
+      dispatch(userRegistered(data));
     })
     .catch(error => {
       console.log(error);
@@ -151,9 +152,8 @@ export const loginUser = (user) => dispatch => {
     'accept': 'application/json'
     }
   }).then(res => res.json())
-    .then(user => {
-      dispatch(userLogedin());
-      console.log(user);
+    .then(data => {
+      dispatch(userLogedin(data));
     }).catch(error => {
       console.log(error);
       dispatch(loginFailed());
