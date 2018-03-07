@@ -17,11 +17,9 @@ router.post('/register', function(req, res) {
     profilePicture: 'https://cdn.pixabay.com/photo/2017/11/16/09/32/matrix-2953869_960_720.jpg',
     bio: '',
     website: '',
-    counts: {
-      media: 0,
-      follows: 0,
-      followedBy: 0,
-    }
+    mediaItems: [],
+    follows: [],
+    followedBy: [],
   }, function(error,user) {
     if(error) {
       var message = JSON.stringify({error: "error occurred when trying to register new user with " + error});

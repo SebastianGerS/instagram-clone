@@ -125,7 +125,6 @@ export const fetchProfile = () => dispatch => {
 
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
-  console.log(user);
   fetch('/auth/register', {
     method: 'POST', 
     body: JSON.stringify(user), 

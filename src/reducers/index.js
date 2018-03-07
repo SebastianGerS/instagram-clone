@@ -103,7 +103,7 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_REGISTRATION_SUCCESS:
     return {
       ...state,
-      user: [...state.user, new User(
+      curentUser: [ new User(
         {
           id: action.data.user._id,
           username: action.data.user.username,
@@ -111,11 +111,9 @@ const Reducer = (state = initialState , action) => {
           profilePicture: action.data.user.profilePicture,
           bio: action.data.user.bio,
           website: action.data.user.website,
-          counts: {
-            media: +action.data.user.counts.media,
-            follows: +action.data.user.counts.follows,
-            followedBy: +action.data.user.counts.followedBy,
-          }
+          mediaItems: action.data.user.mediaItems,
+          follows: action.data.user.follows,
+          followedBy: action.data.user.followedBy,
         }
       )],
       token: action.data.token,
@@ -139,15 +137,13 @@ const Reducer = (state = initialState , action) => {
         {
           id: action.data.user._id,
           username: action.data.user.username,
-          full_name: action.data.user.fullname,
+          fullname: action.data.user.fullname,
           profilePicture: action.data.user.profilePicture,
           bio: action.data.user.bio,
           website: action.data.user.website,
-          counts: {
-            media: +action.data.user.counts.media,
-            follows: +action.data.user.counts.follows,
-            followedBy: +action.data.user.counts.followedBy,
-          }
+          mediaItems: action.data.user.mediaItems,
+          follows: action.data.user.follows,
+          followedBy: action.data.user.followedBy,
         }
       )],
       token: action.data.token,

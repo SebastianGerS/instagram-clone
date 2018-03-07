@@ -28,9 +28,9 @@ class ConnectedUserProfile extends Component {
                 <button className="btn-mobile-settings"></button>
               </div>
               <div>
-              <p><span className="bold">{user.counts.media}</span> Inlägg</p>
-              <p><span className="bold">{user.counts.followedBy}</span> Följare</p>
-              <p><span className="bold">{user.counts.follows}</span> Följer</p>
+              <p><span className="bold">{user.mediaItems.length}</span> Inlägg</p>
+              <p><span className="bold">{user.followedBy.length}</span> Följare</p>
+              <p><span className="bold">{user.follows.length}</span> Följer</p>
               </div>
               <div>
                 <p className="bold">{user.full_name}</p>

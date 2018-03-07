@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-
-var MediaItemSchema = mongoose.Schema({
+var Schema = mongoose.Schema;
+var MediaItemSchema = Schema({
   images: {
     lowResolution: {
       url: String,
@@ -19,34 +19,13 @@ var MediaItemSchema = mongoose.Schema({
     },
   },
   type: String,
-  comments: {
-    count: Number,
-    data: [
-      {
-        createdAt: String,
-        text: String,
-        from: {
-          username: String,
-          profilePicture: String,
-          id: String,
-          fullname: String
-        },
-        id: String
-      }
-    ]
-  },
+  comments: [{type: Schema.Types.ObjectId, ref: 'Comment' }],
   likes: Number,
-  tags: [],
+  tags: [{type: Schema.Types.ObjectId, ref: 'Tag' }],
   caption: String,
-  user: {
-    username: String,
-    fullname: String,
-    profilePicture: String,
-    id: String
-  },
-  createdAt: String,
+  user: {type: Schema.Types.ObjectId, ref: 'User' },
   location: String
-});
+},  { timestamps: { } });
 
 mongoose.model('MediaItem', MediaItemSchema);
 

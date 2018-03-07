@@ -7,11 +7,9 @@ const User = Immutable.Record({
   profilePicture: String,
   bio: String,
   website: String,
-  counts: {
-    media: Number,
-    follows: Number,
-    followedBy: Number,
-  }
+  mediaItems: Array,
+  follows: Array,
+  followedBy: Array,
 });
 
 export default User;

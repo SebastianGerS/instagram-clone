@@ -1,20 +1,19 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
-
-var UserSchema = new mongoose.Schema({
-  email: String,
-  username: String,
+var Schema = mongoose.Schema;
+var UserSchema = new Schema({
+  email: {type:String, unique:true},
+  username: {type:String, unique:true},
   password: {type: String, minlength: [8, 'passwords must be 8 characters or longer']},
   fullname: String,
   profilePicture: String,
   bio: String,
   website: String,
-  counts: {
-    media: Number,
-    follows: Number,
-    followedBy: Number,
-  }
-});
+  mediaItems: [{type: Schema.Types.ObjectId, ref: 'MediaItem' }],
+  follows: [{type: Schema.Types.ObjectId, ref: 'User' }],
+  followedBy: [{type: Schema.Types.ObjectId, ref: 'User' }],
+  
+},{ timestamps: { } });
 
 UserSchema.pre('save', function(next) {
   var user = this;

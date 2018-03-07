@@ -8,7 +8,6 @@ function verifyToken(req, res, next) {
   jwt.verify(token, config.secret, function(error, decoded) {
     if(error) return res.status(500).json({error: 'error during authentification of token'});
     req.userId = decoded.id;
-    console.log(decoded.id);
     next();
   });
 }
