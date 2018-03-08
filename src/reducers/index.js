@@ -167,12 +167,15 @@ const Reducer = (state = initialState , action) => {
       isLogedin: false,
       token: Immutable.OrderedMap()
     };
+  case ActionTypes.MEDIAITEM_UPDATE_START:
+    return {
+      ...state,
+      isUpdating: true
+    };
   case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
     const mediaItems = [...state.mediaItems.map(mediaItem => {
       
       if(mediaItem.id === action.mediaItemId) {
-        console.log(mediaItem.id + 'curent loop object');
-        console.log(action.mediaItemId + 'object wee liked/unliked');
         action.updatedFields.forEach(field => {
           if(Array.isArray(mediaItem[field.name])) {
             if (mediaItem[field.name].includes(field.value)) {
@@ -181,7 +184,6 @@ const Reducer = (state = initialState , action) => {
                   mediaItem[field.name].splice(index,1);
                 }
               });
-              console.log(mediaItem);
             } else {
               mediaItem[field.name].push(field.value);
             }
@@ -195,7 +197,13 @@ const Reducer = (state = initialState , action) => {
     })];
     return {
       ...state,
-      mediaItems: [...mediaItems]
+      mediaItems: [...mediaItems],
+      isUpdating: false
+    };
+  case ActionTypes.MEDIAITEM_UPDATE_FAILURE:
+    return {
+      ...state,
+      isUpdating: false
     };
   default:
     return state;

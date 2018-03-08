@@ -22,17 +22,12 @@ class ConnectedMediaItem extends Component {
   }
   handleLike(e) {
     e.preventDefault();
-    console.log(this.props.currentUserId);
     const field = [{
       name: 'likes',
       value: this.props.currentUserId
     }];
 
     this.props.dispatch(toggleLike(e.target.value, this.props.token.value, field));
-    console.log(e.target.className);
-    if(e.target.className) {
-
-    }
   }
   render() {
     const comments = []

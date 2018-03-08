@@ -127,7 +127,6 @@ router.put('/:id', VerifyToken, function (req,res) {
             if (tag == null) {
               
               Tag.create({tagname: tagname}, function(error, newtag) {
-                console.log(newtag);
                 if (error) return res.status(500).json({error: 'error retreving tag'});
                 
                 tags.push(newtag._id);

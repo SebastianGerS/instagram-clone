@@ -63,10 +63,17 @@ export const logoutUser = () => ({
   type: ActionTypes.USER_LOGOUT
 });
 
-export const updateMediaItem = (mediaItemId, updatedFields) => ({
+export const startUpdatingMediaItem = () => ({
+  type: ActionTypes.MEDIAITEM_UPDATE_START,
+
+});
+export const updatedMediaItem = (mediaItemId, updatedFields) => ({
   type: ActionTypes.MEDIAITEM_UPDATE_SUCCESS,
   mediaItemId: mediaItemId,
   updatedFields: updatedFields
+});
+export const updateMediaItemFailed = () => ({
+  type: ActionTypes.MEDIAITEM_UPDATE_FAILURE,
 });
 
 export const fetchMediaItems = (token, existingItems) => dispatch => {
@@ -142,7 +149,7 @@ export const loginUser = (user) => dispatch => {
 };
 
 export const toggleLike = (mediaItemId, token, updatedFields) => dispatch => {
-
+  dispatch(startUpdatingMediaItem());
   fetch('/mediaitems/' + mediaItemId, {
     method: 'PUT', 
     headers: {
@@ -152,10 +159,10 @@ export const toggleLike = (mediaItemId, token, updatedFields) => dispatch => {
     }})
     .then(res => res.json())
     .then(res => {
-      console.log(res);
-      dispatch(updateMediaItem(mediaItemId, updatedFields));
+      dispatch(updatedMediaItem(mediaItemId, updatedFields));
     })
     .catch(error => {
       console.log(error);
+      dispatch(updateMediaItemFailed());
     });
 };

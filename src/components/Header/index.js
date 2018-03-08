@@ -38,8 +38,6 @@ class ConnectedHeader extends Component {
   componentDidUpdate(prevprops, prevstate) {
   
     if ((prevprops.isLogedin ==! this.props.isLogedin) && this.props.isLogedin === true) {
-      console.log(prevprops.isLogedin);
-      console.log(this.props.isLogedin);
       <Redirect to="/profile" />;
     }
   }

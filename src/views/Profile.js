@@ -39,7 +39,6 @@ class ConnectedProfile extends Component {
     
     let content;
     if (this.props.isLogedin) {
-      console.log(this.props.isLogedin);
       if (this.state.activeTab === 0) {
         content = <ItemGrid mediaItems={this.props.mediaItems}/>;
       } else  if(this.state.activeTab === 1) {
