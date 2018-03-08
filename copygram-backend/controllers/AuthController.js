@@ -35,10 +35,12 @@ router.post('/register', function(req, res) {
 router.post('/login', function(req,res) {
 
   User.findOne({'email': req.body.email}, function(error,user) {
-
     if(error) {
       return res.status(500).json({error: "error occurred when trying to get user from database"});
+    }else if (!user) {
+      return res.status(422).json({error: "email is not registered"});
     }
+
   
     bcrypt.compare(req.body.password, user.password)
       .then(function(accessGranted) {

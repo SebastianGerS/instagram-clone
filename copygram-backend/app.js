@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var UserController = require('./controllers/UserController');
 var AuthController = require('./controllers/AuthController');
+var MediaItemController = require('./controllers/MediaItemController');
 var db = require('./db');
 
 var app = express();
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', UserController);
 app.use('/auth', AuthController);
+app.use('/mediaitems', MediaItemController);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

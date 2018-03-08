@@ -1,12 +1,14 @@
 import ActionTypes from '../actions/ActionTypes';
 import User from '../models/User';
 import MediaItem from '../models/MediaItems';
+import Token from '../models/Token';
 import Immutable from 'immutable';
 
 const initialState = {
   mediaItems:Immutable.OrderedMap(),
   curentUser: Immutable.OrderedMap(),
   isLogedin: false,
+  token: Immutable.Record(),
 };
 
 const Reducer = (state = initialState , action) => {
@@ -51,12 +53,12 @@ const Reducer = (state = initialState , action) => {
       ...state, 
       mediaItems: [...state.mediaItems,new MediaItem(
         { 
-          id: action.mediaItem.id,
+          id: action.mediaItem._id,
           images: {
             lowResolution: {
-              url: action.mediaItem.images.low_resolution.url,
-              width: action.mediaItem.images.low_resolution.width,
-              height: action.mediaItem.images.low_resolution.height
+              url: action.mediaItem.images.lowResolution.url,
+              width: action.mediaItem.images.lowResolution.width,
+              height: action.mediaItem.images.lowResolution.height
             },
             thumbnail: {
               url: action.mediaItem.images.thumbnail.url,
@@ -64,23 +66,23 @@ const Reducer = (state = initialState , action) => {
               height: action.mediaItem.images.thumbnail.height
             },
             standardResolution: {
-              url: action.mediaItem.images.standard_resolution.url,
-              width: action.mediaItem.images.standard_resolution.width,
-              height: action.mediaItem.images.standard_resolution.height
+              url: action.mediaItem.images.standardResolution.url,
+              width: action.mediaItem.images.standardResolution.width,
+              height: action.mediaItem.images.standardResolution.height
             },
           },
           type: action.mediaItem.type,
           comments: action.mediaItem.comments,
           likes: action.mediaItem.likes,
-          tags: [],
+          tags: [action.mediaItem.tags],
           caption: action.mediaItem.caption,
           user: {
             username: action.mediaItem.user.username,
-            fullname: action.mediaItem.user.full_name,
-            profilePicture: action.mediaItem.user.profile_picture,
-            id: action.mediaItem.user.id
+            fullname: action.mediaItem.user.fullname,
+            profilePicture: action.mediaItem.user.profilePicture,
+            id: action.mediaItem.user._id
           },
-          createdAt: action.mediaItem.created_time,
+          createdAt: action.mediaItem.createdAt,
           location: action.mediaItem.location
         }
       )],
@@ -116,7 +118,7 @@ const Reducer = (state = initialState , action) => {
           followedBy: action.data.user.followedBy,
         }
       )],
-      token: action.data.token,
+      token: new Token({value: action.data.token}),
       isFetching: false,
       isLogedin: true
     };
@@ -146,7 +148,7 @@ const Reducer = (state = initialState , action) => {
           followedBy: action.data.user.followedBy,
         }
       )],
-      token: action.data.token,
+      token: new Token({value: action.data.token}),
       isFetching: false,
       isLogedin: true
     };
@@ -160,7 +162,7 @@ const Reducer = (state = initialState , action) => {
       ...state,
       curentUser: Immutable.OrderedMap(),
       isLogedin: false,
-      token: ''
+      token: Immutable.OrderedMap()
     };
   default:
     return state;

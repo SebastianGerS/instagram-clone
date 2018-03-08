@@ -42,8 +42,8 @@ class MediaItem extends Component {
           <div className="imgButtons">
             <button className="likeButton"></button>
           </div>
-          <p className="bold">{this.props.mediaItem.likes.count} gilla-markeringar</p>
-          <p><span className="bold">{this.props.mediaItem.user.username}</span>&nbsp;{this.props.mediaItem.caption.text}&nbsp;{tags}</p>
+          <p className="bold">{this.props.mediaItem.likes} gilla-markeringar</p>
+          <p><span className="bold">{this.props.mediaItem.user.username}</span>&nbsp;{this.props.mediaItem.caption}&nbsp;{tags}</p>
           </div>
           <div>
           {comments}

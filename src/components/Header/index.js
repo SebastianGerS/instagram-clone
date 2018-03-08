@@ -4,6 +4,7 @@ import './style.css';
 import {loginUser, logoutUser} from '../../actions';
 import {connect} from 'react-redux';
 import uuidv1 from "uuid";
+import {Redirect} from 'react-router';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -31,6 +32,15 @@ class ConnectedHeader extends Component {
       email: '',
       password: '',
       modalIsActive: false
+    }
+  }
+
+  componentDidUpdate(prevprops, prevstate) {
+  
+    if ((prevprops.isLogedin ==! this.props.isLogedin) && this.props.isLogedin === true) {
+      console.log(prevprops.isLogedin);
+      console.log(this.props.isLogedin);
+      <Redirect to="/profile" />;
     }
   }
   login(e) {

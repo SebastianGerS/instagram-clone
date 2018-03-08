@@ -6,7 +6,7 @@ router.use(bodyParser.urlencoded({ extended: true}));
 var User = require('../models/User');
 var verifyToken = require('../middleware/verifyToken');
 
-router.get('/',verifyToken ,function(req,res) {
+router.get('/', verifyToken ,function(req,res, next) {
   User.find({},function(error,users) {
 
     if(error) {

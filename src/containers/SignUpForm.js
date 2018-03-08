@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router';
 import './SignUpForm.css';
 import {connect} from 'react-redux';
 import {registerUser} from '../actions';
@@ -45,7 +45,7 @@ class connectedSignUpForm extends Component {
 render() {
   
     if (this.props.isLogedin) {
-      return <Redirect to="/" />;
+      return <Redirect to="/profile" />;
     }
   
   return (

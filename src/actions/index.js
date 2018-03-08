@@ -1,5 +1,6 @@
 import ActionTypes from './ActionTypes';
 import {GET_SELF_URL,GET_MEDIA_URL, GET_MEDIAITEM_URL, ACCESS_TOKEN} from '../data/URLs';
+
 export const addItem = item => ({
   type: ActionTypes.ADD_ITEM,
   item: item
@@ -61,47 +62,33 @@ export const loginFailed = () => ({
 export const logoutUser = () => ({
   type: ActionTypes.USER_LOGOUT
 });
-export const fetchMediaItems = () => dispatch => {
+
+export const fetchMediaItems = (token, existingItems) => dispatch => {
   dispatch(requestMediaItems());
-  const url = GET_MEDIA_URL;
-  fetch(url)
+  fetch('mediaItems/selfe', {
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
     .then(res => res.json())
-    .then(res => {      
-      let count = 0; // will be removed in production only here to limit requests to the instagram api
-      res.data.forEach(item => {  
-        let toBeAdded = true;
+    .then(mediaItems => {  
       
-        if (count > 5) {
-          toBeAdded = false;
-        }
+      
+      mediaItems.forEach(mediaItem => {  
+        let toBeAdded = true;
+        
+        existingItems.forEach(existingItem => {
+          if (mediaItem._id === existingItem.id) {
+            toBeAdded = false;
+          }
+        });
+        
 
         if (toBeAdded) {
-          const itemURL = `${GET_MEDIAITEM_URL}/${item.id}${ACCESS_TOKEN}`;
-          dispatch(requestMediaItems());
-          fetch(itemURL)
-            .then(res => res.json())
-            .then(mediaItem => {
-
-              if (mediaItem.data.comments.count > 0) {
-                const commentsURL = `${GET_MEDIAITEM_URL}/${item.id}/comments${ACCESS_TOKEN}`;
-                dispatch(requestMediaItems());
-                fetch(commentsURL)
-                  .then(r => r.json())
-                  .then(r => {
-                    mediaItem.data.comments['data'] = r.data;
-                    dispatch(reciveMediaItem(mediaItem.data));
-                  });
-              } else {
-                dispatch(reciveMediaItem(mediaItem.data));
-              }
-            })
-            .catch(e => {
-              console.log(e);
-            
-            });
-         
+          dispatch(reciveMediaItem(mediaItem));
         }
-        count++;
       }); 
     }).catch(error => {
       console.log(error);
@@ -109,28 +96,14 @@ export const fetchMediaItems = () => dispatch => {
     });
 };
 
-export const fetchProfile = () => dispatch => {
-  dispatch(requestUser());
-  const url = GET_SELF_URL;
-  fetch(url)
-    .then(res => res.json())
-    .then(user => {
-      dispatch(reciveUser(user.data));
-    }).catch(error => {
-      console.log(error);
-      dispatch(rejectedUser());
-    });
-
-};  
-
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
   fetch('/auth/register', {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {
-    'content-type': 'application/json',
-    'accept': 'application/json'
+      'content-type': 'application/json',
+      'accept': 'application/json'
     }
   })
     .then(res => res.json())
@@ -140,8 +113,8 @@ export const registerUser = (user) => dispatch => {
     .catch(error => {
       console.log(error);
       dispatch(rejectedUserRegistration());
-    })
-}
+    });
+};
 
 
 export const loginUser = (user) => dispatch => {
@@ -150,8 +123,8 @@ export const loginUser = (user) => dispatch => {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {
-    'content-type': 'application/json',
-    'accept': 'application/json'
+      'content-type': 'application/json',
+      'accept': 'application/json'
     }
   }).then(res => res.json())
     .then(data => {
@@ -159,6 +132,6 @@ export const loginUser = (user) => dispatch => {
     }).catch(error => {
       console.log(error);
       dispatch(loginFailed());
-    })
+    });
 
-}
+};

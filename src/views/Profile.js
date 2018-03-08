@@ -7,7 +7,7 @@ import {GET_MEDIA_URL, GET_MEDIAITEM_URL, ACCESS_TOKEN} from '../data/URLs';
 import './Profile.css';
 
 const mapStateToProps = state => {
-  return { mediaItems: state.mediaItems};
+  return { mediaItems: state.mediaItems, token: state.token, isLogedin: state.isLogedin};
 }
 
 class ConnectedProfile extends Component {
@@ -22,8 +22,8 @@ class ConnectedProfile extends Component {
     this.changeTab = this.changeTab.bind(this);
   }
 
-  componentWillMount(){
-    this.props.dispatch(fetchMediaItems());
+  componentWillMount() {
+    this.props.dispatch(fetchMediaItems(this.props.token.value, this.props.mediaItems)); 
   }
 
   changeTab(index) {
@@ -38,13 +38,14 @@ class ConnectedProfile extends Component {
   render() {
     
     let content;
-
-    if (this.state.activeTab === 0) {
-      content = <ItemGrid mediaItems={this.props.mediaItems}/>;
-    } else  if(this.state.activeTab === 1) {
-      content = <ItemFeed mediaItems={this.props.mediaItems} />;
+    if (this.props.isLogedin) {
+      console.log(this.props.isLogedin);
+      if (this.state.activeTab === 0) {
+        content = <ItemGrid mediaItems={this.props.mediaItems}/>;
+      } else  if(this.state.activeTab === 1) {
+        content = <ItemFeed mediaItems={this.props.mediaItems} />;
+      }
     }
-
     return (
       <div className="content">
         <UserProfile />

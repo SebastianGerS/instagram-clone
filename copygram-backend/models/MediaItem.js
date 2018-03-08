@@ -29,4 +29,4 @@ var MediaItemSchema = Schema({
 
 mongoose.model('MediaItem', MediaItemSchema);
 
-module.exports(mongoose.model('MediaItem'));
+module.exports = mongoose.model('MediaItem');
