@@ -20,10 +20,10 @@ var MediaItemSchema = Schema({
   },
   type: String,
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment' }],
-  likes: Number,
+  likes: [{type: Schema.Types.ObjectId, ref: 'User' }],
   tags: [{type: Schema.Types.ObjectId, ref: 'Tag' }],
   caption: String,
-  user: {type: Schema.Types.ObjectId, ref: 'User' },
+  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
   location: String
 },  { timestamps: { } });
 
