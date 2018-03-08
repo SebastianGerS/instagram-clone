@@ -83,19 +83,25 @@
   -webkit-appearance: none;
   outline: none;
   padding: 0.9em;
-  height:1em;
-  width:1em;
+  height:1.5em;
+  width:1.5em;
   color: black;
   cursor: pointer;
-  
 }
 
 .likeButton {
- background-image: url(./heart.svg);
+
  margin-right: 1em;
  
 }
-
+.likeButton svg {
+  pointer-events:none;
+  z-index: 2;
+}
+.liked {
+  fill: red;
+  stroke: red;
+}
 .imgButtons {
   display: flex;
   flex-direction: row;

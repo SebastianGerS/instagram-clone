@@ -63,6 +63,12 @@ export const logoutUser = () => ({
   type: ActionTypes.USER_LOGOUT
 });
 
+export const updateMediaItem = (mediaItemId, updatedFields) => ({
+  type: ActionTypes.MEDIAITEM_UPDATE_SUCCESS,
+  mediaItemId: mediaItemId,
+  updatedFields: updatedFields
+});
+
 export const fetchMediaItems = (token, existingItems) => dispatch => {
   dispatch(requestMediaItems());
   fetch('mediaItems/selfe', {
@@ -133,5 +139,23 @@ export const loginUser = (user) => dispatch => {
       console.log(error);
       dispatch(loginFailed());
     });
+};
 
+export const toggleLike = (mediaItemId, token, updatedFields) => dispatch => {
+
+  fetch('/mediaitems/' + mediaItemId, {
+    method: 'PUT', 
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }})
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(updateMediaItem(mediaItemId, updatedFields));
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };

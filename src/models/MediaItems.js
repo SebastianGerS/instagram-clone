@@ -36,8 +36,8 @@ const MediaItem = Immutable.Record({
       }
     ]
   },
-  likes:String,
-  tags: [],
+  likes: Array,
+  tags: Array,
   caption: String,
   user: {
     username: String,

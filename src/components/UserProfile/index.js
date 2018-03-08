@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import uuidv1 from "uuid";
 
 const mapStateToProps = state => {
-  return { curentUser: state.curentUser};
+  return { currentUser: state.currentUser};
 }
 
 class ConnectedUserProfile extends Component {
@@ -14,8 +14,8 @@ class ConnectedUserProfile extends Component {
 
   render() {
     const content = [];
-    if(this.props.curentUser) {
-      this.props.curentUser.forEach(user => {
+    if(this.props.currentUser) {
+      this.props.currentUser.forEach(user => {
         const img =
             <figure key={uuidv1()}className="profile-img-container">
               <img className="profile-img" src={user.profilePicture}/>

@@ -6,9 +6,10 @@ import Immutable from 'immutable';
 
 const initialState = {
   mediaItems:Immutable.OrderedMap(),
-  curentUser: Immutable.OrderedMap(),
+  currentUser: Immutable.OrderedMap(),
   isLogedin: false,
   token: Immutable.Record(),
+  currentUserId: ''
 };
 
 const Reducer = (state = initialState , action) => {
@@ -105,7 +106,7 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_REGISTRATION_SUCCESS:
     return {
       ...state,
-      curentUser: [ new User(
+      currentUser: [ new User(
         {
           id: action.data.user._id,
           username: action.data.user.username,
@@ -119,6 +120,7 @@ const Reducer = (state = initialState , action) => {
         }
       )],
       token: new Token({value: action.data.token}),
+      currentUserId: action.data.user._id,
       isFetching: false,
       isLogedin: true
     };
@@ -135,7 +137,7 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_LOGIN_SUCCESS:
     return {
       ...state,
-      curentUser: [ new User(
+      currentUser: [ new User(
         {
           id: action.data.user._id,
           username: action.data.user.username,
@@ -149,6 +151,7 @@ const Reducer = (state = initialState , action) => {
         }
       )],
       token: new Token({value: action.data.token}),
+      currentUserId: action.data.user._id,
       isFetching: false,
       isLogedin: true
     };
@@ -163,6 +166,36 @@ const Reducer = (state = initialState , action) => {
       curentUser: Immutable.OrderedMap(),
       isLogedin: false,
       token: Immutable.OrderedMap()
+    };
+  case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
+    const mediaItems = [...state.mediaItems.map(mediaItem => {
+      
+      if(mediaItem.id === action.mediaItemId) {
+        console.log(mediaItem.id + 'curent loop object');
+        console.log(action.mediaItemId + 'object wee liked/unliked');
+        action.updatedFields.forEach(field => {
+          if(Array.isArray(mediaItem[field.name])) {
+            if (mediaItem[field.name].includes(field.value)) {
+              mediaItem[field.name].map((user, index) => {
+                if (user === field.value) {
+                  mediaItem[field.name].splice(index,1);
+                }
+              });
+              console.log(mediaItem);
+            } else {
+              mediaItem[field.name].push(field.value);
+            }
+          } else {
+            mediaItem[field.name] = field.value;
+          }
+         
+        });
+      }
+      return mediaItem;
+    })];
+    return {
+      ...state,
+      mediaItems: [...mediaItems]
     };
   default:
     return state;
