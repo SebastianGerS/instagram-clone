@@ -88,7 +88,6 @@ export const fetchMediaItems = (token, existingItems) => dispatch => {
     .then(res => res.json())
     .then(mediaItems => {  
       
-      
       mediaItems.forEach(mediaItem => {  
         let toBeAdded = true;
         

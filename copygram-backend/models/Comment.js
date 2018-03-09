@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var CommentSchema = Schema({
   text: String,
-  user: {type: Schema.Types.ObjectId, ref: 'User', required: true },
+  user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
   mediaItem: {type: Schema.Types.ObjectId, ref: 'MediaItem', required: true },
 },  { timestamps: { } });
 

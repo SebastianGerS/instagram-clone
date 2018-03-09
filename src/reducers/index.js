@@ -50,6 +50,7 @@ const Reducer = (state = initialState , action) => {
       isFetching: true
     }
   case ActionTypes.FETCH_MEDIAITEMS_SUCCESS:
+  
     return { 
       ...state, 
       mediaItems: [...state.mediaItems,new MediaItem(

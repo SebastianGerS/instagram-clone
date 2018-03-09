@@ -3,6 +3,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var User = require('../models/User');
 var Tag = require('../models/Tag');
+var Comment = require('../models/Comment');
 var MediaItem = require('../models/MediaItem');
 var VerifyToken = require('../middleware/verifyToken');
 
@@ -100,9 +101,14 @@ router.post('/', VerifyToken ,function(req,res) {
   });
 });
 router.get('/selfe',VerifyToken, function(req,res) {
-  MediaItem.find({user: req.userId}).populate({path: 'user'}).lean().exec(function(err, mediaItems) {
+  MediaItem.find({user: req.userId}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
-    return res.json(mediaItems);
+    if (mediaItems) {
+      return res.status(200).json(mediaItems);
+    } else {
+      return res.status(404).json({error: 'no mediaItems found'});
+    }
+    
   });
 });
 

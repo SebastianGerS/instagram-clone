@@ -33,10 +33,9 @@ class ConnectedMediaItem extends Component {
     const comments = []
     const tags = [];
     let likeButtonClass;
-
-    if (this.props.mediaItem.comments.data) {
-      this.props.mediaItem.comments.data.forEach(comment => {
-        let newComment = <p key={uuidv1()}><span className="bold">{comment.from.username}</span> {comment.text}</p>
+    if (this.props.mediaItem.comments) {
+      this.props.mediaItem.comments.forEach(comment => {
+        let newComment = <p key={uuidv1()}><span className="bold">{comment.user.username}</span> {comment.text}</p>
         comments.push(newComment);
       });
     }
