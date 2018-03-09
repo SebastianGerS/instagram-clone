@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import './style.css';
 import uuidv1 from "uuid";
-import {toggleLike} from '../../actions';
+import {toggleLike, createComment} from '../../actions';
 import {connect} from 'react-redux';
 import heart from './heart.svg'
 const mapStateToProps = state => {
   return {
     token:  state.token,
-    currentUserId: state.currentUserId
+    currentUserId: state.currentUserId,
+    currentUser: state.currentUser
   };
 };
 
@@ -16,8 +17,11 @@ class ConnectedMediaItem extends Component {
   constructor(props) {
     super(props);
     this.handleLike = this.handleLike.bind(this);
+    this.addComment = this.addComment.bind(this);
+    this.updateStateValue = this.updateStateValue.bind(this);
     this.state = {
-      updatedFields: []
+      updatedFields: [],
+      comment: '',
     }
   }
   handleLike(e) {
@@ -26,8 +30,31 @@ class ConnectedMediaItem extends Component {
       name: 'likes',
       value: this.props.currentUserId
     }];
+    
+    this.props.dispatch(toggleLike(this.props.mediaItem.id, this.props.token.value, field));
+  }
+  updateStateValue(e) {
+    this.setState({
+        [e.target.name]: e.target.value
+     });
+  }
+  addComment(e) {
+    e.preventDefault();
+    const currentUser = this.props.currentUser;
+    const field = [{
+      name: 'comments',
+      value: {
+        text: this.state.comment,
+        user: {
+          username: currentUser.username,
+          profilePicture: currentUser.profilePicture,
+          fullname: currentUser.profilePicture,
+          id: currentUser.id
+        }
 
-    this.props.dispatch(toggleLike(e.target.value, this.props.token.value, field));
+      }
+    }];
+    this.props.dispatch(createComment(this.state.comment,this.props.mediaItem.id, this.props.token.value, field));
   }
   render() {
     const comments = []
@@ -70,7 +97,7 @@ class ConnectedMediaItem extends Component {
         <div className="itemInfo">
           <div>
           <div className="imgButtons">
-            <button className={likeButtonClass} value={this.props.mediaItem.id} onClick={(e) => this.handleLike(e)}>
+            <button className={likeButtonClass} onClick={(e) => this.handleLike(e)}>
               <svg enableBackground="new 0 0 24 24" viewBox="0 0 24 24" width="24px" >
               <path d="M7,22L7,22c-0.5,0-0.8-0.3-0.8-1c0.5-3.7-0.9-5.1-2.6-6.6c-1.4-1.3-2.9-2.8-3.1-5.8C0.4,6.9,1,5.2,2.2,4    
               C3.3,2.7,5,2,6.7,2c0,0,0.1,0,0.1,0c2.3,0,4.4,1.3,5.5,3.4c1.2-1.6,3-2.6,5-2.6l0.2,0c1.7,0.1,3.2,0.8,4.3,2   
@@ -87,9 +114,9 @@ class ConnectedMediaItem extends Component {
           <div>
           {comments}
           </div>
-          <form className="commentForm">
-            <textarea placeholder="kommentera..."/>
-            <button>Publicera</button>
+          <form className="commentForm" onSubmit={(e) => this.addComment(e)}>
+            <textarea name="comment" placeholder="kommentera..." value={this.state.comment} onChange={(e) => this.updateStateValue(e)}/>
+            <button type="submit" >Publicera</button>
           </form>
         </div>
       </section>

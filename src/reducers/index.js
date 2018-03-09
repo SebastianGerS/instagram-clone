@@ -53,41 +53,41 @@ const Reducer = (state = initialState , action) => {
   
     return { 
       ...state, 
-      mediaItems: [...state.mediaItems,new MediaItem(
+      mediaItems: action.mediaItems.map(mediaItem => new MediaItem(
         { 
-          id: action.mediaItem._id,
+          id: mediaItem._id,
           images: {
             lowResolution: {
-              url: action.mediaItem.images.lowResolution.url,
-              width: action.mediaItem.images.lowResolution.width,
-              height: action.mediaItem.images.lowResolution.height
+              url: mediaItem.images.lowResolution.url,
+              width: mediaItem.images.lowResolution.width,
+              height: mediaItem.images.lowResolution.height
             },
             thumbnail: {
-              url: action.mediaItem.images.thumbnail.url,
-              width: action.mediaItem.images.thumbnail.width,
-              height: action.mediaItem.images.thumbnail.height
+              url: mediaItem.images.thumbnail.url,
+              width: mediaItem.images.thumbnail.width,
+              height: mediaItem.images.thumbnail.height
             },
             standardResolution: {
-              url: action.mediaItem.images.standardResolution.url,
-              width: action.mediaItem.images.standardResolution.width,
-              height: action.mediaItem.images.standardResolution.height
+              url: mediaItem.images.standardResolution.url,
+              width: mediaItem.images.standardResolution.width,
+              height: mediaItem.images.standardResolution.height
             },
           },
-          type: action.mediaItem.type,
-          comments: action.mediaItem.comments,
-          likes: action.mediaItem.likes,
-          tags: [action.mediaItem.tags],
-          caption: action.mediaItem.caption,
+          type: mediaItem.type,
+          comments: mediaItem.comments,
+          likes: mediaItem.likes,
+          tags: [mediaItem.tags],
+          caption: mediaItem.caption,
           user: {
-            username: action.mediaItem.user.username,
-            fullname: action.mediaItem.user.fullname,
-            profilePicture: action.mediaItem.user.profilePicture,
-            id: action.mediaItem.user._id
+            username: mediaItem.user.username,
+            fullname: mediaItem.user.fullname,
+            profilePicture: mediaItem.user.profilePicture,
+            id: mediaItem.user._id
           },
-          createdAt: action.mediaItem.createdAt,
-          location: action.mediaItem.location
+          createdAt: mediaItem.createdAt,
+          location: mediaItem.location
         }
-      )],
+      )),
       isFetching: false
     };
   case ActionTypes.FETCH_MEDIAITEMS_FAILURE:
@@ -138,7 +138,7 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_LOGIN_SUCCESS:
     return {
       ...state,
-      currentUser: [ new User(
+      currentUser: new User(
         {
           id: action.data.user._id,
           username: action.data.user.username,
@@ -150,7 +150,7 @@ const Reducer = (state = initialState , action) => {
           follows: action.data.user.follows,
           followedBy: action.data.user.followedBy,
         }
-      )],
+      ),
       token: new Token({value: action.data.token}),
       currentUserId: action.data.user._id,
       isFetching: false,
@@ -179,7 +179,9 @@ const Reducer = (state = initialState , action) => {
       if(mediaItem.id === action.mediaItemId) {
         action.updatedFields.forEach(field => {
           if(Array.isArray(mediaItem[field.name])) {
-            if (mediaItem[field.name].includes(field.value)) {
+            if(field.name === 'comments') {
+              mediaItem[field.name].push(field.value);
+            } else if (mediaItem[field.name].includes(field.value)) {
               mediaItem[field.name].map((user, index) => {
                 if (user === field.value) {
                   mediaItem[field.name].splice(index,1);

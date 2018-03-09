@@ -10,9 +10,9 @@ export const setUser = user => ({
   type: ActionTypes.SET_USER,
   user: user
 });
-export const reciveMediaItem = mediaItem => ({
+export const reciveMediaItem = mediaItems => ({
   type: ActionTypes.FETCH_MEDIAITEMS_SUCCESS,
-  mediaItem: mediaItem
+  mediaItems: mediaItems
 });
 export const requestMediaItems = () => ({
   type: ActionTypes.FETCH_MEDIAITEMS_START
@@ -86,23 +86,8 @@ export const fetchMediaItems = (token, existingItems) => dispatch => {
     }
   })
     .then(res => res.json())
-    .then(mediaItems => {  
-      
-      mediaItems.forEach(mediaItem => {  
-        let toBeAdded = true;
-        
-        existingItems.forEach(existingItem => {
-          if (mediaItem._id === existingItem.id) {
-            toBeAdded = false;
-          }
-        });
-        
-
-        if (toBeAdded) {
-          dispatch(reciveMediaItem(mediaItem));
-        }
-      }); 
-    }).catch(error => {
+    .then(mediaItems => dispatch(reciveMediaItem(mediaItems)))
+    .catch(error => {
       console.log(error);
       dispatch(rejectedMediaItems());
     });
@@ -165,3 +150,23 @@ export const toggleLike = (mediaItemId, token, updatedFields) => dispatch => {
       dispatch(updateMediaItemFailed());
     });
 };
+
+export const createComment = (comment,mediaItemId ,token, updatedFields) => dispatch => {
+    fetch(`/mediaitems/${mediaItemId}/comments`,
+    {
+      method: 'POST', 
+      headers: {
+        'x-access-token': token,
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify({ text: comment})
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(updatedMediaItem(mediaItemId, updatedFields));
+    }).catch(error => {
+      console.log(error);
+    })
+}

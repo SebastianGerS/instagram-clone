@@ -14,8 +14,8 @@ class ConnectedUserProfile extends Component {
 
   render() {
     const content = [];
-    if(this.props.currentUser) {
-      this.props.currentUser.forEach(user => {
+    if(this.props.currentUser.username) {
+      const user = this.props.currentUser;
         const img =
             <figure key={uuidv1()}className="profile-img-container">
               <img className="profile-img" src={user.profilePicture}/>
@@ -37,7 +37,6 @@ class ConnectedUserProfile extends Component {
               </div>
             </div>
         content.push(img,profile);
-      });
     }
       return (
         <section className="userProfile">
