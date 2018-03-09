@@ -9,19 +9,37 @@ router.use(bodyParser.urlencoded({ extended: true}));
 
 router.post('/', VerifyToken ,function(req,res) {
   Comment.create({
+    _id: req.body._id,
     text: req.body.text,
     user: req.userId,
-    mediaItem: req.params.id,
+    mediaItem: req.params.mediaItemId,
   }, function(error, comment) {
-    if (error) return res.json({error: 'error creating comment'});
-    MediaItem.findById(req.params.id, function(err, mediaItem) {
+    if (error) return res.json({error: 'error creating comment ' + error});
+    MediaItem.findById(req.params.mediaItemId, function(err, mediaItem) {
       if (err) return res.json({error: 'error binding comment to mediaitem'});
-      mediaItem.comments.push(comment._id);
+      mediaItem.comments.push(req.body._id);
       mediaItem.save();
       return res.json('comment created');
     });  
   });
 });
 
+router.delete('/:id', VerifyToken ,function(req,res) {
+  Comment.remove({ _id: req.params.id}, function(error) {
+    if (error) return res.json({error: 'error removing comment'});
+    
+    MediaItem.findById(req.params.mediaItemId, function(err, mediaItem) {
+      if (err) return res.json({error: ' removing comment from mediaitem'});
+      mediaItem.comments.map((comment, index) => {
+        
+        if(comment == req.params.id) {
+          mediaItem.comments.splice(index, 1);
+          mediaItem.save();
+        }
+      });
+      return res.json('comment was removed');
+    });  
+  });
+});
 
 module.exports = router;

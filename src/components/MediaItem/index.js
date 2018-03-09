@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import uuidv1 from "uuid";
-import {toggleLike, createComment} from '../../actions';
+import {toggleLike, createComment, deleteComment} from '../../actions';
 import {connect} from 'react-redux';
 import heart from './heart.svg'
 const mapStateToProps = state => {
@@ -19,6 +19,7 @@ class ConnectedMediaItem extends Component {
     this.handleLike = this.handleLike.bind(this);
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
+    this.removeComment = this.removeComment.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
@@ -45,6 +46,7 @@ class ConnectedMediaItem extends Component {
       name: 'comments',
       value: {
         text: this.state.comment,
+        _id: uuidv1(),
         user: {
           username: currentUser.username,
           profilePicture: currentUser.profilePicture,
@@ -56,14 +58,31 @@ class ConnectedMediaItem extends Component {
     }];
     this.props.dispatch(createComment(this.state.comment,this.props.mediaItem.id, this.props.token.value, field));
   }
+  removeComment(e) {
+    console.log(e.target.value);
+    const field = [{
+      name: 'comments',
+      value: {
+        text: this.state.comment,
+        _id: e.target.value,
+      }
+    }];
+    this.props.dispatch(deleteComment(this.props.mediaItem.id, e.target.value,this.props.token.value ,field));
+  }
   render() {
     const comments = []
     const tags = [];
     let likeButtonClass;
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
-        let newComment = <p key={uuidv1()}><span className="bold">{comment.user.username}</span> {comment.text}</p>
+        let newComment
+        if (this.props.mediaItem.user.id == this.props.currentUser.id) {
+          newComment = <p key={uuidv1()} className="comments"><span><span className="bold">{comment.user.username}</span>&nbsp;{comment.text}</span><button value={comment._id} onClick={(e) => this.removeComment(e)}>x</button></p>
+        } else  {
+          newComment = <p key={uuidv1()}><span className="bold">{comment.user.username}</span>&nbsp;{comment.text}</p>
+        }
         comments.push(newComment);
+
       });
     }
 

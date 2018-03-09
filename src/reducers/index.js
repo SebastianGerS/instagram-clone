@@ -180,7 +180,15 @@ const Reducer = (state = initialState , action) => {
         action.updatedFields.forEach(field => {
           if(Array.isArray(mediaItem[field.name])) {
             if(field.name === 'comments') {
-              mediaItem[field.name].push(field.value);
+              if(!field.value.user) {
+                mediaItem[field.name].map((comment, index) => {
+                  if (comment._id === field.value._id) {
+                    mediaItem[field.name].splice(index,1);
+                  }
+                });
+              } else {
+                mediaItem[field.name].push(field.value);
+              }
             } else if (mediaItem[field.name].includes(field.value)) {
               mediaItem[field.name].map((user, index) => {
                 if (user === field.value) {

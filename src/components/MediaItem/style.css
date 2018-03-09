@@ -108,3 +108,17 @@
   justify-content: flex-end;
   align-items: center;
 }
+.comments button{
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  outline: none; 
+  cursor: pointer;
+  color: red;
+  font-size: 1.1em;
+}
+.comments {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

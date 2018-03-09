@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users', UserController);
 app.use('/auth', AuthController);
 app.use('/mediaitems', MediaItemController);
-app.use('/mediaitems/:id/comments', CommentController);
+app.use('/mediaitems/:mediaItemId/comments', CommentController);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

@@ -160,7 +160,7 @@ export const createComment = (comment,mediaItemId ,token, updatedFields) => disp
         'content-type': 'application/json',
         'accept': 'application/json'
       },
-      body: JSON.stringify({ text: comment})
+      body: JSON.stringify({ text: comment, _id: updatedFields[0].value._id})
     })
     .then(res => res.json())
     .then(res => {
@@ -170,3 +170,24 @@ export const createComment = (comment,mediaItemId ,token, updatedFields) => disp
       console.log(error);
     })
 }
+
+export const deleteComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
+  console.log(mediaItemId);
+  console.log(commentId);
+  fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
+    {
+      method: 'DELETE', 
+      headers: {
+        'x-access-token': token,
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(updatedMediaItem(mediaItemId, updatedFields));
+    }).catch(error => {
+      console.log(error);
+    })
+};
