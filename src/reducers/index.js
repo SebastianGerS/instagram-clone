@@ -174,13 +174,12 @@ const Reducer = (state = initialState , action) => {
       isUpdating: true
     };
   case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
-    const mediaItems = [...state.mediaItems.map(mediaItem => {
-      
-      if(mediaItem.id === action.mediaItemId) {
+    const mediaItems = [...state.mediaItems.map(mediaItem => { 
+      if (mediaItem.id === action.mediaItemId) {
         action.updatedFields.forEach(field => {
-          if(Array.isArray(mediaItem[field.name])) {
-            if(field.name === 'comments') {
-              if(!field.value.user) {
+          if (Array.isArray(mediaItem[field.name])) {
+            if (field.name === 'comments') {
+              if (!field.value.user) {
                 mediaItem[field.name].map((comment, index) => {
                   if (comment._id === field.value._id) {
                     mediaItem[field.name].splice(index,1);
@@ -201,7 +200,6 @@ const Reducer = (state = initialState , action) => {
           } else {
             mediaItem[field.name] = field.value;
           }
-         
         });
       }
       return mediaItem;

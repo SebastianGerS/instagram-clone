@@ -52,8 +52,15 @@ router.post('/', VerifyToken ,function(req,res) {
                 var message = JSON.stringify({error: "error occurred when trying to add new mediaItem with " + error});
                 return res.status(500).send(message);
               }
-         
-              return res.status(200).json(mediaItem);
+
+              User.findById(req.userId, function(err, user) {
+                if (err) return res.status(500).json({error: 'error occurred when binding mediaItem to user'});
+                if (!user) return res.status(500).json({error: 'error occurred trying to fetch user'});
+                user.mediaItems.push(mediaItem._id);
+                user.save();
+                return res.status(200).json(mediaItem);
+              });
+              
             
             });
           }
@@ -93,7 +100,13 @@ router.post('/', VerifyToken ,function(req,res) {
               return res.status(500).send(message);
             }
          
-            return res.status(200).json(mediaItem);
+            User.findById(req.userId, function(err, user) {
+              if (err) return res.status(500).json({error: 'error occurred when binding mediaItem to user'});
+              if (!user) return res.status(500).json({error: 'error occurred trying to fetch user'});
+              user.mediaItems.push(mediaItem._id);
+              user.save();
+              return res.status(200).json(mediaItem);
+            });
           });
         }
       }

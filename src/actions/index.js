@@ -1,5 +1,4 @@
 import ActionTypes from './ActionTypes';
-import {GET_SELF_URL,GET_MEDIA_URL, GET_MEDIAITEM_URL, ACCESS_TOKEN} from '../data/URLs';
 
 export const addItem = item => ({
   type: ActionTypes.ADD_ITEM,
@@ -76,7 +75,7 @@ export const updateMediaItemFailed = () => ({
   type: ActionTypes.MEDIAITEM_UPDATE_FAILURE,
 });
 
-export const fetchMediaItems = (token, existingItems) => dispatch => {
+export const fetchMediaItems = (token) => dispatch => {
   dispatch(requestMediaItems());
   fetch('mediaItems/selfe', {
     headers: {
@@ -190,4 +189,8 @@ export const deleteComment = (mediaItemId, commentId, token, updatedFields) => d
     }).catch(error => {
       console.log(error);
     })
+};
+
+export const updateComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
+  console.log(updatedFields);
 };

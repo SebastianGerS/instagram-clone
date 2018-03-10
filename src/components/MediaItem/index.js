@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './style.css';
+import {ItemComment} from '../';
 import uuidv1 from "uuid";
-import {toggleLike, createComment, deleteComment} from '../../actions';
+import {toggleLike, createComment} from '../../actions';
 import {connect} from 'react-redux';
-import heart from './heart.svg'
+
 const mapStateToProps = state => {
   return {
     token:  state.token,
@@ -19,7 +20,6 @@ class ConnectedMediaItem extends Component {
     this.handleLike = this.handleLike.bind(this);
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
-    this.removeComment = this.removeComment.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
@@ -58,31 +58,14 @@ class ConnectedMediaItem extends Component {
     }];
     this.props.dispatch(createComment(this.state.comment,this.props.mediaItem.id, this.props.token.value, field));
   }
-  removeComment(e) {
-    console.log(e.target.value);
-    const field = [{
-      name: 'comments',
-      value: {
-        text: this.state.comment,
-        _id: e.target.value,
-      }
-    }];
-    this.props.dispatch(deleteComment(this.props.mediaItem.id, e.target.value,this.props.token.value ,field));
-  }
   render() {
     const comments = []
     const tags = [];
     let likeButtonClass;
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
-        let newComment
-        if (this.props.mediaItem.user.id == this.props.currentUser.id) {
-          newComment = <p key={uuidv1()} className="comments"><span><span className="bold">{comment.user.username}</span>&nbsp;{comment.text}</span><button value={comment._id} onClick={(e) => this.removeComment(e)}>x</button></p>
-        } else  {
-          newComment = <p key={uuidv1()}><span className="bold">{comment.user.username}</span>&nbsp;{comment.text}</p>
-        }
+        const newComment = <ItemComment key={uuidv1()}mediaItem={this.props.mediaItem} comment={comment}/>;
         comments.push(newComment);
-
       });
     }
 
@@ -116,8 +99,7 @@ class ConnectedMediaItem extends Component {
         <div className="itemInfo">
           <div>
           <div className="imgButtons">
-            <button className={likeButtonClass} onClick={(e) => this.handleLike(e)}>
-              <svg enableBackground="new 0 0 24 24" viewBox="0 0 24 24" width="24px" >
+              <svg className={likeButtonClass} onClick={this.handleLike} enableBackground="new 0 0 24 24" viewBox="0 0 24 24" width="24px" >
               <path d="M7,22L7,22c-0.5,0-0.8-0.3-0.8-1c0.5-3.7-0.9-5.1-2.6-6.6c-1.4-1.3-2.9-2.8-3.1-5.8C0.4,6.9,1,5.2,2.2,4    
               C3.3,2.7,5,2,6.7,2c0,0,0.1,0,0.1,0c2.3,0,4.4,1.3,5.5,3.4c1.2-1.6,3-2.6,5-2.6l0.2,0c1.7,0.1,3.2,0.8,4.3,2   
                c1.2,1.3,1.8,2.9,1.7,4.7l0,0.1c-0.1,4.8-5.6,9.1-15.9,12.3C7.3,22,7.2,22,7,22z M7,21l0,0.5L7,21C7,21,7,21,7,21z M6.8,3   
@@ -125,7 +107,6 @@ class ConnectedMediaItem extends Component {
                 c9.8-3,15.2-7.1,15.2-11.4l0-0.2c0.1-1.5-0.4-2.9-1.4-4c-0.9-1-2.2-1.6-3.6-1.7l-0.2,0c-1.8,0-3.4,0.9-4.4,2.5c0,0,0,0,0,0.1   
                  c-0.1,0.2-0.3,0.4-0.6,0.4l0,0c-0.3,0-0.6-0.2-0.7-0.5C10.7,4.3,8.8,3,6.8,3z"/>
               </svg> 
-            </button>
           </div>
           <p className="bold">{this.props.mediaItem.likes.length} gilla-markeringar</p>
           <p><span className="bold">{this.props.mediaItem.user.username}</span>&nbsp;{this.props.mediaItem.caption}&nbsp;{tags}</p>
@@ -135,7 +116,7 @@ class ConnectedMediaItem extends Component {
           </div>
           <form className="commentForm" onSubmit={(e) => this.addComment(e)}>
             <textarea name="comment" placeholder="kommentera..." value={this.state.comment} onChange={(e) => this.updateStateValue(e)}/>
-            <button type="submit" >Publicera</button>
+            <button type="submit" className="submitButton">Publicera</button>
           </form>
         </div>
       </section>

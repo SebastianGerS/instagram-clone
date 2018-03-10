@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
 import {connect} from 'react-redux';
-import {addItem, fetchMediaItems} from '../actions';
-import {GET_MEDIA_URL, GET_MEDIAITEM_URL, ACCESS_TOKEN} from '../data/URLs';
+import {fetchMediaItems} from '../actions';
 import './Profile.css';
 
 const mapStateToProps = state => {
@@ -23,7 +22,7 @@ class ConnectedProfile extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchMediaItems(this.props.token.value, this.props.mediaItems)); 
+    this.props.dispatch(fetchMediaItems(this.props.token.value)); 
   }
 
   changeTab(index) {

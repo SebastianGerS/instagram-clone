@@ -8,17 +8,14 @@ const mapStateToProps = state => {
 }
 
 class ConnectedUserProfile extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+ 
   render() {
     const content = [];
     if(this.props.currentUser.username) {
       const user = this.props.currentUser;
         const img =
             <figure key={uuidv1()}className="profile-img-container">
-              <img className="profile-img" src={user.profilePicture}/>
+              <img className="profile-img" src={user.profilePicture} alt="profileimg"/>
             </figure>;
         const profile = 
             <div key={uuidv1()} className="info">

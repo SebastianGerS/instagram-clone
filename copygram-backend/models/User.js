@@ -18,7 +18,7 @@ var UserSchema = new Schema({
 UserSchema.pre('save', function(next) {
   var user = this;
   var rounds = 5;
-
+  if(!user.isModified('password')) return next();
   bcrypt.genSalt(rounds, function(error, salt) {
     if (error) return next(error);
 

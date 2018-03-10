@@ -54,7 +54,7 @@ render() {
         <form className="signupForm" onSubmit={this.register}>
           <input name="email" type="email" placeholder="Email" value={this.state.email} onChange={this.updateStateValue}/>
           <input name="name" type="text" placeholder="Fullname" value={this.state.name} onChange={this.updateStateValue}/>
-          <input name="username" type="text" placeholder="Username"value={this.state.username} onChange={this.updateStateValue}/>
+          <input name="username" type="text" placeholder="Username" value={this.state.username} onChange={this.updateStateValue}/>
           <input name="password" type="password" placeholder="Password"value={this.state.password} onChange={this.updateStateValue}/>
           <button type="submit">signup</button>
         </form>
