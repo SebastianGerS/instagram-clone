@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const MediaItem = Immutable.Record({
-  id: String,
+  _id: String,
   images: {
     lowResolution: {
       url: String,
@@ -20,22 +20,7 @@ const MediaItem = Immutable.Record({
     },
   },
   type: String,
-  comments: {
-    count: Number,
-    data: [
-      {
-        createdAt: String,
-        text: String,
-        from: {
-          username: String,
-          profilePicture: String,
-          id: String,
-          fullname: String
-        },
-        id: String
-      }
-    ]
-  },
+  comments: Array,
   likes: Array,
   tags: Array,
   caption: String,
@@ -43,7 +28,7 @@ const MediaItem = Immutable.Record({
     username: String,
     fullname: String,
     profilePicture: String,
-    id: String
+    _id: String
   },
   createdAt: String,
   location: String

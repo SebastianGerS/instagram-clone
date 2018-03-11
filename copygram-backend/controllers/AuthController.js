@@ -25,7 +25,7 @@ router.post('/register', function(req, res) {
       var message = JSON.stringify({error: "error occurred when trying to register new user with " + error});
       return res.status(500).send(message);
     }
-    var token = jwt.sign({ id: user._id }, config.secret, {
+    var token = jwt.sign({ _id: user._id }, config.secret, {
       expiresIn: 3600
     });
     return res.status(200).json({user: user, token: token});
@@ -46,7 +46,7 @@ router.post('/login', function(req,res) {
         console.log(user);
         console.log(accessGranted);
         if (!accessGranted) return res.status(401).json({error: 'password is incorect'});
-        var token = jwt.sign({ id: user._id }, config.secret, {
+        var token = jwt.sign({ _id: user._id }, config.secret, {
           expiresIn: 3600
         });
         return res.status(200).json({user: user, token: token});

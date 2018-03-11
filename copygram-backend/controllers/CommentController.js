@@ -41,5 +41,12 @@ router.delete('/:id', VerifyToken ,function(req,res) {
     });  
   });
 });
+router.put('/:id', VerifyToken ,function(req,res) {
+  Comment.findOneAndUpdate({_id: req.params.id },{text: req.body.value.text}, function(error) {
+    if (error) return res.json({error: 'error updating comment'});
+    
+      return res.json('comment was updated');
+  });
+});
 
 module.exports = router;

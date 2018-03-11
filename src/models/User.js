@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const User = Immutable.Record({
-  id: String,
+  _id: String,
   username: String,
   fullname: String,
   profilePicture: String,

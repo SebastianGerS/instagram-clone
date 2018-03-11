@@ -171,8 +171,6 @@ export const createComment = (comment,mediaItemId ,token, updatedFields) => disp
 }
 
 export const deleteComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
-  console.log(mediaItemId);
-  console.log(commentId);
   fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
     {
       method: 'DELETE', 
@@ -192,5 +190,22 @@ export const deleteComment = (mediaItemId, commentId, token, updatedFields) => d
 };
 
 export const updateComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
-  console.log(updatedFields);
+  
+  fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
+  {
+    method: 'PUT', 
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    },
+    body: JSON.stringify(updatedFields[0])
+  })
+  .then(res => res.json())
+  .then(res => {
+    console.log(res);
+    dispatch(updatedMediaItem(mediaItemId, updatedFields));
+  }).catch(error => {
+    console.log(error);
+  })
 };

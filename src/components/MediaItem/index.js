@@ -32,7 +32,7 @@ class ConnectedMediaItem extends Component {
       value: this.props.currentUserId
     }];
     
-    this.props.dispatch(toggleLike(this.props.mediaItem.id, this.props.token.value, field));
+    this.props.dispatch(toggleLike(this.props.mediaItem._id, this.props.token.value, field));
   }
   updateStateValue(e) {
     this.setState({
@@ -51,12 +51,12 @@ class ConnectedMediaItem extends Component {
           username: currentUser.username,
           profilePicture: currentUser.profilePicture,
           fullname: currentUser.profilePicture,
-          id: currentUser.id
+          id: currentUser._id
         }
 
       }
     }];
-    this.props.dispatch(createComment(this.state.comment,this.props.mediaItem.id, this.props.token.value, field));
+    this.props.dispatch(createComment(this.state.comment,this.props.mediaItem._id, this.props.token.value, field));
   }
   render() {
     const comments = []

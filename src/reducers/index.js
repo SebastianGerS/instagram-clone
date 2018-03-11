@@ -14,36 +14,6 @@ const initialState = {
 
 const Reducer = (state = initialState , action) => {
   switch (action.type) {
-  case ActionTypes.FETCH_USER_START:
-    return {
-      ...state,
-      isFetching: true
-    }
-  case ActionTypes.FETCH_USER_SUCCESS:
-    return {
-      ...state, 
-      user: [...state.user, new User(
-        {
-          id: action.user.id,
-          username: action.user.username,
-          fullname: action.user.full_name,
-          profilePicture: action.user.profile_picture,
-          bio: action.user.bio,
-          website: action.user.website,
-          counts: {
-            media: action.user.counts.media,
-            follows: action.user.counts.follows,
-            followedBy: action.user.counts.followe_by,
-          }
-        }
-      )],
-     isLogedin:true
-    };
-  case ActionTypes.FETCH_USER_START:
-    return {
-      ...state,
-      isFetching: false
-    }
   case ActionTypes.FETCH_MEDIAITEMS_START:
     return {
       ...state,
@@ -53,41 +23,7 @@ const Reducer = (state = initialState , action) => {
   
     return { 
       ...state, 
-      mediaItems: action.mediaItems.map(mediaItem => new MediaItem(
-        { 
-          id: mediaItem._id,
-          images: {
-            lowResolution: {
-              url: mediaItem.images.lowResolution.url,
-              width: mediaItem.images.lowResolution.width,
-              height: mediaItem.images.lowResolution.height
-            },
-            thumbnail: {
-              url: mediaItem.images.thumbnail.url,
-              width: mediaItem.images.thumbnail.width,
-              height: mediaItem.images.thumbnail.height
-            },
-            standardResolution: {
-              url: mediaItem.images.standardResolution.url,
-              width: mediaItem.images.standardResolution.width,
-              height: mediaItem.images.standardResolution.height
-            },
-          },
-          type: mediaItem.type,
-          comments: mediaItem.comments,
-          likes: mediaItem.likes,
-          tags: [mediaItem.tags],
-          caption: mediaItem.caption,
-          user: {
-            username: mediaItem.user.username,
-            fullname: mediaItem.user.fullname,
-            profilePicture: mediaItem.user.profilePicture,
-            id: mediaItem.user._id
-          },
-          createdAt: mediaItem.createdAt,
-          location: mediaItem.location
-        }
-      )),
+      mediaItems: action.mediaItems.map(mediaItem => new MediaItem(mediaItem)),
       isFetching: false
     };
   case ActionTypes.FETCH_MEDIAITEMS_FAILURE:
@@ -108,17 +44,7 @@ const Reducer = (state = initialState , action) => {
     return {
       ...state,
       currentUser: [ new User(
-        {
-          id: action.data.user._id,
-          username: action.data.user.username,
-          fullname: action.data.user.fullname,
-          profilePicture: action.data.user.profilePicture,
-          bio: action.data.user.bio,
-          website: action.data.user.website,
-          mediaItems: action.data.user.mediaItems,
-          follows: action.data.user.follows,
-          followedBy: action.data.user.followedBy,
-        }
+          action.data.user
       )],
       token: new Token({value: action.data.token}),
       currentUserId: action.data.user._id,
@@ -139,17 +65,7 @@ const Reducer = (state = initialState , action) => {
     return {
       ...state,
       currentUser: new User(
-        {
-          id: action.data.user._id,
-          username: action.data.user.username,
-          fullname: action.data.user.fullname,
-          profilePicture: action.data.user.profilePicture,
-          bio: action.data.user.bio,
-          website: action.data.user.website,
-          mediaItems: action.data.user.mediaItems,
-          follows: action.data.user.follows,
-          followedBy: action.data.user.followedBy,
-        }
+        action.data.user
       ),
       token: new Token({value: action.data.token}),
       currentUserId: action.data.user._id,
@@ -175,25 +91,33 @@ const Reducer = (state = initialState , action) => {
     };
   case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
     const mediaItems = [...state.mediaItems.map(mediaItem => { 
-      if (mediaItem.id === action.mediaItemId) {
+      if (mediaItem._id === action.mediaItemId) {
         action.updatedFields.forEach(field => {
           if (Array.isArray(mediaItem[field.name])) {
             if (field.name === 'comments') {
               if (!field.value.user) {
-                mediaItem[field.name].map((comment, index) => {
-                  if (comment._id === field.value._id) {
-                    mediaItem[field.name].splice(index,1);
-                  }
-                });
+                if(field.value.text) {
+                  mediaItem[field.name].map((comment, index) => {
+                    if (comment._id === field.value._id) {
+                      comment.text = field.value.text;
+                    }
+                  });
+                } else {
+                  mediaItem[field.name].map((comment, index) => {
+                    if (comment._id === field.value._id) {
+                      mediaItem[field.name].splice(index,1);
+                    }
+                  });            
+                }
               } else {
-                mediaItem[field.name].push(field.value);
+                  mediaItem[field.name].push(field.value);
               }
             } else if (mediaItem[field.name].includes(field.value)) {
               mediaItem[field.name].map((user, index) => {
                 if (user === field.value) {
                   mediaItem[field.name].splice(index,1);
                 }
-              });
+              });            
             } else {
               mediaItem[field.name].push(field.value);
             }

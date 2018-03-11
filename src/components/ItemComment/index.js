@@ -37,14 +37,14 @@ class ConnectedItemComment extends Component {
     const field = [{
       name: 'comments',
       value: {
-        text: this.state.text,
         _id: this.props.comment._id,
       }
     }];
-    this.props.dispatch(deleteComment(this.props.mediaItem.id, this.props.comment._id, this.props.token.value ,field));
+    this.props.dispatch(deleteComment(this.props.mediaItem._id, this.props.comment._id, this.props.token.value ,field));
   }
   
-  updateComment() {
+  updateComment(e) {
+    e.preventDefault();
     const field = [{
       name: 'comments',
       value: {
@@ -52,7 +52,7 @@ class ConnectedItemComment extends Component {
         _id: this.props.comment._id,
       }
     }];
-    this.props.dispatch(updateComment(this.props.mediaItem.id, this.props.comment._id, this.props.token.value, field));
+    this.props.dispatch(updateComment(this.props.mediaItem._id, this.props.comment._id, this.props.token.value, field));
     this.toggleCommentModal();
   }
   toggleCommentModal() {
@@ -62,10 +62,10 @@ class ConnectedItemComment extends Component {
       modal =
       <section className="editCommentModal">
         <h3>Edit Comments</h3>
-        <form key={uuidv1()} className="editCommentForm">
+        <form key={uuidv1()} className="editCommentForm" onSubmit={this.updateComment}>
             <p className="bold">{this.props.comment.user.username}</p>
             <textarea required name="text" onChange={this.updateStateValue} defaultValue={this.state.text}></textarea>
-            <button className="submitButton" onClick={this.updateComment}>Publicera</button>
+            <button className="submitButton" >Publicera</button>
         </form>
       </section>;
     }
@@ -81,7 +81,7 @@ class ConnectedItemComment extends Component {
   render() {
     const comments = [];
     let newcomment;
-    if (this.props.mediaItem.user.id == this.props.currentUser.id) {
+    if (this.props.mediaItem.user._id == this.props.currentUser._id) {
      
         newcomment = 
           <p key={uuidv1()} className="comments">
