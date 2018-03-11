@@ -92,6 +92,23 @@ export const fetchMediaItems = (token) => dispatch => {
     });
 };
 
+export const fetchAllMediaItems = (token) => dispatch => {
+  dispatch(requestMediaItems());
+  fetch('mediaItems/', {
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .then(mediaItems => dispatch(reciveMediaItem(mediaItems)))
+    .catch(error => {
+      console.log(error);
+      dispatch(rejectedMediaItems());
+    });
+};
+
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
   fetch('/auth/register', {
