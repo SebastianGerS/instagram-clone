@@ -74,7 +74,10 @@ export const updatedMediaItem = (mediaItemId, updatedFields) => ({
 export const updateMediaItemFailed = () => ({
   type: ActionTypes.MEDIAITEM_UPDATE_FAILURE,
 });
-
+export const updatedCurrentUser = (updatedFields) => ({
+  type: ActionTypes.USER_UPDATE_SUCCESS,
+  updatedFields: updatedFields
+})
 export const fetchMediaItems = (token) => dispatch => {
   dispatch(requestMediaItems());
   fetch('mediaItems/selfe', {
@@ -101,8 +104,44 @@ export const fetchAllMediaItems = (token) => dispatch => {
       'accept': 'application/json'
     }
   })
-    .then(res => res.json())
-    .then(mediaItems => dispatch(reciveMediaItem(mediaItems)))
+    .then(res => {
+      if (res.status !== 200) {
+        return {error: res.json};
+      }
+      return res.json();
+    })
+    .then(mediaItems => {
+      if (mediaItems.error){
+        mediaItems = [];
+      }
+      dispatch(reciveMediaItem(mediaItems))
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(rejectedMediaItems());
+    });
+};
+export const fetchMediaItemsOfFollowed = (token) => dispatch => {
+  dispatch(requestMediaItems());
+  fetch('mediaItems/follows', {
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
+    .then(res =>  {
+      if (res.status !== 200) {
+        return {error: res.json};
+      }
+      return res.json();
+    })
+    .then(mediaItems =>  {
+      if (mediaItems.error) {
+        mediaItems = [];
+      }
+      dispatch(reciveMediaItem(mediaItems));
+    })
     .catch(error => {
       console.log(error);
       dispatch(rejectedMediaItems());
@@ -226,3 +265,23 @@ export const updateComment = (mediaItemId, commentId, token, updatedFields) => d
     console.log(error);
   })
 };
+
+export const toggleFollow = (token, updatedFields) => dispatch => {
+  fetch(`/users/${updatedFields[0].value}`,
+  {
+    method: 'PUT', 
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    },
+    body: JSON.stringify(updatedFields[0])
+  })
+  .then(res => res.json())
+  .then(res => {
+    console.log(res);
+    dispatch(updatedCurrentUser(updatedFields));
+  }).catch(error => {
+    console.log(error);
+  })
+}

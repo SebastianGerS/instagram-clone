@@ -138,6 +138,27 @@ const Reducer = (state = initialState , action) => {
       ...state,
       isUpdating: false
     };
+  case ActionTypes.USER_UPDATE_SUCCESS:
+    const currentUser = {...state.currentUser.map((field,index) => {
+      if(index === 'follows') {
+        if(field.includes(`${action.updatedFields[0].value}`)) {
+          field.map((user, userIndex) => {
+            if(user == action.updatedFields[0].value) {
+              field.splice(userIndex, 1);
+            }
+          })
+        }else {
+          field.push(action.updatedFields[0].value);
+        }
+      }
+     
+      return field;
+    })};
+     
+    return {
+      ...state,
+      currrentUser: currentUser
+    }
   default:
     return state;
   }

@@ -46,7 +46,6 @@ class ConnectedExplore extends Component {
     }
     return (
       <div className="content">
-        <UserProfile />
         <div className="tabs">
           <Tab index={0} name="Grid" changeTab={this.changeTab} active={this.state.tabs[0]}/>
           <Tab index={1} name="Flow" changeTab={this.changeTab} active={this.state.tabs[1]}/>

@@ -1,16 +1,28 @@
-import React, { Component } from 'react';
-import {ItemFeed, ItemGrid} from '../containers';
+import React, {Component} from 'react';
+import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
-class Home extends Component  {
+import {connect} from 'react-redux';
+import {fetchMediaItemsOfFollowed} from '../actions';
 
-  constructor() {
-    super();
+
+const mapStateToProps = state => {
+  return { mediaItems: state.mediaItems, token: state.token, isLogedin: state.isLogedin};
+}
+
+class ConnectedHome extends Component {
+
+  constructor(props) {
+    super(props);
     this.state = {
       activeTab: 0,
       tabs: { 0: 'active'},
     }
 
     this.changeTab = this.changeTab.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.dispatch(fetchMediaItemsOfFollowed(this.props.token.value)); 
   }
 
   changeTab(index) {
@@ -23,17 +35,17 @@ class Home extends Component  {
   }
 
   render() {
+    
     let content;
-
-    if (this.state.activeTab === 0) {
-      content = <ItemGrid />;
-    } else  if(this.state.activeTab === 1) {
-      content = <ItemFeed />;
+    if (this.props.isLogedin) {
+      if (this.state.activeTab === 0) {
+        content = <ItemGrid mediaItems={this.props.mediaItems}/>;
+      } else  if(this.state.activeTab === 1) {
+        content = <ItemFeed mediaItems={this.props.mediaItems} />;
+      }
     }
-
     return (
       <div className="content">
-        <UserProfile />
         <div className="tabs">
           <Tab index={0} name="Grid" changeTab={this.changeTab} active={this.state.tabs[0]}/>
           <Tab index={1} name="Flow" changeTab={this.changeTab} active={this.state.tabs[1]}/>
@@ -41,7 +53,9 @@ class Home extends Component  {
         {content}
       </div>
     );
-  }
+   }
 }
+
+const Home = connect(mapStateToProps)(ConnectedHome);
 
 export default Home;

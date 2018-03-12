@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import './style.css';
 import {ItemComment} from '../';
 import uuidv1 from "uuid";
-import {toggleLike, createComment} from '../../actions';
+import {toggleLike, createComment, toggleFollow} from '../../actions';
 import {connect} from 'react-redux';
 
 const mapStateToProps = state => {
   return {
     token:  state.token,
-    currentUserId: state.currentUserId,
     currentUser: state.currentUser
   };
 };
@@ -20,16 +19,29 @@ class ConnectedMediaItem extends Component {
     this.handleLike = this.handleLike.bind(this);
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
+    this.toggleFollow = this.toggleFollow.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
+      isFollowing: false
+    }
+  }
+  componentDidMount(){
+    if(this.props.currentUser.follows.includes(this.props.mediaItem.user._id)) {
+      this.setState({
+        isFollowing: true
+      });
+    } else {
+      this.setState({
+        isFollowing: false
+      });
     }
   }
   handleLike(e) {
     e.preventDefault();
     const field = [{
       name: 'likes',
-      value: this.props.currentUserId
+      value: this.props.currentUser._id
     }];
     
     this.props.dispatch(toggleLike(this.props.mediaItem._id, this.props.token.value, field));
@@ -58,10 +70,21 @@ class ConnectedMediaItem extends Component {
     }];
     this.props.dispatch(createComment(this.state.comment,this.props.mediaItem._id, this.props.token.value, field));
   }
+  toggleFollow() {
+    const field = [{
+      name: 'follows',
+      value: this.props.mediaItem.user._id
+    }];
+    this.setState({
+      isFollowing: !this.state.isFollowing
+    })
+    this.props.dispatch(toggleFollow(this.props.token.value, field));
+  }
   render() {
     const comments = []
     const tags = [];
     let likeButtonClass;
+    let followUserClass;
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
         const newComment = <ItemComment key={uuidv1()}mediaItem={this.props.mediaItem} comment={comment}/>;
@@ -75,22 +98,35 @@ class ConnectedMediaItem extends Component {
         tags.push(newTag);
       });
     }
-    if (this.props.mediaItem.likes) {
-        
-     if(this.props.mediaItem.likes.includes(this.props.currentUserId)) {
+    if (this.props.mediaItem.likes) {   
+     if(this.props.mediaItem.likes.includes(this.props.currentUser._id)) {
         likeButtonClass = "likeButton liked";
       } else {
         likeButtonClass = "likeButton";
       }
     }
+    if (this.props.mediaItem.user) {
+      if (this.state.isFollowing) {
+        followUserClass = "unFollowButton";
+      } else {
+        followUserClass = "followButton";
+      }
+
+     
+    }
    
     return(
       <section className="mediaItem">
         <div className="profileBanner">
-          <img src={this.props.mediaItem.user.profilePicture}/>
           <div>
-            <p className="bold">{this.props.mediaItem.user.username}</p>
-            <p>{this.props.mediaItem.location}</p>
+            <img src={this.props.mediaItem.user.profilePicture}/>
+            <div>
+              <p className="bold">{this.props.mediaItem.user.username}</p>
+              <p>{this.props.mediaItem.location}</p>
+            </div>
+          </div>
+          <div>
+            <button className={followUserClass} onClick={this.toggleFollow}></button>
           </div>
         </div>
         <figure className="imgContainer">

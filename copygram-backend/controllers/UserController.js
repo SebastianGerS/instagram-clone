@@ -40,14 +40,51 @@ router.delete('/:id', verifyToken,function(req,res) {
   });
 });
 router.put('/:id', verifyToken,function(req,res) {
-  User.findByIdAndUpdate(req.params.id, req.body,{new: true},function(error,user) {
+  User.findById(req.userId, function(error, user) {
+    if (error) return res.json({error: 'error trying to find user'});
 
-    if(error) {
-      return res.status(500).send("error occurred when trying to update user from database");
-    }
+    if(!user) return res.json({error: 'no user conected to the provided token could be found'});
 
-    return res.status(200).send(user);
+    User.findById(req.params.id, function(err, followedUser) {
+      if (error) return res.json({error: 'error trying to find the followed user'});
+
+      if (!followedUser) return res.json({error: 'no user conected to the provided token could be found'});
+      console.log(user.follows);
+      console.log(req.params.id);
+      let tobeFollowed = true;
+      let toFollow = true;
+
+      user.follows.map((followed, index) => {
+        if (followed == req.params.id ) {
+          user.follows.splice(index, 1);
+          toFollow = false;
+          user.save();
+        }
+      });
+      if (toFollow) {
+     
+        user.follows.push(req.params.id);
+        user.save();
+      }
+      
+      followedUser.followedBy.map((follower, index) => {
+        console.log(follower);
+        if (follower == req.userId ) {
+          followedUser.followedBy.splice(index, 1);
+          tobeFollowed = false;
+          followedUser.save();
+        }
+      });
+      if (tobeFollowed) {
+        followedUser.followedBy.push(req.userId);
+        followedUser.save();
+        return res.status(200).json('you are now following ' + followedUser.username);
+      } else {
+      return res.status(200).json('you are no longer following ' + followedUser.username);
+      }
+     
   
+    });
   });
 });
 module.exports = router;

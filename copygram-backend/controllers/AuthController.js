@@ -43,8 +43,6 @@ router.post('/login', function(req,res) {
   
     bcrypt.compare(req.body.password, user.password)
       .then(function(accessGranted) {
-        console.log(user);
-        console.log(accessGranted);
         if (!accessGranted) return res.status(401).json({error: 'password is incorect'});
         var token = jwt.sign({ _id: user._id }, config.secret, {
           expiresIn: 3600
