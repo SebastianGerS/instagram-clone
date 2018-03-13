@@ -13,7 +13,7 @@
   padding: 0.5em 0;
   max-width: 640px;
 }
-.profileBanner > div {
+.profileBanner > a > div {
   display: flex;
   flex-shrink: 0.5;
   flex-direction: row;

@@ -5,15 +5,33 @@ import Token from '../models/Token';
 import Immutable from 'immutable';
 
 const initialState = {
-  mediaItems:Immutable.OrderedMap(),
+  mediaItems: Immutable.OrderedMap(),
   currentUser: Immutable.OrderedMap(),
   isLogedin: false,
   token: Immutable.Record(),
-  currentUserId: ''
+  currentUserId: '',
+  user: Immutable.Record(),
 };
 
 const Reducer = (state = initialState , action) => {
   switch (action.type) {
+    case ActionTypes.FETCH_USER_START: 
+    return {
+      ...state,
+      isFetching: true
+    }
+    case ActionTypes.FETCH_USER_SUCCESS: 
+    return {
+      ...state,
+      user: new User(action.user),
+      isFetching: false
+    }
+    case ActionTypes.FETCH_USER_FAILURE:
+    return {
+      ...state,
+      isFetching: false
+    }
+
   case ActionTypes.FETCH_MEDIAITEMS_START:
     return {
       ...state,

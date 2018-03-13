@@ -36,10 +36,12 @@ class ConnectedHeader extends Component {
   }
 
   componentDidUpdate(prevprops, prevstate) {
-  
     if ((prevprops.isLogedin ==! this.props.isLogedin) && this.props.isLogedin === true) {
-      <Redirect to="/profile" />;
-    }
+      this.setState({
+        redirect: true
+      });
+     }
+    
   }
   login(e) {
     e.preventDefault();
@@ -118,6 +120,13 @@ class ConnectedHeader extends Component {
 
   }
   render() {
+
+    if (this.state.redirect) {
+      this.setState({
+        redirect: false
+      });
+      return <Redirect to="/profile" />;
+     }
     return(
       <header>
         <h1>CopyGram</h1>

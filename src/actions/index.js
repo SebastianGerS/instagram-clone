@@ -77,7 +77,8 @@ export const updateMediaItemFailed = () => ({
 export const updatedCurrentUser = (updatedFields) => ({
   type: ActionTypes.USER_UPDATE_SUCCESS,
   updatedFields: updatedFields
-})
+});
+
 export const fetchMediaItems = (token) => dispatch => {
   dispatch(requestMediaItems());
   fetch('mediaItems/selfe', {
@@ -147,7 +148,58 @@ export const fetchMediaItemsOfFollowed = (token) => dispatch => {
       dispatch(rejectedMediaItems());
     });
 };
-
+export const fetchUser = (userId) => dispatch => {
+  dispatch(requestUser());
+  fetch(`/users/${userId}`, {
+    headers: {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
+    .then(res =>  {
+      if (res.status !== 200) {
+        return {error: res.json};
+      }
+      return res.json();
+    })
+    .then(user =>  {
+      if (user.error) {
+        user = [];
+      }
+      console.log(user);
+      dispatch(reciveUser(user));
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(rejectedUser());
+    });
+} 
+export const fetchUserMediaItems = (userId) => dispatch => {
+  dispatch(requestMediaItems());
+  fetch(`/mediaItems/${userId}`, {
+    headers: {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    }
+  })
+    .then(res =>  {
+      if (res.status !== 200) {
+        return {error: res.json};
+      }
+      return res.json();
+    })
+    .then(mediaItems =>  {
+      if (mediaItems.error) {
+        mediaItems = [];
+      }
+      console.log(mediaItems);
+      dispatch(reciveMediaItem(mediaItems));
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(rejectedMediaItems());
+    });
+};
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
   fetch('/auth/register', {

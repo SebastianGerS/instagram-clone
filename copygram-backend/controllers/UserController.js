@@ -17,7 +17,7 @@ router.get('/', verifyToken ,function(req,res, next) {
   
   });
 });
-router.get('/:id',verifyToken ,function(req,res) {
+router.get('/:id', function(req,res) {
   User.findById(req.params.id,function(error,user) {
 
     if(error) {

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
 import {connect} from 'react-redux';
-import {fetchMediaItems} from '../actions';
+import {fetchMediaItems, userMediaItems, fetchUserMediaItems, fetchUser} from '../actions';
 import './Profile.css';
 
 const mapStateToProps = state => {
@@ -22,7 +22,23 @@ class ConnectedProfile extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchMediaItems(this.props.token.value)); 
+    
+    if (this.props.location.pathname === '/profile') {
+      this.props.dispatch(fetchMediaItems(this.props.token.value)); 
+    } else {
+      this.props.dispatch(fetchUser(this.props.match.params.userId)); 
+      this.props.dispatch(fetchUserMediaItems(this.props.match.params.userId)); 
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.location.pathName !== this.props.location.pathname || prevProps.mediaItems !== this.props.mediaItems){
+      if (this.props.location.pathname === '/profile') {
+        this.props.dispatch(fetchMediaItems(this.props.token.value)); 
+      } else {
+        this.props.dispatch(fetchUser(this.props.match.params.userId)); 
+        this.props.dispatch(fetchUserMediaItems(this.props.match.params.userId)); 
+      }
+    }   
   }
 
   changeTab(index) {
@@ -46,7 +62,7 @@ class ConnectedProfile extends Component {
     }
     return (
       <div className="content">
-        <UserProfile />
+        <UserProfile path={this.props.location.pathname}/>
         <div className="tabs">
           <Tab index={0} name="Grid" changeTab={this.changeTab} active={this.state.tabs[0]}/>
           <Tab index={1} name="Flow" changeTab={this.changeTab} active={this.state.tabs[1]}/>

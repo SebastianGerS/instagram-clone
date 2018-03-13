@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import './style.css';
 import {ItemComment} from '../';
 import uuidv1 from "uuid";
-import {toggleLike, createComment, toggleFollow} from '../../actions';
+import {toggleLike, createComment, toggleFollow, fetchUser, fetchUserMediaItems} from '../../actions';
 import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const mapStateToProps = state => {
   return {
@@ -20,13 +21,14 @@ class ConnectedMediaItem extends Component {
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
     this.toggleFollow = this.toggleFollow.bind(this);
+    this.fetchUserData = this.fetchUserData.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
       isFollowing: false
     }
   }
-  componentDidMount(){
+  componentWillMount(){
     if(this.props.currentUser.follows.includes(this.props.mediaItem.user._id)) {
       this.setState({
         isFollowing: true
@@ -65,10 +67,9 @@ class ConnectedMediaItem extends Component {
           fullname: currentUser.profilePicture,
           id: currentUser._id
         }
-
       }
     }];
-    this.props.dispatch(createComment(this.state.comment,this.props.mediaItem._id, this.props.token.value, field));
+    this.props.dispatch(createComment(this.state.comment, this.props.mediaItem._id, this.props.token.value, field));
   }
   toggleFollow() {
     const field = [{
@@ -79,6 +80,9 @@ class ConnectedMediaItem extends Component {
       isFollowing: !this.state.isFollowing
     })
     this.props.dispatch(toggleFollow(this.props.token.value, field));
+  }
+  fetchUserData() {
+   
   }
   render() {
     const comments = []
@@ -110,21 +114,21 @@ class ConnectedMediaItem extends Component {
         followUserClass = "unFollowButton";
       } else {
         followUserClass = "followButton";
-      }
-
-     
+      }     
     }
    
     return(
       <section className="mediaItem">
         <div className="profileBanner">
-          <div>
-            <img src={this.props.mediaItem.user.profilePicture}/>
+        <Link to={`/users/${this.props.mediaItem.user._id}`}>
             <div>
-              <p className="bold">{this.props.mediaItem.user.username}</p>
-              <p>{this.props.mediaItem.location}</p>
+              <img src={this.props.mediaItem.user.profilePicture}/>
+              <div>
+            <p className="bold">{this.props.mediaItem.user.username}</p>
+                <p>{this.props.mediaItem.location}</p>
+              </div>
             </div>
-          </div>
+          </Link>
           <div>
             <button className={followUserClass} onClick={this.toggleFollow}></button>
           </div>

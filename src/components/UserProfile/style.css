@@ -32,6 +32,9 @@
 
 .bold {
   font-weight: 600;
+  color: black;
+  text-decoration: none;
+
 }
 
 .btn-settings {
