@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import {ItemComment} from '../';
 import uuidv1 from "uuid";
-import {toggleLike, createComment, toggleFollow, fetchUser, fetchUserMediaItems} from '../../actions';
+import {toggleLike, createComment, toggleFollow} from '../../actions';
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -21,7 +21,6 @@ class ConnectedMediaItem extends Component {
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
     this.toggleFollow = this.toggleFollow.bind(this);
-    this.fetchUserData = this.fetchUserData.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
@@ -80,9 +79,6 @@ class ConnectedMediaItem extends Component {
       isFollowing: !this.state.isFollowing
     })
     this.props.dispatch(toggleFollow(this.props.token.value, field));
-  }
-  fetchUserData() {
-   
   }
   render() {
     const comments = []

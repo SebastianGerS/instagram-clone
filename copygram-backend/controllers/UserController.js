@@ -49,8 +49,6 @@ router.put('/:id', verifyToken,function(req,res) {
       if (error) return res.json({error: 'error trying to find the followed user'});
 
       if (!followedUser) return res.json({error: 'no user conected to the provided token could be found'});
-      console.log(user.follows);
-      console.log(req.params.id);
       let tobeFollowed = true;
       let toFollow = true;
 
@@ -68,7 +66,6 @@ router.put('/:id', verifyToken,function(req,res) {
       }
       
       followedUser.followedBy.map((follower, index) => {
-        console.log(follower);
         if (follower == req.userId ) {
           followedUser.followedBy.splice(index, 1);
           tobeFollowed = false;

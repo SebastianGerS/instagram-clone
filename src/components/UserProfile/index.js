@@ -20,7 +20,6 @@ class ConnectedUserProfile extends Component {
         user: this.props.currentUser
       });
     } else {
-      console.log(this.props.user)
       this.setState ({
         user: this.props.user
       });
@@ -33,7 +32,6 @@ class ConnectedUserProfile extends Component {
           user: this.props.currentUser
         });
       } else {
-        console.log(this.props.user)
         this.setState ({
           user: this.props.user
         });

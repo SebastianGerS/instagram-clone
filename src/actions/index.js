@@ -166,7 +166,6 @@ export const fetchUser = (userId) => dispatch => {
       if (user.error) {
         user = [];
       }
-      console.log(user);
       dispatch(reciveUser(user));
     })
     .catch(error => {
@@ -192,7 +191,6 @@ export const fetchUserMediaItems = (userId) => dispatch => {
       if (mediaItems.error) {
         mediaItems = [];
       }
-      console.log(mediaItems);
       dispatch(reciveMediaItem(mediaItems));
     })
     .catch(error => {
@@ -271,7 +269,6 @@ export const createComment = (comment,mediaItemId ,token, updatedFields) => disp
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(updatedMediaItem(mediaItemId, updatedFields));
     }).catch(error => {
       console.log(error);
@@ -290,7 +287,6 @@ export const deleteComment = (mediaItemId, commentId, token, updatedFields) => d
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(updatedMediaItem(mediaItemId, updatedFields));
     }).catch(error => {
       console.log(error);
@@ -311,7 +307,6 @@ export const updateComment = (mediaItemId, commentId, token, updatedFields) => d
   })
   .then(res => res.json())
   .then(res => {
-    console.log(res);
     dispatch(updatedMediaItem(mediaItemId, updatedFields));
   }).catch(error => {
     console.log(error);
@@ -331,7 +326,6 @@ export const toggleFollow = (token, updatedFields) => dispatch => {
   })
   .then(res => res.json())
   .then(res => {
-    console.log(res);
     dispatch(updatedCurrentUser(updatedFields));
   }).catch(error => {
     console.log(error);
