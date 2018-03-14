@@ -1,8 +1,4 @@
 .removeButton {
-  background: none;
-  border: none;
-  -webkit-appearance: none;
-  outline: none; 
   cursor: pointer;
   color: black;
   padding: 1em;
@@ -38,11 +34,6 @@
 }
 
 .optionsButton {
-  background: none;
-  border: none;
-  -webkit-appearance: none;
-  outline: none; 
-  cursor: pointer;
   color: black;
   background-image: url(../../resources/icons/options.png);
   padding: 1em;

@@ -140,3 +140,6 @@
   background-size: cover;
   cursor: pointer;
 }
+.caption {
+  margin-bottom: 2em;
+}

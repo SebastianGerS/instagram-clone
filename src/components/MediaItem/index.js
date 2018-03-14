@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import {ItemComment} from '../';
 import uuidv1 from "uuid";
-import {toggleLike, createComment, toggleFollow} from '../../actions';
+import {toggleLike, createComment, toggleFollow, deleteMediaItem, updateMediaItem} from '../../actions';
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -21,6 +21,8 @@ class ConnectedMediaItem extends Component {
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
     this.toggleFollow = this.toggleFollow.bind(this);
+    this.updateMediaItem = this.updateMediaItem.bind(this);
+    this.removeMediaItem = this.removeMediaItem.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
@@ -28,15 +30,17 @@ class ConnectedMediaItem extends Component {
     }
   }
   componentWillMount(){
-    if(this.props.currentUser.follows.includes(this.props.mediaItem.user._id)) {
-      this.setState({
-        isFollowing: true
-      });
-    } else {
-      this.setState({
-        isFollowing: false
-      });
-    }
+    if(this.props.mediaItem) {
+      if(this.props.currentUser.follows.includes(this.props.mediaItem.user._id)) {
+        this.setState({
+          isFollowing: true
+        });
+      } else {
+        this.setState({
+          isFollowing: false
+        });
+      }
+    } 
   }
   handleLike(e) {
     e.preventDefault();
@@ -80,11 +84,21 @@ class ConnectedMediaItem extends Component {
     })
     this.props.dispatch(toggleFollow(this.props.token.value, field));
   }
+  updateMediaItem() {
+    this.props.dispatch(updateMediaItem(this.props.mediaItem._id, this.props.token.value));
+  }
+  removeMediaItem() {
+    this.props.dispatch(deleteMediaItem(this.props.mediaItem._id,this.props.mediaItem.images.url ,this.props.token.value));
+  }
   render() {
     const comments = []
     const tags = [];
     let likeButtonClass;
-    const followUserButton = [];
+    const ItemButtons = [];
+    let button;
+    if (!this.props.mediaItem) {
+      return null;
+    }
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
         console.log(comment.user);
@@ -100,7 +114,7 @@ class ConnectedMediaItem extends Component {
       });
     }
     if (this.props.mediaItem.likes) {   
-     if(this.props.mediaItem.likes.includes(this.props.currentUser._id)) {
+    if(this.props.mediaItem.likes.includes(this.props.currentUser._id)) {
         likeButtonClass = "likeButton liked";
       } else {
         likeButtonClass = "likeButton";
@@ -108,15 +122,20 @@ class ConnectedMediaItem extends Component {
     }
 
     if (this.props.mediaItem.user._id !== this.props.currentUser._id) {
-      let button;
+    
       if (this.state.isFollowing) {
         button = <button key={uuidv1()} className="unFollowButton" onClick={this.toggleFollow}></button>;
       } else {
         button = <button key={uuidv1()} className="followButton" onClick={this.toggleFollow}></button>;
       }     
-      followUserButton.push(button);
+      ItemButtons.push(button);
+    } else if (this.props.mediaItem.user._id == this.props.currentUser._id) {
+      button = <button key={uuidv1()} className="optionsButton" onClick={this.updateMediaItem}></button>
+      ItemButtons.push(button);
+      button = <button key={uuidv1()} className="removeButton" onClick={this.removeMediaItem}></button>;
+      ItemButtons.push(button);
     }
-   
+  
     return(
       <section className="mediaItem">
         <div className="profileBanner">
@@ -130,7 +149,7 @@ class ConnectedMediaItem extends Component {
             </div>
           </Link>
           <div>
-           {followUserButton}
+          {ItemButtons}
           </div>
         </div>
         <figure className="imgContainer">
@@ -142,14 +161,14 @@ class ConnectedMediaItem extends Component {
               <svg className={likeButtonClass} onClick={this.handleLike} enableBackground="new 0 0 24 24" viewBox="0 0 24 24" width="24px" >
               <path d="M7,22L7,22c-0.5,0-0.8-0.3-0.8-1c0.5-3.7-0.9-5.1-2.6-6.6c-1.4-1.3-2.9-2.8-3.1-5.8C0.4,6.9,1,5.2,2.2,4    
               C3.3,2.7,5,2,6.7,2c0,0,0.1,0,0.1,0c2.3,0,4.4,1.3,5.5,3.4c1.2-1.6,3-2.6,5-2.6l0.2,0c1.7,0.1,3.2,0.8,4.3,2   
-               c1.2,1.3,1.8,2.9,1.7,4.7l0,0.1c-0.1,4.8-5.6,9.1-15.9,12.3C7.3,22,7.2,22,7,22z M7,21l0,0.5L7,21C7,21,7,21,7,21z M6.8,3   
+              c1.2,1.3,1.8,2.9,1.7,4.7l0,0.1c-0.1,4.8-5.6,9.1-15.9,12.3C7.3,22,7.2,22,7,22z M7,21l0,0.5L7,21C7,21,7,21,7,21z M6.8,3   
                 C5.3,3,3.9,3.6,2.9,4.7c-1,1.1-1.5,2.4-1.4,3.9c0.2,2.6,1.4,3.9,2.8,5.2C6,15.3,7.7,17,7.2,21c0,0,0,0,0.1,0    
                 c9.8-3,15.2-7.1,15.2-11.4l0-0.2c0.1-1.5-0.4-2.9-1.4-4c-0.9-1-2.2-1.6-3.6-1.7l-0.2,0c-1.8,0-3.4,0.9-4.4,2.5c0,0,0,0,0,0.1   
-                 c-0.1,0.2-0.3,0.4-0.6,0.4l0,0c-0.3,0-0.6-0.2-0.7-0.5C10.7,4.3,8.8,3,6.8,3z"/>
+                c-0.1,0.2-0.3,0.4-0.6,0.4l0,0c-0.3,0-0.6-0.2-0.7-0.5C10.7,4.3,8.8,3,6.8,3z"/>
               </svg> 
           </div>
           <p className="bold">{this.props.mediaItem.likes.length} gilla-markeringar</p>
-          <p><span className="bold">{this.props.mediaItem.user.username}</span>&nbsp;{this.props.mediaItem.caption}&nbsp;{tags}</p>
+          <p className="caption"><span className="bold">{this.props.mediaItem.user.username}</span>&nbsp;{this.props.mediaItem.caption}&nbsp;{tags}</p>
           </div>
           <div>
           {comments}

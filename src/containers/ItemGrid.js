@@ -10,17 +10,18 @@ class ItemGrid extends Component {
   }
 
   render() {
-
+    if(!this.props.mediaItems) return null;
     const content = [];
     
     if (this.props.mediaItems) {
       this.props.mediaItems.forEach(mediaItem => {
-        let img = <img key={uuidv1()} src={mediaItem.images.url}/>;
-        content.push(img);
+        if (mediaItem) {
+          let img = <img key={uuidv1()} src={mediaItem.images.url}/>;
+          content.push(img);
+        }
       });
     }
   
-   
     return ( 
       <article className="imgGrid">
         {content}

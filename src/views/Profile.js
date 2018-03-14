@@ -22,7 +22,6 @@ class ConnectedProfile extends Component {
   }
 
   componentWillMount() {
-    
     if (this.props.location.pathname === '/profile') {
       this.props.dispatch(fetchMediaItems(this.props.token.value)); 
     } else {
@@ -30,6 +29,7 @@ class ConnectedProfile extends Component {
       this.props.dispatch(fetchUserMediaItems(this.props.match.params.userId)); 
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if(prevProps.location.pathName !== this.props.location.pathName){
       if (this.props.location.pathname === '/profile') {
@@ -51,13 +51,12 @@ class ConnectedProfile extends Component {
   }
 
   render() {
-    
     let content;
     if (this.props.isLogedin) {
       if (this.state.activeTab === 0) {
         content = <ItemGrid mediaItems={this.props.mediaItems}/>;
-      } else  if(this.state.activeTab === 1) {
-        content = <ItemFeed mediaItems={this.props.mediaItems} />;
+      } else if(this.state.activeTab === 1) {
+        content = <ItemFeed mediaItems={this.props.mediaItems}/>;
       }
     }
     return (

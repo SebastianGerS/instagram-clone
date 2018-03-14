@@ -8,6 +8,8 @@ var MediaItem = require('../models/MediaItem');
 var VerifyToken = require('../middleware/verifyToken');
 var multer = require('multer');
 var uuidv1 = require("uuid");
+var fs = require('fs')
+var { promisify } = require('util')
 router.use(bodyParser.urlencoded({ extended: true}));
 var storage = multer.diskStorage({
   destination: './public/images',
@@ -98,13 +100,6 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
     });
   });
 });
-// router.post('/test', [VerifyToken, upload.single('data')], function(req,res) {
-//   var data = req.file;
-//   console.log(data);
-//   console.log(req.body);
-//   return res.status(200).json({message: 'did it work?'});
- 
-// });
 
 router.get('/',VerifyToken, function(req,res) {
   MediaItem.find({user: {$nin: req.userId }}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
@@ -152,6 +147,25 @@ router.get('/:userId', function(req,res) {
     }
     
   });
+});
+router.delete('/:id',VerifyToken, function(req,res) {
+  MediaItem.deleteOne({_id: req.params.id , user: req.userId}, function(err) {
+    if (err) return res.status(500).json({error: 'error deleting mediaitems'});
+    Comment.deleteMany({mediaItem: req.params.id}, function(error) {
+      if (error) return res.status(500).json({error: 'error deleting the mediaitems comments'});
+      User.findById(req.userId, function(e, user) {
+        if (e) return res.status(500).json({error: 'error removing attachment of mediaItem from user'});
+        user.mediaItems.forEach(function(mediaItem, index) {
+          if (mediaItem == req.params.id) {
+            user.mediaItems.splice(index,1);
+            user.save();
+            fs.unlinkSync('./public'+req.body.path);
+            return res.status(200).json({message: 'deleted mediaItem and attached comments and removed attachemt from user'});
+          }
+        });
+      });
+    });
+  }); 
 });
 
 router.put('/:id', VerifyToken, function (req,res) {

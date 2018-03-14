@@ -108,41 +108,45 @@ const Reducer = (state = initialState , action) => {
       isUpdating: true
     };
   case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
-    const mediaItems = [...state.mediaItems.map(mediaItem => { 
+    const mediaItems = [...state.mediaItems.map (mediaItem => { 
       if (mediaItem._id === action.mediaItemId) {
-        action.updatedFields.forEach(field => {
-          if (Array.isArray(mediaItem[field.name])) {
-            if (field.name === 'comments') {
-              if (!field.value.user) {
-                if(field.value.text) {
-                  mediaItem[field.name].map((comment, index) => {
-                    if (comment._id === field.value._id) {
-                      comment.text = field.value.text;
-                    }
-                  });
+        if (action.updatedFields !== null) {
+          action.updatedFields.forEach (field => {
+            if (Array.isArray(mediaItem[field.name])) {
+              if (field.name === 'comments') {
+                if (!field.value.user) {
+                  if (field.value.text) {
+                    mediaItem[field.name].map ((comment, index) => {
+                      if (comment._id === field.value._id) {
+                        comment.text = field.value.text;
+                      }
+                    });
+                  } else {
+                    mediaItem[field.name].map ((comment, index) => {
+                      if (comment._id === field.value._id) {
+                        mediaItem[field.name].splice(index,1);
+                      }
+                    });            
+                  }
                 } else {
-                  mediaItem[field.name].map((comment, index) => {
-                    if (comment._id === field.value._id) {
-                      mediaItem[field.name].splice(index,1);
-                    }
-                  });            
+                    mediaItem[field.name].push(field.value);
                 }
+              } else if (mediaItem[field.name].includes(field.value)) {
+                mediaItem[field.name].map((user, index) => {
+                  if (user === field.value) {
+                    mediaItem[field.name].splice(index,1);
+                  }
+                });            
               } else {
-                  mediaItem[field.name].push(field.value);
+                mediaItem[field.name].push(field.value);
               }
-            } else if (mediaItem[field.name].includes(field.value)) {
-              mediaItem[field.name].map((user, index) => {
-                if (user === field.value) {
-                  mediaItem[field.name].splice(index,1);
-                }
-              });            
             } else {
-              mediaItem[field.name].push(field.value);
+              mediaItem[field.name] = field.value;
             }
-          } else {
-            mediaItem[field.name] = field.value;
-          }
-        });
+          });
+        } else {
+          return;
+        }
       }
       return mediaItem;
     })];

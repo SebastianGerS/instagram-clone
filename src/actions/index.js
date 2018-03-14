@@ -66,7 +66,7 @@ export const startUpdatingMediaItem = () => ({
   type: ActionTypes.MEDIAITEM_UPDATE_START,
 
 });
-export const updatedMediaItem = (mediaItemId, updatedFields) => ({
+export const updatedMediaItem = (mediaItemId, updatedFields = null) => ({
   type: ActionTypes.MEDIAITEM_UPDATE_SUCCESS,
   mediaItemId: mediaItemId,
   updatedFields: updatedFields
@@ -349,4 +349,41 @@ export const uploadItem = (item, token) => dispatch => {
     }).catch(error => {
       console.log(error);
     });
+};
+
+export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch => {
+  fetch(`/mediaitems/${mediaItemId}`,
+  {
+    method: 'DELETE', 
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    },
+    body: JSON.stringify({path: mediaItemPath})
+  })
+  .then(res => res.json())
+  .then(res => {
+    dispatch(updatedMediaItem(mediaItemId));   
+  }).catch(error => {
+    console.log(error);
+  });
+};
+
+export const updateMediaItem = (mediaItemId, token, field) => dispatch => {
+  fetch(`/mediaitems/${mediaItemId}`,
+  {
+    method: 'PUT', 
+    headers: {
+      'x-access-token': token,
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    },
+  })
+  .then(res => res.json())
+  .then(res => {
+    dispatch(updatedMediaItem(mediaItemId, field));
+  }).catch(error => {
+    console.log(error);
+  });
 };
