@@ -130,7 +130,7 @@ class ConnectedMediaItem extends Component {
           </div>
         </div>
         <figure className="imgContainer">
-          <img className="img"src={this.props.mediaItem.images.standardResolution.url}/>
+          <img className="img" src={`${this.props.mediaItem.images.standardResolution.url}`}/>
         </figure>
         <div className="itemInfo">
           <div>

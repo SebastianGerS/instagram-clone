@@ -334,20 +334,18 @@ export const toggleFollow = (token, updatedFields) => dispatch => {
 
 export const uploadItem = (item, token) => dispatch => {
   console.log(item.get('data'));
-  fetch(`/mediaitems/test`,
+  fetch(`/mediaItems/`,
     {
       method: 'POST', 
       headers: {
         'x-access-token': token,
-        'content-type': 'multipart/form-data',
-        'accept': 'application/json'
       },
       body: item
     })
     .then(res => res.json())
     .then(res => {
       console.log(res);
-      window.URL.revokeObjectURL(res.item.preview);
+    
     }).catch(error => {
       console.log(error);
     });

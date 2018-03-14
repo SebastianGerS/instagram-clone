@@ -15,7 +15,7 @@ class ItemGrid extends Component {
     
     if (this.props.mediaItems) {
       this.props.mediaItems.forEach(mediaItem => {
-        let img = <img key={uuidv1()} src={mediaItem.images.lowResolution.url}/>;
+        let img = <img key={uuidv1()} src={`${mediaItem.images.lowResolution.url}`}/>;
         content.push(img);
       });
     }

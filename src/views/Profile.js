@@ -31,7 +31,7 @@ class ConnectedProfile extends Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps.location.pathName !== this.props.location.pathname || prevProps.mediaItems !== this.props.mediaItems){
+    if(prevProps.location.pathName !== this.props.location.pathName){
       if (this.props.location.pathname === '/profile') {
         this.props.dispatch(fetchMediaItems(this.props.token.value)); 
       } else {

@@ -44,7 +44,7 @@ class ConnectedItemUpload extends Component {
     item.append('data', this.state.fileToUpload);
      
     this.props.dispatch(uploadItem(item, this.props.token.value));
-
+    window.URL.revokeObjectURL(this.state.fileToUpload.preview);
   }
   addTags (e) {
     e.preventDefault;
