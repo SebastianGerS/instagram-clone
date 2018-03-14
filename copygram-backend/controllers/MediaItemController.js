@@ -37,21 +37,7 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
            
             MediaItem.create({
               images: {
-                lowResolution: {
-                  url: '/images/' + req.file.filename,
-                  width: 0,
-                  height: 0
-                },
-                thumbnail: {
-                  url: '/images/' + req.file.filename,
-                  width: 0,
-                  height: 0
-                },
-                standardResolution: {
-                  url: '/images/' + req.file.filename,
-                  width: 0,
-                  height: 0
-                },
+                url: '/images/' + req.file.filename,
               },
               type: 'image',
               comments: [],
@@ -84,21 +70,7 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
         if(tagCounter == newTags.length) {
           MediaItem.create({
             images: {
-              lowResolution: {
-                url: '/images/' + req.file.filename,
-                width: 0,
-                height: 0
-              },
-              thumbnail: {
-                url: '/images/' + req.file.filename,
-                width: 0,
-                height: 0
-              },
-              standardResolution: {
-                url: '/images/' + req.file.filename,
-                width: 0,
-                height: 0
-              },
+              url: '/images/' + req.file.filename,
             },
             type: 'image',
             comments: [],

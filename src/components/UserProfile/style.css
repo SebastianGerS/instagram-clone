@@ -51,7 +51,7 @@
 .btn-mobile-settings {
   background:none;
   border: none;
-  background-image: url(./settings-icon.svg);
+  background-image: url(../../resources/icons/settings-icon.svg);
   padding: 1em;
   cursor: pointer;
 }

@@ -23,3 +23,5 @@ yarn-error.log*
 
 #keys
 copygram-backend/dbpasswords.js
+copygram-backend/public
+

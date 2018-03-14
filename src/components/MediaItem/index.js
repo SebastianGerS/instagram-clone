@@ -64,7 +64,7 @@ class ConnectedMediaItem extends Component {
           username: currentUser.username,
           profilePicture: currentUser.profilePicture,
           fullname: currentUser.profilePicture,
-          id: currentUser._id
+          _id: currentUser._id
         }
       }
     }];
@@ -87,7 +87,8 @@ class ConnectedMediaItem extends Component {
     const followUserButton = [];
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
-        const newComment = <ItemComment key={uuidv1()}mediaItem={this.props.mediaItem} comment={comment}/>;
+        console.log(comment.user);
+        const newComment = <ItemComment key={uuidv1()} mediaItem={this.props.mediaItem} comment={comment}/>;
         comments.push(newComment);
       });
     }
@@ -119,11 +120,11 @@ class ConnectedMediaItem extends Component {
     return(
       <section className="mediaItem">
         <div className="profileBanner">
-        <Link to={`/users/${this.props.mediaItem.user._id}`}>
+          <Link className="userLink" to={`/users/${this.props.mediaItem.user._id}`}>
             <div>
               <img src={this.props.mediaItem.user.profilePicture}/>
               <div>
-            <p className="bold">{this.props.mediaItem.user.username}</p>
+                <p className="bold">{this.props.mediaItem.user.username}</p>
                 <p>{this.props.mediaItem.location}</p>
               </div>
             </div>
@@ -133,7 +134,7 @@ class ConnectedMediaItem extends Component {
           </div>
         </div>
         <figure className="imgContainer">
-          <img className="img" src={`${this.props.mediaItem.images.standardResolution.url}`}/>
+          <img className="img" src={this.props.mediaItem.images.url}/>
         </figure>
         <div className="itemInfo">
           <div>

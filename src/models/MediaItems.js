@@ -3,21 +3,7 @@ import Immutable from 'immutable';
 const MediaItem = Immutable.Record({
   _id: String,
   images: {
-    lowResolution: {
-      url: String,
-      width: Number,
-      height: Number
-    },
-    thumbnail: {
-      url: String,
-      width: Number,
-      height: Number
-    },
-    standardResolution: {
-      url: String,
-      width: Number,
-      height: Number
-    },
+    url: String,
   },
   type: String,
   comments: Array,

@@ -48,7 +48,7 @@ header nav ul {
   outline: none;
   padding: 0.9em;
   cursor: pointer;
-  background-image: url(./user.svg);
+  background-image: url(../../resources/icons/user.svg);
 }
 
 .loginForm {

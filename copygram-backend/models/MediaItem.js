@@ -2,21 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var MediaItemSchema = Schema({
   images: {
-    lowResolution: {
-      url: String,
-      width: Number,
-      height: Number
-    },
-    thumbnail: {
-      url: String,
-      width: Number,
-      height: Number
-    },
-    standardResolution: {
-      url: String,
-      width: Number,
-      height: Number
-    },
+    url: String,
   },
   type: String,
   comments: [{type: String, ref: 'Comment' }],
