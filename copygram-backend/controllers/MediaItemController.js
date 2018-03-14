@@ -6,8 +6,14 @@ var Tag = require('../models/Tag');
 var Comment = require('../models/Comment');
 var MediaItem = require('../models/MediaItem');
 var VerifyToken = require('../middleware/verifyToken');
-
-router.use(bodyParser.urlencoded({ extended: true}));
+var multer = require('multer');
+var storage = multer.diskStorage({
+  destination: './data',
+  filename(req,data,cb) {
+    cb(null, new Date() + '-' + data.originalname);
+  },
+});
+var upload = multer({storage});
 
 router.post('/', VerifyToken ,function(req,res) {
   var tags = [];
@@ -40,7 +46,7 @@ router.post('/', VerifyToken ,function(req,res) {
                   height: req.body.images.standardResolution.height
                 },
               },
-              type: req.body.type,
+              type: 'image',
               comments: [],
               likes: [],
               tags: tags,
@@ -113,7 +119,14 @@ router.post('/', VerifyToken ,function(req,res) {
     });
   });
 });
-router.get('/',VerifyToken, function(req,res) {
+router.post('/test',[VerifyToken, upload.single('data')], function(req,res) {
+  var data = req.data;
+
+  return res.status(200).json({meddage: 'did it work?'});
+ 
+});
+
+router.get('/',[VerifyToken, bodyParser.urlencoded({ extended: true})], function(req,res) {
   MediaItem.find({user: {$nin: req.userId }}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
@@ -124,7 +137,7 @@ router.get('/',VerifyToken, function(req,res) {
     
   });
 });
-router.get('/follows',VerifyToken, function(req,res) {
+router.get('/follows',[VerifyToken, bodyParser.urlencoded({ extended: true})], function(req,res) {
   User.findById(req.userId).lean().exec(function (error, user) {
     if (error) return res.status(500).json({error: 'error retreving user'});
     MediaItem.find({user: {$in: user.follows }}).sort({createdAt: 'desc' }).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
@@ -138,7 +151,7 @@ router.get('/follows',VerifyToken, function(req,res) {
     });
   });
 });
-router.get('/selfe',VerifyToken, function(req,res) {
+router.get('/selfe',[VerifyToken, bodyParser.urlencoded({ extended: true})], function(req,res) {
   MediaItem.find({user: req.userId}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
@@ -149,7 +162,7 @@ router.get('/selfe',VerifyToken, function(req,res) {
     
   });
 });
-router.get('/:userId', function(req,res) {
+router.get('/:userId',bodyParser.urlencoded({ extended: true}) ,function(req,res) {
   MediaItem.find({user: req.params.userId}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
@@ -161,7 +174,7 @@ router.get('/:userId', function(req,res) {
   });
 });
 
-router.put('/:id', VerifyToken, function (req,res) {
+router.put('/:id', [VerifyToken, bodyParser.urlencoded({ extended: true})], function (req,res) {
   MediaItem.findById(req.params.id, function(err, mediaItem) {
     if (err) return res.status(500).json({error: 'error retreving mediaitem'});
     

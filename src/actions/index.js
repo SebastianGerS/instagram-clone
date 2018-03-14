@@ -115,7 +115,7 @@ export const fetchAllMediaItems = (token) => dispatch => {
       if (mediaItems.error){
         mediaItems = [];
       }
-      dispatch(reciveMediaItem(mediaItems))
+      dispatch(reciveMediaItem(mediaItems));
     })
     .catch(error => {
       console.log(error);
@@ -172,7 +172,7 @@ export const fetchUser = (userId) => dispatch => {
       console.log(error);
       dispatch(rejectedUser());
     });
-} 
+}; 
 export const fetchUserMediaItems = (userId) => dispatch => {
   dispatch(requestMediaItems());
   fetch(`/mediaItems/${userId}`, {
@@ -257,7 +257,7 @@ export const toggleLike = (mediaItemId, token, updatedFields) => dispatch => {
 };
 
 export const createComment = (comment,mediaItemId ,token, updatedFields) => dispatch => {
-    fetch(`/mediaitems/${mediaItemId}/comments`,
+  fetch(`/mediaitems/${mediaItemId}/comments`,
     {
       method: 'POST', 
       headers: {
@@ -272,8 +272,8 @@ export const createComment = (comment,mediaItemId ,token, updatedFields) => disp
       dispatch(updatedMediaItem(mediaItemId, updatedFields));
     }).catch(error => {
       console.log(error);
-    })
-}
+    });
+};
 
 export const deleteComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
   fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
@@ -290,44 +290,65 @@ export const deleteComment = (mediaItemId, commentId, token, updatedFields) => d
       dispatch(updatedMediaItem(mediaItemId, updatedFields));
     }).catch(error => {
       console.log(error);
-    })
+    });
 };
 
 export const updateComment = (mediaItemId, commentId, token, updatedFields) => dispatch => {
   
   fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
-  {
-    method: 'PUT', 
-    headers: {
-      'x-access-token': token,
-      'content-type': 'application/json',
-      'accept': 'application/json'
-    },
-    body: JSON.stringify(updatedFields[0])
-  })
-  .then(res => res.json())
-  .then(res => {
-    dispatch(updatedMediaItem(mediaItemId, updatedFields));
-  }).catch(error => {
-    console.log(error);
-  })
+    {
+      method: 'PUT', 
+      headers: {
+        'x-access-token': token,
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify(updatedFields[0])
+    })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(updatedMediaItem(mediaItemId, updatedFields));
+    }).catch(error => {
+      console.log(error);
+    });
 };
 
 export const toggleFollow = (token, updatedFields) => dispatch => {
   fetch(`/users/${updatedFields[0].value}`,
-  {
-    method: 'PUT', 
-    headers: {
-      'x-access-token': token,
-      'content-type': 'application/json',
-      'accept': 'application/json'
-    },
-    body: JSON.stringify(updatedFields[0])
-  })
-  .then(res => res.json())
-  .then(res => {
-    dispatch(updatedCurrentUser(updatedFields));
-  }).catch(error => {
-    console.log(error);
-  })
-}
+    {
+      method: 'PUT', 
+      headers: {
+        'x-access-token': token,
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify(updatedFields[0])
+    })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(updatedCurrentUser(updatedFields));
+    }).catch(error => {
+      console.log(error);
+    });
+};
+
+export const uploadItem = (item, token) => dispatch => {
+  console.log(item.get('data'));
+  fetch(`/mediaitems/test`,
+    {
+      method: 'POST', 
+      headers: {
+        'x-access-token': token,
+        'content-type': 'multipart/form-data',
+        'accept': 'application/json'
+      },
+      body: item
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      window.URL.revokeObjectURL(res.item.preview);
+    }).catch(error => {
+      console.log(error);
+    });
+};

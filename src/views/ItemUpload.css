@@ -1,0 +1,80 @@
+.imageUpload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 80%;
+  padding-bottom: 5em;
+}
+
+.imageForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1em 0;
+  min-width: 200px;
+}
+
+.dropzone {
+  min-height:200px;
+  padding: 2em;
+  border: 2px dashed black;
+  margin: 1em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+}
+
+.imageInfo {
+ margin: 1em 0; 
+ width: 50%;
+}
+
+.imageInfo button {
+  padding:1em;
+  margin-left:0.5em;
+  background-image: url(./delete.svg);
+}
+
+.imageInfo li {
+  border: 1px solid #b4daff;
+  border-radius: 4px;
+  padding: 0.5em;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5em 0;
+  width: fit-content;
+}
+.imageInfo ul {
+  margin: 0;
+  padding: 0;
+  width: fit-content;
+}
+.imageInfo span {
+  font-weight: 500;
+  margin-left: 1em;
+}
+
+.imageForm button {
+  padding:1em;
+  color: white;
+  background:#3897f0;
+  border-radius: 4px;
+  margin-top:0.5em;
+  min-width: 200px;
+}
+
+.imageForm input {
+  padding:1em;
+  border: 1px solid #b4daff;
+  background-color: white;
+  border-radius: 4px;
+  margin: 0.5em 0;
+  min-width: 200px;
+}

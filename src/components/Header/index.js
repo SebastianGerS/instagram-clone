@@ -141,6 +141,9 @@ class ConnectedHeader extends Component {
             <li>
               <Link className="link" to="/explore">Explore</Link>
             </li>
+            <li>
+              <Link className="link" to="/upload">Upload</Link>
+            </li>
           </ul>
         </nav>
         <button className="userButton" onClick={this.toggleLoginModal}></button>
