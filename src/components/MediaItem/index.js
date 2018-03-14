@@ -84,7 +84,7 @@ class ConnectedMediaItem extends Component {
     const comments = []
     const tags = [];
     let likeButtonClass;
-    let followUserClass;
+    const followUserButton = [];
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
         const newComment = <ItemComment key={uuidv1()}mediaItem={this.props.mediaItem} comment={comment}/>;
@@ -105,12 +105,15 @@ class ConnectedMediaItem extends Component {
         likeButtonClass = "likeButton";
       }
     }
-    if (this.props.mediaItem.user) {
+
+    if (this.props.mediaItem.user._id !== this.props.currentUser._id) {
+      let button;
       if (this.state.isFollowing) {
-        followUserClass = "unFollowButton";
+        button = <button key={uuidv1()} className="unFollowButton" onClick={this.toggleFollow}></button>;
       } else {
-        followUserClass = "followButton";
+        button = <button key={uuidv1()} className="followButton" onClick={this.toggleFollow}></button>;
       }     
+      followUserButton.push(button);
     }
    
     return(
@@ -126,7 +129,7 @@ class ConnectedMediaItem extends Component {
             </div>
           </Link>
           <div>
-            <button className={followUserClass} onClick={this.toggleFollow}></button>
+           {followUserButton}
           </div>
         </div>
         <figure className="imgContainer">
