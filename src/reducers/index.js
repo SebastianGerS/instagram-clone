@@ -61,9 +61,9 @@ const Reducer = (state = initialState , action) => {
   case ActionTypes.USER_REGISTRATION_SUCCESS:
     return {
       ...state,
-      currentUser: [ new User(
+      currentUser: new User(
           action.data.user
-      )],
+      ),
       token: new Token({value: action.data.token}),
       currentUserId: action.data.user._id,
       isFetching: false,
@@ -102,57 +102,47 @@ const Reducer = (state = initialState , action) => {
       isLogedin: false,
       token: Immutable.OrderedMap()
     };
+  case ActionTypes.MEDIAITEM_CREATE_START:
+    return {
+      ...state,
+      isUpdating: true
+    };
+  case ActionTypes.MEDIAITEM_CREATE_SUCCESS:
+    
+    return {
+      ...state,
+      isUpdating: false
+    };
+  case ActionTypes.MEDIAITEM_CREATE_FAILURE:
+    return {
+      ...state,
+      isUpdating: false
+    };
+    case ActionTypes.MEDIAITEM_DELETE_START:
+    return {
+      ...state,
+      isUpdating: true
+    };
+  case ActionTypes.MEDIAITEM_DELETE_SUCCESS:
+    
+    return {
+      ...state,
+      isUpdating: false
+    };
+  case ActionTypes.MEDIAITEM_DELETE_FAILURE:
+    return {
+      ...state,
+      isUpdating: false
+    };
   case ActionTypes.MEDIAITEM_UPDATE_START:
     return {
       ...state,
       isUpdating: true
     };
   case ActionTypes.MEDIAITEM_UPDATE_SUCCESS:
-    const mediaItems = [...state.mediaItems.map (mediaItem => { 
-      if (mediaItem._id === action.mediaItemId) {
-        if (action.updatedFields !== null) {
-          action.updatedFields.forEach (field => {
-            if (Array.isArray(mediaItem[field.name])) {
-              if (field.name === 'comments') {
-                if (!field.value.user) {
-                  if (field.value.text) {
-                    mediaItem[field.name].map ((comment, index) => {
-                      if (comment._id === field.value._id) {
-                        comment.text = field.value.text;
-                      }
-                    });
-                  } else {
-                    mediaItem[field.name].map ((comment, index) => {
-                      if (comment._id === field.value._id) {
-                        mediaItem[field.name].splice(index,1);
-                      }
-                    });            
-                  }
-                } else {
-                    mediaItem[field.name].push(field.value);
-                }
-              } else if (mediaItem[field.name].includes(field.value)) {
-                mediaItem[field.name].map((user, index) => {
-                  if (user === field.value) {
-                    mediaItem[field.name].splice(index,1);
-                  }
-                });            
-              } else {
-                mediaItem[field.name].push(field.value);
-              }
-            } else {
-              mediaItem[field.name] = field.value;
-            }
-          });
-        } else {
-          return;
-        }
-      }
-      return mediaItem;
-    })];
+    
     return {
       ...state,
-      mediaItems: [...mediaItems],
       isUpdating: false
     };
   case ActionTypes.MEDIAITEM_UPDATE_FAILURE:
@@ -161,25 +151,26 @@ const Reducer = (state = initialState , action) => {
       isUpdating: false
     };
   case ActionTypes.USER_UPDATE_SUCCESS:
-    const currentUser = {...state.currentUser.map((field,index) => {
-      if(index === 'follows') {
-        if(field.includes(`${action.updatedFields[0].value}`)) {
-          field.map((user, userIndex) => {
-            if(user == action.updatedFields[0].value) {
-              field.splice(userIndex, 1);
-            }
-          })
-        }else {
-          field.push(action.updatedFields[0].value);
-        }
-      }
-     
-      return field;
-    })};
-     
+   
     return {
       ...state,
-      currrentUser: currentUser
+      isUpdating: false
+    }
+  case ActionTypes.FETCHING_UPDATED_SELFE_START:
+    return {
+      ...state,
+      isFetching: true
+    }
+  case ActionTypes.FETCHING_UPDATED_SELFE_SUCCESS:
+    return {
+      ...state,
+      currentUser: new User(action.user),
+      isFetching: false
+    }
+  case ActionTypes.FETCHING_UPDATED_SELFE_FAILURE:
+    return {
+      ...state,
+      isFetching: false
     }
   default:
     return state;

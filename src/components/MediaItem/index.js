@@ -53,6 +53,7 @@ class ConnectedMediaItem extends Component {
       }
     } 
   }
+
   handleLike(e) {
     e.preventDefault();
     const field = [{
@@ -60,42 +61,27 @@ class ConnectedMediaItem extends Component {
       value: this.props.currentUser._id
     }];
     
-    this.props.dispatch(toggleLike(this.props.mediaItem._id, this.props.token.value, field));
+    this.props.dispatch(toggleLike(this.props.mediaItem._id, this.props.token.value, field, this.props.path, this.props.mediaItem.user._id));
   }
+
   updateStateValue(e) {
     this.setState({
         [e.target.name]: e.target.value
      });
-     console.log(this.state.tags);
   }
+
   addComment(e) {
     e.preventDefault();
-    const currentUser = this.props.currentUser;
-    const field = [{
-      name: 'comments',
-      value: {
-        text: this.state.comment,
-        _id: uuidv1(),
-        user: {
-          username: currentUser.username,
-          profilePicture: currentUser.profilePicture,
-          fullname: currentUser.profilePicture,
-          _id: currentUser._id
-        }
-      }
-    }];
-    this.props.dispatch(createComment(this.state.comment, this.props.mediaItem._id, this.props.token.value, field));
+    this.props.dispatch(createComment(this.state.comment, this.props.mediaItem._id, this.props.token.value,this.props.path, this.props.mediaItem.user._id));
   }
+
   toggleFollow() {
-    const field = [{
-      name: 'follows',
-      value: this.props.mediaItem.user._id
-    }];
     this.setState({
       isFollowing: !this.state.isFollowing
     })
-    this.props.dispatch(toggleFollow(this.props.token.value, field));
+    this.props.dispatch(toggleFollow(this.props.token.value, this.props.path, this.props.mediaItem.user._id));
   }
+
   updateMediaItem() {
     const fields = 
       {
@@ -103,17 +89,21 @@ class ConnectedMediaItem extends Component {
         location: this.state.location,
         tags: this.state.tags
       };
+
     this.props.dispatch(updateMediaItem(this.props.mediaItem._id, this.props.token.value, fields));
     this.toggleMediaItemModal();
   }
+
   toggleMediaItemModal() {
     this.setState({
       isBeingEdited: !this.state.isBeingEdited,
     });
   };
+
   removeMediaItem() {
     this.props.dispatch(deleteMediaItem(this.props.mediaItem._id, this.props.mediaItem.images.url, this.props.token.value));
   }
+
   removeTag(e) {
     const tags = this.state.tags;
     tags.splice(e.target.value, 1);
@@ -124,12 +114,14 @@ class ConnectedMediaItem extends Component {
       ]
     });
   }
+
   addTag (e) {
     e.preventDefault;
 
     if(e.key === ' ' || e.key === 'Enter') {
       let newTag = this.state.tag;
       newTag = newTag.trim();
+      newTag = newTag.charAt(0) !== '#' ? `#${newTag}` : newTag;
       this.setState({
         tags: [
           ...this.state.tags,
@@ -139,6 +131,7 @@ class ConnectedMediaItem extends Component {
       });
     } 
   }
+
   render() {
     const comments = []
     const tags = [];
@@ -151,8 +144,7 @@ class ConnectedMediaItem extends Component {
     }
     if (this.props.mediaItem.comments) {
       this.props.mediaItem.comments.forEach(comment => {
-        console.log(comment.user);
-        const newComment = <ItemComment key={uuidv1()} mediaItem={this.props.mediaItem} comment={comment}/>;
+        const newComment = <ItemComment path={this.props.path} key={uuidv1()} mediaItem={this.props.mediaItem} comment={comment}/>;
         comments.push(newComment);
       });
     }

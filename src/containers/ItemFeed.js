@@ -15,8 +15,9 @@ class ItemFeed extends Component {
 
     const content = [];
     if(this.props.mediaItems){
-      this.props.mediaItems.forEach(item => {    
-        let mediaItem = <MediaItem key={uuidv1()} mediaItem={item}/>
+      this.props.mediaItems.forEach(item => {  
+          
+        let mediaItem = <MediaItem key={uuidv1()} mediaItem={item} path={this.props.path}/>
         content.push(mediaItem);
       });
     }

@@ -31,7 +31,7 @@ class ConnectedProfile extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps.location.pathName !== this.props.location.pathName){
+    if(prevProps.location.pathname !== this.props.location.pathname){
       if (this.props.location.pathname === '/profile') {
         this.props.dispatch(fetchMediaItems(this.props.token.value)); 
       } else {
@@ -54,9 +54,9 @@ class ConnectedProfile extends Component {
     let content;
     if (this.props.isLogedin) {
       if (this.state.activeTab === 0) {
-        content = <ItemGrid mediaItems={this.props.mediaItems}/>;
+        content = <ItemGrid path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
       } else if(this.state.activeTab === 1) {
-        content = <ItemFeed mediaItems={this.props.mediaItems}/>;
+        content = <ItemFeed path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
       }
     }
     return (

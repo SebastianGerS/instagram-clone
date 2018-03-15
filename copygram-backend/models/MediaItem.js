@@ -5,7 +5,7 @@ var MediaItemSchema = Schema({
     url: String,
   },
   type: String,
-  comments: [{type: String, ref: 'Comment' }],
+  comments: [{type: Schema.Types.ObjectId, ref: 'Comment' }],
   likes: [{type: Schema.Types.ObjectId, ref: 'User' }],
   tags: [{type: Schema.Types.ObjectId, ref: 'Tag' }],
   caption: String,

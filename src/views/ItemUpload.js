@@ -4,6 +4,7 @@ import uuidv1 from "uuid";
 import {connect} from 'react-redux';
 import {uploadItem} from '../actions';
 import './ItemUpload.css';
+import {Redirect} from 'react-router';
 const mapStateToProps = state => {
   return { token: state.token};
 }
@@ -22,6 +23,7 @@ class ConnectedItemUpload extends Component {
       location: '',
       tag: '',
       tags: [],
+      redirect: false
     };
   }
   componentDidUpdate() {
@@ -45,6 +47,9 @@ class ConnectedItemUpload extends Component {
      
     this.props.dispatch(uploadItem(item, this.props.token.value));
     window.URL.revokeObjectURL(this.state.fileToUpload.preview);
+    this.setState({
+      redirect: true
+    });
   }
   addTags (e) {
     e.preventDefault;
@@ -52,6 +57,7 @@ class ConnectedItemUpload extends Component {
     if(e.key === ' ' || e.key === 'Enter') {
       let newTag = this.state.tag;
       newTag = newTag.trim();
+      newTag = newTag.charAt(0) !== '#' ? `#${newTag}` : newTag;
       this.setState({
         tags: [
           ...this.state.tags,
@@ -80,6 +86,9 @@ class ConnectedItemUpload extends Component {
     let imagePreview;
     let info;
     const tags = [];
+    if( this.state.redirect === true) {
+      return <Redirect to="/profile" />;
+    }
     if(this.state.fileToUpload) {
       imagePreview = {
         backgroundImage: `url(${this.state.fileToUpload.preview})`,

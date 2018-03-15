@@ -33,27 +33,30 @@ class ConnectedItemComment extends Component {
      });
   }
   removeComment() {
-    const field = [{
-      name: 'comments',
-      value: {
-        _id: this.props.comment._id,
-      }
-    }];
-    this.props.dispatch(deleteComment(this.props.mediaItem._id, this.props.comment._id, this.props.token.value ,field));
+   
+    this.props.dispatch(deleteComment(
+      this.props.mediaItem._id, 
+      this.props.comment._id, 
+      this.props.token.value , 
+      this.props.path, 
+      this.props.mediaItem.user._id));
   }
   
   updateComment(e) {
     e.preventDefault();
-    const field = [{
-      name: 'comments',
-      value: {
-        text: this.state.text,
-        _id: this.props.comment._id,
-      }
-    }];
-    this.props.dispatch(updateComment(this.props.mediaItem._id, this.props.comment._id, this.props.token.value, field));
+  
+    this.props.dispatch(updateComment(
+      this.props.mediaItem._id,
+      this.props.comment._id, 
+      this.props.token.value, 
+      this.state.text, 
+      this.props.path, 
+      this.props.mediaItem.user._id)
+    );
+
     this.toggleCommentModal();
   }
+  
   toggleCommentModal() {
 
     let modal;

@@ -8,8 +8,8 @@ var MediaItem = require('../models/MediaItem');
 var VerifyToken = require('../middleware/verifyToken');
 var multer = require('multer');
 var uuidv1 = require("uuid");
-var fs = require('fs')
-var { promisify } = require('util')
+var fs = require('fs');
+
 router.use(bodyParser.urlencoded({ extended: true}));
 var storage = multer.diskStorage({
   destination: './public/images',
@@ -17,13 +17,13 @@ var storage = multer.diskStorage({
     cb(null, uuidv1() + data.originalname);
   },
 });
+
 var upload = multer({storage});
 
 router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
   var tags = [];
   var tagCounter = 0;
   var newTags = req.body.tags.split(',');
-  console.log(req.file);
       
   newTags.forEach(tagname => {
     
@@ -103,67 +103,67 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
 
 router.get('/',VerifyToken, function(req,res) {
   MediaItem.find({user: {$nin: req.userId }})
-  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
-  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
-  .populate({path: 'tags'})
-  .lean().exec(function(err, mediaItems) {
-    if (err) return res.status(500).json({error: 'error retreving mediaitems'});
-    if (mediaItems) {
-      return res.status(200).json(mediaItems);
-    } else {
-      return res.status(404).json({error: 'no mediaItems found'});
-    }
-    
-  });
-});
-router.get('/follows', VerifyToken, function(req,res) {
-  User.findById(req.userId).lean().exec(function (error, user) {
-    if (error) return res.status(500).json({error: 'error retreving user'});
-    MediaItem.find({user: {$in: user.follows }})
-    .sort({createdAt: 'desc' })
     .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
     .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
     .populate({path: 'tags'})
     .lean().exec(function(err, mediaItems) {
       if (err) return res.status(500).json({error: 'error retreving mediaitems'});
-      if (mediaItems.length) {
+      if (mediaItems) {
         return res.status(200).json(mediaItems);
       } else {
         return res.status(404).json({error: 'no mediaItems found'});
       }
-      
+    
     });
+});
+router.get('/follows', VerifyToken, function(req,res) {
+  User.findById(req.userId).lean().exec(function (error, user) {
+    if (error) return res.status(500).json({error: 'error retreving user'});
+    MediaItem.find({user: {$in: user.follows }})
+      .sort({createdAt: 'desc' })
+      .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+      .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+      .populate({path: 'tags'})
+      .lean().exec(function(err, mediaItems) {
+        if (err) return res.status(500).json({error: 'error retreving mediaitems'});
+        if (mediaItems.length) {
+          return res.status(200).json(mediaItems);
+        } else {
+          return res.status(404).json({error: 'no mediaItems found'});
+        }
+      
+      });
   });
 });
 router.get('/selfe',VerifyToken, function(req,res) {
   MediaItem.find({user: req.userId})
-  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
-  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
-  .populate({path: 'tags'})
-  .lean().exec(function(err, mediaItems) {
-    if (err) return res.status(500).json({error: 'error retreving mediaitems'});
-    if (mediaItems) {
-      return res.status(200).json(mediaItems);
-    } else {
-      return res.status(404).json({error: 'no mediaItems found'});
-    }
+    .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+    .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+    .populate({path: 'tags'})
+    .lean().exec(function(err, mediaItems) {
+      if (err) return res.status(500).json({error: 'error retreving mediaitems'});
+      if (mediaItems) {
+        return res.status(200).json(mediaItems);
+      } else {
+        return res.status(404).json({error: 'no mediaItems found'});
+      }
     
-  });
+    });
 });
 router.get('/:userId', function(req,res) {
   MediaItem.find({user: req.params.userId})
-  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
-  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
-  .populate({path: 'tags'})
-  .lean().exec(function(err, mediaItems) {
-    if (err) return res.status(500).json({error: 'error retreving mediaitems'});
-    if (mediaItems) {
-      return res.status(200).json(mediaItems);
-    } else {
-      return res.status(404).json({error: 'no mediaItems found'});
-    }
+    .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+    .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+    .populate({path: 'tags'})
+    .lean().exec(function(err, mediaItems) {
+      if (err) return res.status(500).json({error: 'error retreving mediaitems'});
+      if (mediaItems) {
+        return res.status(200).json(mediaItems);
+      } else {
+        return res.status(404).json({error: 'no mediaItems found'});
+      }
     
-  });
+    });
 });
 router.delete('/:id',VerifyToken, function(req,res) {
   MediaItem.deleteOne({_id: req.params.id , user: req.userId}, function(err) {
@@ -196,39 +196,43 @@ router.put('/:id', VerifyToken, function (req,res) {
         mediaItem.location = req.body.location;
         var tags = [];
         var tagCounter = 0;
-        req.body.tags.forEach(tagname => {
-          
-          Tag.findOne({tagname: tagname},function(err, tag) {
-            if (err) return res.status(500).json({error: 'error retreving tag'});
-          
-            if (tag == null) {
-              
-              Tag.create({tagname: tagname}, function(error, newtag) {
-                if (error) return res.status(500).json({error: 'error retreving tag'});
+        if (req.body.tags.length !== 0) {
+          req.body.tags.forEach(tagname => {
+            
+            Tag.findOne({tagname: tagname},function(err, tag) {
+              if (err) return res.status(500).json({error: 'error retreving tag'});
+            
+              if (tag == null) {
                 
-                tags.push(newtag._id);
+                Tag.create({tagname: tagname}, function(error, newtag) {
+                  if (error) return res.status(500).json({error: 'error retreving tag'});
+                  
+                  tags.push(newtag._id);
+                  tagCounter++;
+                  if(tagCounter == req.body.tags.length) {
+                
+                    mediaItem.tags = tags;
+                    mediaItem.save();
+                    return res.json({message: 'media items tags where updated'});
+                  }
+                } );
+              } else {
+                tags.push(tag._id);
                 tagCounter++;
                 if(tagCounter == req.body.tags.length) {
-              
+                
                   mediaItem.tags = tags;
                   mediaItem.save();
-                  return res.json({message: 'media items tags where updated'});
+                  return res.json({message: 'mediaitem was updated'});
                 }
-              } );
-            } else {
-              tags.push(tag._id);
-              tagCounter++;
-              if(tagCounter == req.body.tags.length) {
-              
-                mediaItem.tags = tags;
-                mediaItem.save();
-                return res.json({message: 'mediaitem was updated'});
               }
-            }
-            
-           
+            });
           });
-        });
+        } else {
+          mediaItem.tags = tags;
+          mediaItem.save();
+          return res.json({message: 'mediaitem was updated'});
+        }
       } else {
         var toBeAdded = true;
   

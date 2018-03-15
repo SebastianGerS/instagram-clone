@@ -28,6 +28,7 @@ router.get('/:id', function(req,res) {
   
   });
 });
+
 router.delete('/:id', verifyToken,function(req,res) {
   User.findByIdAndRemove(req.params.id,function(error,user) {
 
@@ -75,12 +76,10 @@ router.put('/:id', verifyToken,function(req,res) {
       if (tobeFollowed) {
         followedUser.followedBy.push(req.userId);
         followedUser.save();
-        return res.status(200).json('you are now following ' + followedUser.username);
+        return res.status(200).json({message: 'you are now following ' + followedUser.username});
       } else {
-      return res.status(200).json('you are no longer following ' + followedUser.username);
+      return res.status(200).json({message: 'you are no longer following ' + followedUser.username});
       }
-     
-  
     });
   });
 });
