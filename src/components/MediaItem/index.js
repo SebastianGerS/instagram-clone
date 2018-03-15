@@ -21,12 +21,23 @@ class ConnectedMediaItem extends Component {
     this.addComment = this.addComment.bind(this);
     this.updateStateValue = this.updateStateValue.bind(this);
     this.toggleFollow = this.toggleFollow.bind(this);
+    this.addTag = this.addTag.bind(this);
+    this.removeTag = this.removeTag.bind(this);
     this.updateMediaItem = this.updateMediaItem.bind(this);
     this.removeMediaItem = this.removeMediaItem.bind(this);
+    this.toggleMediaItemModal = this.toggleMediaItemModal.bind(this);
     this.state = {
       updatedFields: [],
       comment: '',
-      isFollowing: false
+      isFollowing: false,
+      caption: this.props.mediaItem.caption,
+      location: this.props.mediaItem.location,
+      tag: '',
+      tags: [...this.props.mediaItem.tags.map(tag => {
+              return tag.tagname})
+            ],
+      isBeingEdited: false,
+      modal: [],
     }
   }
   componentWillMount(){
@@ -55,6 +66,7 @@ class ConnectedMediaItem extends Component {
     this.setState({
         [e.target.name]: e.target.value
      });
+     console.log(this.state.tags);
   }
   addComment(e) {
     e.preventDefault();
@@ -85,17 +97,55 @@ class ConnectedMediaItem extends Component {
     this.props.dispatch(toggleFollow(this.props.token.value, field));
   }
   updateMediaItem() {
-    this.props.dispatch(updateMediaItem(this.props.mediaItem._id, this.props.token.value));
+    const fields = 
+      {
+        caption: this.state.caption,
+        location: this.state.location,
+        tags: this.state.tags
+      };
+    this.props.dispatch(updateMediaItem(this.props.mediaItem._id, this.props.token.value, fields));
+    this.toggleMediaItemModal();
   }
+  toggleMediaItemModal() {
+    this.setState({
+      isBeingEdited: !this.state.isBeingEdited,
+    });
+  };
   removeMediaItem() {
-    this.props.dispatch(deleteMediaItem(this.props.mediaItem._id,this.props.mediaItem.images.url ,this.props.token.value));
+    this.props.dispatch(deleteMediaItem(this.props.mediaItem._id, this.props.mediaItem.images.url, this.props.token.value));
+  }
+  removeTag(e) {
+    const tags = this.state.tags;
+    tags.splice(e.target.value, 1);
+
+    this.setState({
+      tags: [
+        ...tags
+      ]
+    });
+  }
+  addTag (e) {
+    e.preventDefault;
+
+    if(e.key === ' ' || e.key === 'Enter') {
+      let newTag = this.state.tag;
+      newTag = newTag.trim();
+      this.setState({
+        tags: [
+          ...this.state.tags,
+          newTag
+        ],
+        tag: ''
+      });
+    } 
   }
   render() {
     const comments = []
     const tags = [];
     let likeButtonClass;
-    const ItemButtons = [];
+    const OwnerActions = [];
     let button;
+    const tagsBeingEdited = [];
     if (!this.props.mediaItem) {
       return null;
     }
@@ -109,15 +159,24 @@ class ConnectedMediaItem extends Component {
 
     if (this.props.mediaItem.tags) {
       this.props.mediaItem.tags.forEach(tag => {
-        let newTag = <span key={uuidv1()}>{tag.text}</span>
+        let newTag = <span className="bold" key={uuidv1()}>{tag.tagname}</span>
         tags.push(newTag);
       });
     }
+    if (this.state.tags) {
+      let i = 0;
+      this.state.tags.map(tagname => {
+        let tag =  <li key={uuidv1()}>{tagname} <button value={i} onClick={this.removeTag}></button></li>
+        tagsBeingEdited.push(tag);
+        i++;
+      });
+    }
+   
     if (this.props.mediaItem.likes) {   
-    if(this.props.mediaItem.likes.includes(this.props.currentUser._id)) {
-        likeButtonClass = "likeButton liked";
+      if(this.props.mediaItem.likes.includes(this.props.currentUser._id)) {
+          likeButtonClass = "likeButton liked";
       } else {
-        likeButtonClass = "likeButton";
+          likeButtonClass = "likeButton";
       }
     }
 
@@ -128,12 +187,12 @@ class ConnectedMediaItem extends Component {
       } else {
         button = <button key={uuidv1()} className="followButton" onClick={this.toggleFollow}></button>;
       }     
-      ItemButtons.push(button);
+      OwnerActions.push(button);
     } else if (this.props.mediaItem.user._id == this.props.currentUser._id) {
-      button = <button key={uuidv1()} className="optionsButton" onClick={this.updateMediaItem}></button>
-      ItemButtons.push(button);
+      button = <button key={uuidv1()} className="optionsButton" onClick={this.toggleMediaItemModal}></button>
+      OwnerActions.push(button);
       button = <button key={uuidv1()} className="removeButton" onClick={this.removeMediaItem}></button>;
-      ItemButtons.push(button);
+      OwnerActions.push(button);
     }
   
     return(
@@ -149,7 +208,31 @@ class ConnectedMediaItem extends Component {
             </div>
           </Link>
           <div>
-          {ItemButtons}
+          {OwnerActions}
+          {this.state.isBeingEdited &&
+            <section className="editMediaItemModal">
+              <h3>Edit MediaItem</h3>
+              <div>
+                <div className="imageInfo">
+                  <h3>Caption: <span>{this.state.caption}</span></h3>
+                  <h3>Location: <span>{this.state.location}</span></h3>
+                  <ul>
+                    <h3>Tags: </h3>
+                    {tagsBeingEdited}
+                  </ul>
+                </div>
+                <div className="imageForm">
+                  <label for="caption">Caption</label>
+                  <input name="caption" onChange={this.updateStateValue} value={this.state.caption}/>
+                  <label for="location">Location</label>
+                  <input name="location" onChange={this.updateStateValue} value={this.state.location}/>
+                  <label for="tag">Tags</label>
+                  <input name="tag" onKeyPress={this.addTag} onChange={this.updateStateValue} value={this.state.tag}/>
+                  <button onClick={this.updateMediaItem}>Upload!</button>
+                </div>
+              </div>
+            </section>
+          }
           </div>
         </div>
         <figure className="imgContainer">

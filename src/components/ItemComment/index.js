@@ -73,8 +73,6 @@ class ConnectedItemComment extends Component {
       isBeingEdited: !this.state.isBeingEdited,
       modal: [modal]
     });
-
-
   };
 
   render() {

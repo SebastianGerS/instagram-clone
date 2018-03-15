@@ -143,3 +143,27 @@
 .caption {
   margin-bottom: 2em;
 }
+
+.editMediaItemModal {
+  z-index: 2;
+  position: fixed;
+  top: 100px;
+  left: 20vw;
+  margin: auto auto;
+  background-color: white;
+  padding: 5em 6em;
+  border: 1px solid #dbdbdb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.editMediaItemModal > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.editMediaItemModal > div > div {
+ margin: 0 2em;
+}

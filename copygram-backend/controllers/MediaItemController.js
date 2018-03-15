@@ -102,7 +102,11 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
 });
 
 router.get('/',VerifyToken, function(req,res) {
-  MediaItem.find({user: {$nin: req.userId }}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
+  MediaItem.find({user: {$nin: req.userId }})
+  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+  .populate({path: 'tags'})
+  .lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
       return res.status(200).json(mediaItems);
@@ -115,7 +119,12 @@ router.get('/',VerifyToken, function(req,res) {
 router.get('/follows', VerifyToken, function(req,res) {
   User.findById(req.userId).lean().exec(function (error, user) {
     if (error) return res.status(500).json({error: 'error retreving user'});
-    MediaItem.find({user: {$in: user.follows }}).sort({createdAt: 'desc' }).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
+    MediaItem.find({user: {$in: user.follows }})
+    .sort({createdAt: 'desc' })
+    .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+    .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+    .populate({path: 'tags'})
+    .lean().exec(function(err, mediaItems) {
       if (err) return res.status(500).json({error: 'error retreving mediaitems'});
       if (mediaItems.length) {
         return res.status(200).json(mediaItems);
@@ -127,7 +136,11 @@ router.get('/follows', VerifyToken, function(req,res) {
   });
 });
 router.get('/selfe',VerifyToken, function(req,res) {
-  MediaItem.find({user: req.userId}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
+  MediaItem.find({user: req.userId})
+  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+  .populate({path: 'tags'})
+  .lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
       return res.status(200).json(mediaItems);
@@ -138,7 +151,11 @@ router.get('/selfe',VerifyToken, function(req,res) {
   });
 });
 router.get('/:userId', function(req,res) {
-  MediaItem.find({user: req.params.userId}).populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}).populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}}).lean().exec(function(err, mediaItems) {
+  MediaItem.find({user: req.params.userId})
+  .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+  .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+  .populate({path: 'tags'})
+  .lean().exec(function(err, mediaItems) {
     if (err) return res.status(500).json({error: 'error retreving mediaitems'});
     if (mediaItems) {
       return res.status(200).json(mediaItems);
@@ -176,9 +193,7 @@ router.put('/:id', VerifyToken, function (req,res) {
      
       if(req.body.caption){
         mediaItem.caption = req.body.caption;
-        mediaItem.save();
-        return res.json({message: 'media items caption was updated'});
-      } else if(req.body.tags) {
+        mediaItem.location = req.body.location;
         var tags = [];
         var tagCounter = 0;
         req.body.tags.forEach(tagname => {
@@ -207,16 +222,33 @@ router.put('/:id', VerifyToken, function (req,res) {
               
                 mediaItem.tags = tags;
                 mediaItem.save();
-                return res.json({message: 'media items tags where updated'});
+                return res.json({message: 'mediaitem was updated'});
               }
             }
             
            
           });
         });
+      } else {
+        var toBeAdded = true;
+  
+        mediaItem.likes = mediaItem.likes.filter(function(like) {
+          if(like == req.userId) {
+            toBeAdded = false;
+          }
+          return like != req.userId;
+        });
+  
+        if(toBeAdded) {
+          mediaItem.likes.push(req.userId);
+          mediaItem.save();
+          return res.json({message: 'media item was liked'});
+        }
+  
+        mediaItem.save();
+        return res.json({message: 'media item was unliked'});
       }
-    }
-    if(!req.body.tags) {
+    } else {
       var toBeAdded = true;
 
       mediaItem.likes = mediaItem.likes.filter(function(like) {

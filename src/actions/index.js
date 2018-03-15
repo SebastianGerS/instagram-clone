@@ -370,7 +370,7 @@ export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch =
   });
 };
 
-export const updateMediaItem = (mediaItemId, token, field) => dispatch => {
+export const updateMediaItem = (mediaItemId, token, fields) => dispatch => {
   fetch(`/mediaitems/${mediaItemId}`,
   {
     method: 'PUT', 
@@ -379,10 +379,11 @@ export const updateMediaItem = (mediaItemId, token, field) => dispatch => {
       'content-type': 'application/json',
       'accept': 'application/json'
     },
+    body: JSON.stringify(fields)
   })
   .then(res => res.json())
   .then(res => {
-    dispatch(updatedMediaItem(mediaItemId, field));
+    dispatch(fetchMediaItems(token));
   }).catch(error => {
     console.log(error);
   });
