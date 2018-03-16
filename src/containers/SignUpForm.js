@@ -23,14 +23,14 @@ class connectedSignUpForm extends Component {
     this.register = this.register.bind(this);
   }
 
-  register(e) { 
+  register(e) {
     e.preventDefault();
     if (this.state.email.length <= 0 || this.state.name.length <= 0  || this.state.username.length <= 0 || this.state.password.length <= 0 ) {
       return;
     }
     const user = {
       email: this.state.email,
-      name: this.state.name,
+      fullname: this.state.name,
       username: this.state.username,
       password: this.state.password
     }

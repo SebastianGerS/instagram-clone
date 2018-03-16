@@ -124,11 +124,11 @@ class ConnectedItemUpload extends Component {
         <p>{info}</p>
         </Dropzone>
         <div className="imageForm">
-          <label for="caption" >Caption</label>
+          <label htmlFor="caption" >Caption</label>
           <input name="caption" onChange={this.updateStateValue} value={this.state.caption}/>
-          <label for="location" >Location</label>
+          <label htmlFor="location" >Location</label>
           <input name="location" onChange={this.updateStateValue} value={this.state.location}/>
-          <label for="tag" >Tags</label>
+          <label htmlFor="tag" >Tags</label>
           <input name="tag" onKeyPress={this.addTags} onChange={this.updateStateValue} value={this.state.tag}/>
           <button  onClick={this.uploadImage}>Upload!</button>
         </div>

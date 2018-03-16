@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './style.css';
 import {connect} from 'react-redux';
 import uuidv1 from "uuid";
+import {SettingsModal} from '../';
 
 const mapStateToProps = state => {
   return { currentUser: state.currentUser, isLogedin: state.isLogedin, user: state.user};
@@ -10,8 +11,10 @@ const mapStateToProps = state => {
 class ConnectedUserProfile extends Component {
   constructor(props) {
     super(props);
+    this.toggleSettings = this.toggleSettings.bind(this);
     this.state = {
-      user: undefined
+      user: undefined,
+      isBeingEdited: false,
     }
   }
   componentWillMount( ) {
@@ -38,43 +41,54 @@ class ConnectedUserProfile extends Component {
       }
     }
   }
-
+  toggleSettings() {
+    this.setState({
+      isBeingEdited: !this.state.isBeingEdited
+    })
+  }
   render() {
     const content = [];
     if(this.state.user.username) {
     
       let settingButtons = [];
-        if(this.state.user === this.props.currentUser) {
-          settingButtons = [<button className="btn-settings">Redigera Profil</button>,
-          <button className="btn-mobile-settings"></button>];
-        }
-        const img =
-            <figure key={uuidv1()}className="profile-img-container">
-              <img className="profile-img" src={this.state.user.profilePicture} alt="profileimg"/>
-            </figure>;
-        const profile = 
-            <div key={uuidv1()} className="info">
-              <div>
-                <h3>{this.state.user.username}</h3>
-                {settingButtons}
-              </div>
-              <div>
-              <p><span className="bold">{this.state.user.mediaItems.length}</span> Inlägg</p>
-              <p><span className="bold">{this.state.user.followedBy.length}</span> Följare</p>
-              <p><span className="bold">{this.state.user.follows.length}</span> Följer</p>
-              </div>
-              <div>
-                <p className="bold">{this.state.user.full_name}</p>
-              </div>
+      let profileImage;
+      if(this.state.user === this.props.currentUser) {
+        settingButtons = [<button onClick={this.toggleSettings} className="btn-settings">Edit Profile</button>,
+        <button className="btn-mobile-settings"></button>];
+      }
+      if (this.state.user.profilePicture.length !== 0) {
+        profileImage = <img className="profile-img" src={this.state.user.profilePicture} alt="profileimg"/>;
+      }
+      const img =
+          <figure key={uuidv1()}className="profile-img-container">
+            {profileImage}
+          </figure>;
+      const profile = 
+          <div key={uuidv1()} className="info">
+            <div>
+              <h3>{this.state.user.username}</h3>
+              {settingButtons}
             </div>
-        content.push(img,profile);
+            <div>
+              <p><span className="bold">{this.state.user.mediaItems.length}</span> Posts</p>
+              <p><span className="bold">{this.state.user.followedBy.length}</span> Followers</p>
+              <p><span className="bold">{this.state.user.follows.length}</span> Following</p>
+            </div>
+            <div>
+              <p className="bold">{this.state.user.full_name}</p>
+            </div>
+          </div>
+      content.push(img,profile);
+
     }
       return (
         <section className="userProfile">
           {content}
+          {this.state.isBeingEdited &&
+            <SettingsModal user={this.state.user} toggleSettings={this.toggleSettings}/>
+          }
         </section>
-        );
-  
+      );
   }
 }
 const UserProfile = connect(mapStateToProps)(ConnectedUserProfile);

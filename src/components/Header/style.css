@@ -37,6 +37,14 @@ header nav ul {
   padding: 5em 8em;
   border: 1px solid #dbdbdb;
 }
+.loginModal > button{
+ border: 1px solid #dbdbdb;
+ background-color: rgb(250,250,250);
+ border-radius: 4px;
+ padding: 1em;
+ width: 8em;
+
+}
 .registerLink {
   cursor: pointer;
   color:#b4daff;

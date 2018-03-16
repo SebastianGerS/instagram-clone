@@ -540,3 +540,26 @@ export const updateMediaItem = (mediaItemId, token, fields) => dispatch => {
       dispatch(updateMediaItemFailed());
     });
 };
+export const updateUserInfo = (token, data) => dispatch => {
+  console.log(data);
+  console.log(token);
+  dispatch(startCreatingMediaItem());
+  fetch(`/auth/me`,
+    {
+      method: 'POST', 
+      headers: {
+        'x-access-token': token,
+      },
+      body: data
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      // dispatch(createdMediaItem());
+      dispatch(fetchMediaItems(token)); 
+      dispatch(fetchSelfe(token));
+    }).catch(error => {
+      // dispatch(createMediaItemFailed());
+      console.log(error);
+    });
+}

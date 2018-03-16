@@ -6,6 +6,18 @@ var jwt = require('jsonwebtoken');
 var config = require('../config');
 var User = require('../models/User');
 var VerifyToken = require('../middleware/verifyToken');
+var multer = require('multer');
+var uuidv1 = require("uuid");
+var fs = require('fs');
+
+var storage = multer.diskStorage({
+  destination: './public/images',
+  filename(req,data,cb) {
+    cb(null, uuidv1() + data.originalname);
+  },
+});
+
+var upload = multer({storage});
 
 router.use(bodyParser.urlencoded({ extended: true}));
 
@@ -15,7 +27,7 @@ router.post('/register', function(req, res) {
     username: req.body.username,
     password: req.body.password,
     fullname: req.body.fullname,
-    profilePicture: 'https://cdn.pixabay.com/photo/2017/11/16/09/32/matrix-2953869_960_720.jpg',
+    profilePicture: '',
     bio: '',
     website: '',
     mediaItems: [],
@@ -62,6 +74,38 @@ router.get('/me',VerifyToken ,function(req,res) {
     if(error) return res.status(500).send("error occurred when trying to get user from database" +  error);
     if (!user) return res.status(500).send("no user was found");
     return res.status(200).send(user);
+  
+  });
+});
+
+router.post('/me',[VerifyToken,upload.single('profilePicture')] ,function(req,res) {
+  User.findById(req.userId,function(error,user) {
+
+    if(error) return res.status(500).send("error occurred when trying to get user from database" +  error);
+    if (!user) return res.status(500).send("no user was found");
+
+    if (req.file) {
+      if(user.profilePicture.length !== 0) {
+        fs.unlinkSync('./public'+user.profilePicture);
+      }
+      user.profilePicture =  '/images/' + req.file.filename;
+    }
+
+    if (req.body.username) {
+      user.username = req.body.username;
+    }
+
+    if (req.body.fullname) {
+      user.fullname = req.body.fullname;
+    }
+
+    if (req.body.email) {
+      user.email = req.body.email;
+    }
+
+    user.save();
+
+    return res.status(200).json({message: 'user was sucessfully updated'});
   
   });
 });

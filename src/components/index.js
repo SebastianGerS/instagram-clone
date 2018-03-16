@@ -5,5 +5,6 @@ export {default as Footer } from './Footer';
 export {default as NotFound } from './NotFound';
 export {default as MediaItem } from './MediaItem';
 export {default as ItemComment } from './ItemComment';
+export {default as SettingsModal } from './SettingsModal';
 export {default as UserProfile } from './UserProfile';
 
