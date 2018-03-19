@@ -52,8 +52,6 @@ class ConnectedItemUpload extends Component {
     });
   }
   addTags (e) {
-    e.preventDefault();
-
     if(e.key === ' ' || e.key === 'Enter') {
       let newTag = this.state.tag;
       newTag = newTag.trim();

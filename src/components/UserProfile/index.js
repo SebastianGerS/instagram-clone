@@ -18,7 +18,7 @@ class ConnectedUserProfile extends Component {
     }
   }
   componentWillMount( ) {
-    if(this.props.path === '/profile' && this.props.isLogedin) {
+    if((this.props.path === '/profile'|| this.props.path === '/home') && this.props.isLogedin) {
       this.setState ({
         user: this.props.currentUser
       });

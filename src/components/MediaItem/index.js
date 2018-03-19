@@ -119,8 +119,6 @@ class ConnectedMediaItem extends Component {
   }
 
   addTag (e) {
-    e.preventDefault();
-
     if(e.key === ' ' || e.key === 'Enter') {
       let newTag = this.state.tag;
       newTag = newTag.trim();
@@ -227,13 +225,13 @@ class ConnectedMediaItem extends Component {
                   </ul>
                 </div>
                 <div className="imageForm">
-                  <label for="caption">Caption</label>
+                  <label htmlFor="caption">Caption</label>
                   <input name="caption" onChange={this.updateStateValue} value={this.state.caption}/>
-                  <label for="location">Location</label>
+                  <label htmlFor="location">Location</label>
                   <input name="location" onChange={this.updateStateValue} value={this.state.location}/>
-                  <label for="tag">Tags</label>
+                  <label htmlFor="tag">Tags</label>
                   <input name="tag" onKeyPress={this.addTag} onChange={this.updateStateValue} value={this.state.tag}/>
-                  <button onClick={this.updateMediaItem}>Upload!</button>
+                  <button onClick={this.updateMediaItem}>Update!</button>
                 </div>
               </div>
             </section>
@@ -265,7 +263,7 @@ class ConnectedMediaItem extends Component {
           </div>
           <form className="commentForm" onSubmit={(e) => this.addComment(e)}>
             <textarea name="comment" placeholder="kommentera..." value={this.state.comment} onChange={(e) => this.updateStateValue(e)}/>
-            <button type="submit" className="submitButton">Publicera</button>
+            <button type="submit" className="submitButton">Publish</button>
           </form>
         </div>
       </section>
