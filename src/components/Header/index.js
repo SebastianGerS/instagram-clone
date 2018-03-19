@@ -36,13 +36,17 @@ class ConnectedHeader extends Component {
   }
 
   componentDidUpdate(prevprops, prevstate) {
-    if ((prevprops.isLogedin ==! this.props.isLogedin) && this.props.isLogedin === true) {
+    if ((prevprops.isLogedin !== this.props.isLogedin) && this.props.isLogedin === true) {
       this.setState({
         redirect: true
       });
-     }
-    
+    } else if (this.props.isLogedin === true && this.state.redirect){
+      this.setState({
+        redirect: false
+      });
+    }
   }
+
   login(e) {
     e.preventDefault();
     if(this.state.email.lenth <= 0 || this.state.password <= 0){
@@ -122,29 +126,34 @@ class ConnectedHeader extends Component {
   render() {
 
     if (this.state.redirect) {
-      this.setState({
-        redirect: false
-      });
       return <Redirect to="/profile" />;
      }
     return(
       <header>
         <h1>CopyGram</h1>
         <nav>
+        {this.props.isLogedin ? ( 
           <ul>
             <li>
-              <Link className="link" to="/">Home</Link>
+              <Link className="link" to="/home">Home</Link>
             </li>
             <li>
               <Link className="link" to="/profile">Profile</Link>
             </li>
             <li>
-              <Link className="link" to="/explore">Explore</Link>
-            </li>
-            <li>
               <Link className="link" to="/upload">Upload</Link>
             </li>
+            <li>
+              <Link className="link" to="/explore">Explore</Link>
+            </li>
           </ul>
+        ) : (
+          <ul>
+            <li>
+              <Link className="link" to="/explore">Explore</Link>
+            </li>
+          </ul>
+        )}
         </nav>
         <button className="userButton" onClick={this.toggleLoginModal}></button>
         {this.state.modal}

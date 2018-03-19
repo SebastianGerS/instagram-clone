@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
 import {connect} from 'react-redux';
-import {fetchMediaItems, userMediaItems, fetchUserMediaItems, fetchUser} from '../actions';
+import {fetchMediaItems, fetchUserMediaItems, fetchUser} from '../actions';
+import { Redirect } from 'react-router-dom';
 import './Profile.css';
 
 const mapStateToProps = state => {
@@ -52,13 +53,16 @@ class ConnectedProfile extends Component {
 
   render() {
     let content;
-    if (this.props.isLogedin) {
-      if (this.state.activeTab === 0) {
-        content = <ItemGrid path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
-      } else if(this.state.activeTab === 1) {
-        content = <ItemFeed path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
-      }
+    if(!this.props.isLogedin && this.props.location.pathname === '/profile') {
+      return <Redirect to='/'/>;
     }
+
+    if (this.state.activeTab === 0) {
+      content = <ItemGrid path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
+    } else if(this.state.activeTab === 1) {
+      content = <ItemFeed path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
+    }
+    
     return (
       <div className="content">
         <UserProfile path={this.props.location.pathname}/>

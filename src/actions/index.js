@@ -149,8 +149,15 @@ export const fetchMediaItems = (token) => dispatch => {
 };
 
 export const fetchAllMediaItems = (token) => dispatch => {
+  let url;
+  if (token) {
+    url = 'mediaItems/';
+  } else {
+    url = 'mediaItems/all';
+  }
+  
   dispatch(requestMediaItems());
-  fetch('mediaItems/', {
+  fetch(url, {
     headers: {
       'x-access-token': token,
       'content-type': 'application/json',
@@ -541,8 +548,6 @@ export const updateMediaItem = (mediaItemId, token, fields) => dispatch => {
     });
 };
 export const updateUserInfo = (token, data) => dispatch => {
-  console.log(data);
-  console.log(token);
   dispatch(startCreatingMediaItem());
   fetch(`/auth/me`,
     {

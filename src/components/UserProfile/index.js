@@ -53,8 +53,8 @@ class ConnectedUserProfile extends Component {
       let settingButtons = [];
       let profileImage;
       if(this.state.user === this.props.currentUser) {
-        settingButtons = [<button onClick={this.toggleSettings} className="btn-settings">Edit Profile</button>,
-        <button className="btn-mobile-settings"></button>];
+        settingButtons = [<button key={uuidv1()} onClick={this.toggleSettings} className="btn-settings">Edit Profile</button>,
+        <button key={uuidv1()} className="btn-mobile-settings"></button>];
       }
       if (this.state.user.profilePicture.length !== 0) {
         profileImage = <img className="profile-img" src={this.state.user.profilePicture} alt="profileimg"/>;

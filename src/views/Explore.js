@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ItemGrid, ItemFeed} from '../containers';
-import { UserProfile, Tab } from '../components';
+import { Tab } from '../components';
 import {connect} from 'react-redux';
 import {fetchAllMediaItems} from '../actions';
 
@@ -22,7 +22,12 @@ class ConnectedExplore extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchAllMediaItems(this.props.token.value)); 
+    if (this.props.isLogedin) {
+      this.props.dispatch(fetchAllMediaItems(this.props.token.value));   
+    } else {
+      this.props.dispatch(fetchAllMediaItems()); 
+    }
+    
   }
 
   changeTab(index) {
@@ -37,13 +42,13 @@ class ConnectedExplore extends Component {
   render() {
     
     let content;
-    if (this.props.isLogedin) {
-      if (this.state.activeTab === 0) {
-        content = <ItemGrid path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
-      } else  if(this.state.activeTab === 1) {
-        content = <ItemFeed path={this.props.location.pathname} mediaItems={this.props.mediaItems} />;
-      }
+    
+    if (this.state.activeTab === 0) {
+      content = <ItemGrid path={this.props.location.pathname} mediaItems={this.props.mediaItems}/>;
+    } else  if(this.state.activeTab === 1) {
+      content = <ItemFeed path={this.props.location.pathname} mediaItems={this.props.mediaItems} />;
     }
+
     return (
       <div className="content">
         <div className="tabs">

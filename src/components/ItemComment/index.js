@@ -81,8 +81,7 @@ class ConnectedItemComment extends Component {
   render() {
     const comments = [];
     let newcomment;
-    if (this.props.mediaItem.user._id == this.props.currentUser._id || this.props.comment.user._id == this.props.currentUser._id) {
-     
+    if (this.props.mediaItem.user._id === this.props.currentUser._id || this.props.comment.user._id === this.props.currentUser._id) {
         newcomment = 
           <p key={uuidv1()} className="comments">
             <span>
@@ -93,7 +92,6 @@ class ConnectedItemComment extends Component {
               <button className="removeButton" onClick={this.removeComment}></button>
             </span>
           </p>;
-     
     } else  {
       newcomment = <p key={uuidv1()}><span className="bold">{this.props.comment.user.username}</span>&nbsp;{this.props.comment.text}</p>;
     }

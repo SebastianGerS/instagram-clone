@@ -6,7 +6,7 @@ import {uploadItem} from '../actions';
 import './ItemUpload.css';
 import {Redirect} from 'react-router';
 const mapStateToProps = state => {
-  return { token: state.token};
+  return { token: state.token, isLogedin: state.isLogedin};
 }
 
 class ConnectedItemUpload extends Component {
@@ -52,7 +52,7 @@ class ConnectedItemUpload extends Component {
     });
   }
   addTags (e) {
-    e.preventDefault;
+    e.preventDefault();
 
     if(e.key === ' ' || e.key === 'Enter') {
       let newTag = this.state.tag;
@@ -86,6 +86,9 @@ class ConnectedItemUpload extends Component {
     let imagePreview;
     let info;
     const tags = [];
+    if(!this.props.isLogedin) {
+      return <Redirect to='/'/>;
+    }
     if( this.state.redirect === true) {
       return <Redirect to="/profile" />;
     }
@@ -104,6 +107,7 @@ class ConnectedItemUpload extends Component {
       let li = <li key={uuidv1()}>{tag} <button value={i} onClick={this.removeTag}></button></li>;
       tags.push(li);
       i++
+      return tag;
     });
 
     return (

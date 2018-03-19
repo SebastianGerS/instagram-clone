@@ -116,6 +116,23 @@ router.get('/',VerifyToken, function(req,res) {
     
     });
 });
+
+router.get('/all', function(req,res) {
+  MediaItem.find()
+    .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
+    .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
+    .populate({path: 'tags'})
+    .lean().exec(function(err, mediaItems) {
+      if (err) return res.status(500).json({error: 'error retreving mediaitems'});
+      if (mediaItems) {
+        return res.status(200).json(mediaItems);
+      } else {
+        return res.status(404).json({error: 'no mediaItems found'});
+      }
+    
+    });
+});
+
 router.get('/follows', VerifyToken, function(req,res) {
   User.findById(req.userId).lean().exec(function (error, user) {
     if (error) return res.status(500).json({error: 'error retreving user'});

@@ -3,6 +3,7 @@ import {ItemGrid, ItemFeed} from '../containers';
 import { UserProfile, Tab } from '../components';
 import {connect} from 'react-redux';
 import {fetchMediaItemsOfFollowed} from '../actions';
+import { Redirect } from 'react-router-dom';
 
 
 const mapStateToProps = state => {
@@ -22,7 +23,10 @@ class ConnectedHome extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(fetchMediaItemsOfFollowed(this.props.token.value)); 
+    if(this.props.isLogedin) {
+      this.props.dispatch(fetchMediaItemsOfFollowed(this.props.token.value)); 
+    }
+    
   }
 
   changeTab(index) {
@@ -35,7 +39,9 @@ class ConnectedHome extends Component {
   }
 
   render() {
-    
+    if(!this.props.isLogedin) {
+      return <Redirect to='/'/>;
+    }
     let content;
     if (this.props.isLogedin) {
       if (this.state.activeTab === 0) {
@@ -46,6 +52,7 @@ class ConnectedHome extends Component {
     }
     return (
       <div className="content">
+        <UserProfile path={this.props.location.pathname}/>
         <div className="tabs">
           <Tab index={0} name="Grid" changeTab={this.changeTab} active={this.state.tabs[0]}/>
           <Tab index={1} name="Flow" changeTab={this.changeTab} active={this.state.tabs[1]}/>
