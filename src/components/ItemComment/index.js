@@ -62,9 +62,9 @@ class ConnectedItemComment extends Component {
     let modal;
     if(!this.state.isBeingEdited) {
       modal =
-      <section className="editCommentModal">
+      <section  key={uuidv1()} className="editCommentModal">
         <h3>Edit Comments</h3>
-        <form key={uuidv1()} className="editCommentForm" onSubmit={this.updateComment}>
+        <form className="editCommentForm" onSubmit={this.updateComment}>
             <textarea required name="text" onChange={this.updateStateValue} defaultValue={this.state.text}></textarea>
             <button className="warning" >Cancel</button>
             <button className="success" >Update!</button>
