@@ -1,3 +1,19 @@
+.editCommentModal {
+  z-index: 2;
+  position: fixed;
+  top: 77px;
+  left:0;
+  width:100%;
+  height: 100%;
+  background-color: rgba(255,255,255, 0.95);
+  padding: 1em 0;
+  border: 1px solid #dbdbdb;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .removeButton {
   cursor: pointer;
   color: black;
@@ -7,7 +23,7 @@
 .comments {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center
 }
 
@@ -19,17 +35,23 @@
   resize: none;
   border: 1px solid #b4daff;
   overflow: hidden;
-  margin: 0 1em 0 1em;
+  width:100%;
   padding: 1em 0 0 1em;
+  margin: 1em 0;
   text-justify: distribute-all-lines;
   text-align: justify;
-
 }
-
+.editCommentForm button {
+  border: 1px solid #b4daff;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  width:100%;
+}
 .comments > span {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center
 }
 
@@ -41,21 +63,17 @@
 }
 .editCommentForm {
   display:flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top:2em;
+  width:90%;
+  max-width: 660px;
 }
-
-.editCommentModal {
-  z-index: 2;
-  position: fixed;
-  top: 200px;
-  background-color: white;
-  padding: 5em 8em;
-  border: 1px solid #dbdbdb;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+.thumbnail {
+  max-width: 40px;
+  min-width: 40px;
+  max-height: 40px;
+  min-height: 40px;
+  border-radius: 100%;
 }

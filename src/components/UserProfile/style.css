@@ -5,6 +5,8 @@
   justify-content: flex-start;
   align-items: center;
   width: 90%;
+  flex-wrap: wrap;
+  margin-top:1em;
 }
 
 .info {
@@ -28,12 +30,17 @@
   font-size: 2em;
   font-weight: 200;
 }
+.bold:first {
+ margin-left: 0
+}
 
 .bold {
+  margin-left: 0.5em;
   font-weight: 600;
   color: black;
   text-decoration: none;
 }
+
 
 .btn-settings {
   background:none;
@@ -55,9 +62,11 @@
 }
 
 .profile-img-container {
-  margin-right:8em;
+  margin-right:7em;
   width: 150px;
   height: 150px;
+  min-width: 150px;
+  min-height: 150px;
   margin-bottom: 5em;
   border-radius: 100%;
   background-color: white;
@@ -73,4 +82,41 @@
 
 .userStats p {
   margin: 0 0.5em;
+}
+@media only screen and (max-width:1150px) {
+  .profile-img-container {
+    margin-right: 3em;
+  }
+
+  .info {
+    margin-right: 4em;
+  }
+}
+@media only screen and (max-width:900px) {
+  .profile-img-container {
+    margin-right: 1em;
+  }
+
+  .info {
+    margin-right: 2em;
+  }
+}
+
+@media only screen and (max-width:805px) {
+  .profile-img-container {
+    margin-bottom: 1em;
+  }
+  .userProfile {
+    justify-content: center;
+  }
+  .info {
+    margin-top: 0.5em;
+  }
+}
+
+@media only screen and (max-width:700px) {
+  .profile-img-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }

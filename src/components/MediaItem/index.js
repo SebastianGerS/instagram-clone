@@ -103,6 +103,7 @@ class ConnectedMediaItem extends Component {
     });
   };
 
+
   removeMediaItem() {
     this.props.dispatch(deleteMediaItem(this.props.mediaItem._id, this.props.mediaItem.images.url, this.props.token.value));
   }
@@ -153,7 +154,7 @@ class ConnectedMediaItem extends Component {
 
     if (this.props.mediaItem.tags) {
       this.props.mediaItem.tags.forEach(tag => {
-        let newTag = <span className="bold" key={uuidv1()}>{tag.tagname}</span>
+        let newTag = <span className="bold" key={uuidv1()}>&nbsp;{tag.tagname}</span>
         tags.push(newTag);
         return tag;
       });
@@ -224,14 +225,15 @@ class ConnectedMediaItem extends Component {
                     {tagsBeingEdited}
                   </ul>
                 </div>
-                <div className="imageForm">
+                <div className="updateImageForm">
                   <label htmlFor="caption">Caption</label>
                   <input name="caption" onChange={this.updateStateValue} value={this.state.caption}/>
                   <label htmlFor="location">Location</label>
                   <input name="location" onChange={this.updateStateValue} value={this.state.location}/>
                   <label htmlFor="tag">Tags</label>
                   <input name="tag" onKeyPress={this.addTag} onChange={this.updateStateValue} value={this.state.tag}/>
-                  <button onClick={this.updateMediaItem}>Update!</button>
+                  <button className="warning" type="cancel" onClick={this.toggleMediaItemModal}>Cancel</button>
+                  <button className="success" onClick={this.updateMediaItem}>Update!</button>
                 </div>
               </div>
             </section>

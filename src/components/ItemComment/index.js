@@ -65,9 +65,9 @@ class ConnectedItemComment extends Component {
       <section className="editCommentModal">
         <h3>Edit Comments</h3>
         <form key={uuidv1()} className="editCommentForm" onSubmit={this.updateComment}>
-            <p className="bold">{this.props.comment.user.username}</p>
             <textarea required name="text" onChange={this.updateStateValue} defaultValue={this.state.text}></textarea>
-            <button className="submitButton" >Publicera</button>
+            <button className="warning" >Cancel</button>
+            <button className="success" >Update!</button>
         </form>
       </section>;
     }
@@ -84,16 +84,24 @@ class ConnectedItemComment extends Component {
     if (this.props.mediaItem.user._id === this.props.currentUser._id || this.props.comment.user._id === this.props.currentUser._id) {
         newcomment = 
           <p key={uuidv1()} className="comments">
+            <img className="thumbnail" src={this.props.comment.user.profilePicture} alt="profilepicture"/>
             <span>
               <span className="bold">{this.props.comment.user.username}</span>&nbsp;{this.props.comment.text}
             </span>
             <span>
-              <button className="optionsButton" onClick={this.toggleCommentModal}></button>
+              { this.props.comment.user._id === this.props.currentUser._id &&
+                <button className="optionsButton" onClick={this.toggleCommentModal}></button>
+              }
               <button className="removeButton" onClick={this.removeComment}></button>
             </span>
           </p>;
     } else  {
-      newcomment = <p key={uuidv1()}><span className="bold">{this.props.comment.user.username}</span>&nbsp;{this.props.comment.text}</p>;
+      newcomment = 
+        <p key={uuidv1()} className="comments"> 
+          <img className="thumbnail" src={this.props.comment.user.profilePicture} alt="profilepicture"/>
+          <span className="bold">{this.props.comment.user.username}</span>
+          &nbsp;{this.props.comment.text}
+        </p>;
     }
     comments.push(newcomment);
     return(

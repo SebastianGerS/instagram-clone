@@ -92,7 +92,23 @@ class ConnectedHeader extends Component {
       } else {
         modal = 
         <div key={uuidv1()} className="loginModal">
-            <button onClick={(e) => this.logout(e)}>logout</button>
+              <ul>
+            <li onClick={this.toggleLoginModal}>
+              <Link className="link" to="/home">Home</Link>
+            </li>
+            <li onClick={this.toggleLoginModal}>
+              <Link className="link" to="/profile">Profile</Link>
+            </li>
+            <li onClick={this.toggleLoginModal}>
+              <Link className="link" to="/upload">Upload</Link>
+            </li>
+            <li onClick={this.toggleLoginModal}>
+              <Link className="link" to="/explore">Explore</Link>
+            </li>
+            <li>
+             <button onClick={(e) => this.logout(e)}>Logout</button>
+            </li>
+          </ul>
         </div>;
         this.setState({
           modal: [modal]
@@ -132,7 +148,7 @@ class ConnectedHeader extends Component {
       <header>
         <h1>CopyGram</h1>
         <nav>
-        {this.props.isLogedin ? ( 
+        {this.props.isLogedin &&
           <ul>
             <li>
               <Link className="link" to="/home">Home</Link>
@@ -144,16 +160,10 @@ class ConnectedHeader extends Component {
               <Link className="link" to="/upload">Upload</Link>
             </li>
             <li>
-              <Link className="link" to="/explore">Explore</Link>
+              <Link className="link" to="/explore" >Explore</Link>
             </li>
           </ul>
-        ) : (
-          <ul>
-            <li>
-              <Link className="link" to="/explore">Explore</Link>
-            </li>
-          </ul>
-        )}
+          }
         </nav>
         <button className="userButton" onClick={this.toggleLoginModal}></button>
         {this.state.modal}
