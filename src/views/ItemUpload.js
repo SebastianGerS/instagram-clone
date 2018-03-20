@@ -97,7 +97,7 @@ class ConnectedItemUpload extends Component {
       }
       info = '';
     } else {
-      info = 'Here you will soon beable to upload your images'
+      info = 'Click or drag and drop to upload add image for upload!'
     }
     let i = 0
     this.state.tags.map(tag => {

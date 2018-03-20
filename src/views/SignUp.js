@@ -3,7 +3,7 @@ import {SignUpForm }from '../containers';
 
 const SignUp = () => {
   return (
-    <div>
+    <div className="content">
       <SignUpForm/>
     </div>
   )

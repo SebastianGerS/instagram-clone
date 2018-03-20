@@ -1,8 +1,7 @@
-.signup {
+.signup.signup {
   background-color: white;
-  width: 100vh;
-
-  padding: 5em 10em;
+  width: 100%;
+  padding: 2em;
   margin-bottom:2em;
 }
 
