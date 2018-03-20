@@ -36,7 +36,6 @@ class ConnectedItemUpload extends Component {
   }
   uploadImage() {
     if(!this.state.fileToUpload) {
-      console.log('please select a file');
       return;
     }
     const item = new FormData();

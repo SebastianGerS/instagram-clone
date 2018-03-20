@@ -68,7 +68,6 @@ router.post('/login', function(req,res) {
 });
 
 router.get('/me',VerifyToken ,function(req,res) {
-  console.log(req);
   User.findById(req.userId,function(error,user) {
 
     if(error) return res.status(500).send("error occurred when trying to get user from database" +  error);

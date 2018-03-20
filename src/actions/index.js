@@ -304,7 +304,6 @@ export const fetchSelfe = (token) => dispatch => {
     }
   }).then(res => res.json())
     .then(user => {
-      console.log(user);
       dispatch(updatedSelfeFetched(user));
     }).catch(error => {
       console.log(error);
@@ -559,12 +558,11 @@ export const updateUserInfo = (token, data) => dispatch => {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
-      // dispatch(createdMediaItem());
+
       dispatch(fetchMediaItems(token)); 
       dispatch(fetchSelfe(token));
     }).catch(error => {
-      // dispatch(createMediaItemFailed());
+
       console.log(error);
     });
 }
