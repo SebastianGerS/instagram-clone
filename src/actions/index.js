@@ -1,4 +1,5 @@
 import ActionTypes from './ActionTypes';
+import {SERVER_URL} from '../data/config';
 
 export const addItem = item => ({
   type: ActionTypes.ADD_ITEM,
@@ -133,7 +134,7 @@ export const failedFetchingSelfe = () => ({
 
 export const fetchMediaItems = (token) => dispatch => {
   dispatch(requestMediaItems());
-  fetch('mediaItems/selfe', {
+  fetch(`${SERVER_URL}/mediaItems/selfe`, {
     headers: {
       'x-access-token': token,
       'content-type': 'application/json',
@@ -149,11 +150,11 @@ export const fetchMediaItems = (token) => dispatch => {
 };
 
 export const fetchAllMediaItems = (token) => dispatch => {
-  let url;
+  let url = SERVER_URL;
   if (token) {
-    url = 'mediaItems/';
+    url += '/mediaItems/';
   } else {
-    url = 'mediaItems/all';
+    url += '/mediaItems/all';
   }
   
   dispatch(requestMediaItems());
@@ -183,7 +184,7 @@ export const fetchAllMediaItems = (token) => dispatch => {
 };
 export const fetchMediaItemsOfFollowed = (token) => dispatch => {
   dispatch(requestMediaItems());
-  fetch('mediaItems/follows', {
+  fetch(`${SERVER_URL}/mediaItems/follows`, {
     headers: {
       'x-access-token': token,
       'content-type': 'application/json',
@@ -209,7 +210,7 @@ export const fetchMediaItemsOfFollowed = (token) => dispatch => {
 };
 export const fetchUser = (userId) => dispatch => {
   dispatch(requestUser());
-  fetch(`/users/${userId}`, {
+  fetch(`${SERVER_URL}/users/${userId}`, {
     headers: {
       'content-type': 'application/json',
       'accept': 'application/json'
@@ -234,7 +235,7 @@ export const fetchUser = (userId) => dispatch => {
 }; 
 export const fetchUserMediaItems = (userId) => dispatch => {
   dispatch(requestMediaItems());
-  fetch(`/mediaItems/${userId}`, {
+  fetch(`${SERVER_URL}/mediaItems/${userId}`, {
     headers: {
       'content-type': 'application/json',
       'accept': 'application/json'
@@ -259,7 +260,7 @@ export const fetchUserMediaItems = (userId) => dispatch => {
 };
 export const registerUser = (user) => dispatch => {
   dispatch(requestUserRegistration());
-  fetch('/auth/register', {
+  fetch(`${SERVER_URL}/auth/register`, {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {
@@ -279,7 +280,7 @@ export const registerUser = (user) => dispatch => {
 
 export const loginUser = (user) => dispatch => {
   dispatch(attemptLogin());
-  fetch('/auth/login', {
+  fetch(`${SERVER_URL}/auth/login`, {
     method: 'POST', 
     body: JSON.stringify(user), 
     headers: {
@@ -296,7 +297,7 @@ export const loginUser = (user) => dispatch => {
 };
 export const fetchSelfe = (token) => dispatch => {
   dispatch(startFetchingUpdatedSelfe());
-  fetch('/auth/me', {
+  fetch(`${SERVER_URL}/auth/me`, {
     headers: {
       'x-access-token': token,
       'content-type': 'application/json',
@@ -312,7 +313,7 @@ export const fetchSelfe = (token) => dispatch => {
 };
 export const toggleLike = (mediaItemId, token, updatedFields, path, mediaItemUserId) => dispatch => {
   dispatch(startUpdatingMediaItem());
-  fetch('/mediaitems/' + mediaItemId, {
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}`, {
     method: 'PUT', 
     headers: {
       'x-access-token': token,
@@ -345,7 +346,7 @@ export const toggleLike = (mediaItemId, token, updatedFields, path, mediaItemUse
 
 export const createComment = (comment, mediaItemId ,token, path, mediaItemUserId) => dispatch => {
   dispatch(startUpdatingMediaItem());
-  fetch(`/mediaitems/${mediaItemId}/comments`,
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}/comments`,
     {
       method: 'POST', 
       headers: {
@@ -380,7 +381,7 @@ export const createComment = (comment, mediaItemId ,token, path, mediaItemUserId
 
 export const deleteComment = (mediaItemId, commentId, token, path, mediaItemUserId) => dispatch => {
   dispatch(startUpdatingMediaItem());
-  fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}/comments/${commentId}`,
     {
       method: 'DELETE', 
       headers: {
@@ -414,7 +415,7 @@ export const deleteComment = (mediaItemId, commentId, token, path, mediaItemUser
 
 export const updateComment = (mediaItemId, commentId, token, text, path, mediaItemUserId) => dispatch => {
   dispatch(startUpdatingMediaItem());
-  fetch(`/mediaitems/${mediaItemId}/comments/${commentId}`,
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}/comments/${commentId}`,
     {
       method: 'PUT', 
       headers: {
@@ -449,7 +450,7 @@ export const updateComment = (mediaItemId, commentId, token, text, path, mediaIt
 
 export const toggleFollow = (token, path, mediaItemUserId) => dispatch => {
   dispatch(startUpdatingCurrentUser());
-  fetch(`/users/${mediaItemUserId}`,
+  fetch(`${SERVER_URL}/users/${mediaItemUserId}`,
     {
       method: 'PUT', 
       headers: {
@@ -484,7 +485,7 @@ export const toggleFollow = (token, path, mediaItemUserId) => dispatch => {
 
 export const uploadItem = (item, token) => dispatch => {
   dispatch(startCreatingMediaItem());
-  fetch(`/mediaItems/`,
+  fetch(`${SERVER_URL}/mediaItems/`,
     {
       method: 'POST', 
       headers: {
@@ -505,7 +506,7 @@ export const uploadItem = (item, token) => dispatch => {
 
 export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch => {
   dispatch(startDeletingMediaItem());
-  fetch(`/mediaitems/${mediaItemId}`,
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}`,
     {
       method: 'DELETE', 
       headers: {
@@ -528,7 +529,7 @@ export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch =
 
 export const updateMediaItem = (mediaItemId, token, fields) => dispatch => {
   dispatch(startUpdatingMediaItem());
-  fetch(`/mediaitems/${mediaItemId}`,
+  fetch(`${SERVER_URL}/mediaitems/${mediaItemId}`,
     {
       method: 'PUT', 
       headers: {
@@ -548,7 +549,7 @@ export const updateMediaItem = (mediaItemId, token, fields) => dispatch => {
 };
 export const updateUserInfo = (token, data) => dispatch => {
   dispatch(startCreatingMediaItem());
-  fetch(`/auth/me`,
+  fetch(`${SERVER_URL}/auth/me`,
     {
       method: 'POST', 
       headers: {

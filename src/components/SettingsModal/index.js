@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import {connect} from 'react-redux';
 import {updateUserInfo} from '../../actions';
 import './style.css';
+import {SERVER_URL} from '../../data/config';
 
 const mapStateToProps = state => {
   return {token: state.token};
@@ -68,7 +69,7 @@ class ConnectedSettingsModal extends Component {
       };
     } else {
       imagePreview = {
-        backgroundImage: `url(${this.props.user.profilePicture})`,
+        backgroundImage: `url(${SERVER_URL + this.props.user.profilePicture})`,
       };
     }
 

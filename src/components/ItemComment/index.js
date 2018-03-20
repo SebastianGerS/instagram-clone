@@ -3,6 +3,7 @@ import './style.css';
 import uuidv1 from "uuid";
 import {deleteComment, updateComment} from '../../actions';
 import {connect} from 'react-redux';
+import {SERVER_URL} from '../../data/config';
 
 const mapStateToProps = state => {
   return {
@@ -84,7 +85,7 @@ class ConnectedItemComment extends Component {
     if (this.props.mediaItem.user._id === this.props.currentUser._id || this.props.comment.user._id === this.props.currentUser._id) {
         newcomment = 
           <p key={uuidv1()} className="comments">
-            <img className="thumbnail" src={this.props.comment.user.profilePicture} alt="profilepicture"/>
+            <img className="thumbnail" src={ SERVER_URL + this.props.comment.user.profilePicture} alt="profilepicture"/>
             <span>
               <span className="bold">{this.props.comment.user.username}</span>&nbsp;{this.props.comment.text}
             </span>
@@ -98,7 +99,7 @@ class ConnectedItemComment extends Component {
     } else  {
       newcomment = 
         <p key={uuidv1()} className="comments"> 
-          <img className="thumbnail" src={this.props.comment.user.profilePicture} alt="profilepicture"/>
+          <img className="thumbnail" src={ SERVER_URL + this.props.comment.user.profilePicture} alt="profilepicture"/>
           <span className="bold">{this.props.comment.user.username}</span>
           &nbsp;{this.props.comment.text}
         </p>;
