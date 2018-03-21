@@ -9,6 +9,14 @@ var VerifyToken = require('../middleware/verifyToken');
 var multer = require('multer');
 var uuidv1 = require("uuid");
 var fs = require('fs');
+var config = require('../config');
+var cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: config.cloudName,
+  api_key: config.cloudKey,
+  api_secret: config.cloudSecret,
+});
 
 router.use(bodyParser.urlencoded({ extended: true}));
 var storage = multer.diskStorage({
@@ -24,7 +32,7 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
   var tags = [];
   var tagCounter = 0;
   var newTags = req.body.tags.split(',');
-      
+  
   newTags.forEach(tagname => {
     
     var tag = Tag.findOne({tagname: tagname},function(err, tag) {
@@ -32,14 +40,69 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
       
       if (!tag) {
         Tag.create({tagname: tagname}, function(error, newtag) {
-          if (error) return res.status(500).json({error: 'error retreving tag'});
+          if (error) return res.status(500).json({error: 'error creating tag'});
           tags.push(newtag._id);
           tagCounter++;
           if(tagCounter == newTags.length) {
+            cloudinary.v2.uploader.upload(req.file.path, 
+              { eager: 
+                [
+                  { width: 660, height: 660, crop: "fill" }
+                ]                              
+             }, function(error, cloudinaryResult) {
+              if (error)  {
+                var message = {message: 'error trying to upload images to cloudinary with error: ' + error };
+                return res.status(200).json(message);
+              }
+              MediaItem.create({
+                images: {
+                  url: cloudinaryResult.eager[0].secure_url,
+                  id: cloudinaryResult.public_id,
+                },
+                type: 'image',
+                comments: [],
+                likes: [],
+                tags: tags,
+                caption: req.body.caption,
+                user: req.userId,
+                location: req.body.location
+              }, function(error,mediaItem) {
+                if(error) {
+                  var message = JSON.stringify({error: "error occurred when trying to add new mediaItem with " + error});
+                  return res.status(500).send(message);
+                }
+  
+                User.findById(req.userId, function(err, user) {
+                  if (err) return res.status(500).json({error: 'error occurred when binding mediaItem to user'});
+                  if (!user) return res.status(500).json({error: 'error occurred trying to fetch user'});
+                  user.mediaItems.push(mediaItem._id);
+                  user.save();
+                  return res.status(200).json(mediaItem);
+                });
+              });
+            });
+          }
+        } );
+      } else {
+        tags.push(tag._id);
+        tagCounter++;
+        if(tagCounter == newTags.length) {
+          cloudinary.v2.uploader.upload(req.file.path, 
+            { eager: 
+              [
+                { width: 660, height: 660, crop: "fill" }
+              ]                              
+           },
+            function(error, cloudinaryResult) {
+            if (error)  {
+              var message = {message: 'error trying to upload images to cloudinary with error: ' + error };
+              return res.status(200).json(message);
+            }
            
             MediaItem.create({
               images: {
-                url: '/images/' + req.file.filename,
+                url: cloudinaryResult.eager[0].secure_url,
+                id: cloudinaryResult.public_id,
               },
               type: 'image',
               comments: [],
@@ -53,7 +116,7 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
                 var message = JSON.stringify({error: "error occurred when trying to add new mediaItem with " + error});
                 return res.status(500).send(message);
               }
-
+          
               User.findById(req.userId, function(err, user) {
                 if (err) return res.status(500).json({error: 'error occurred when binding mediaItem to user'});
                 if (!user) return res.status(500).json({error: 'error occurred trying to fetch user'});
@@ -61,38 +124,6 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
                 user.save();
                 return res.status(200).json(mediaItem);
               });
-              
-            
-            });
-          }
-        } );
-      } else {
-        tags.push(tag._id);
-        tagCounter++;
-        if(tagCounter == newTags.length) {
-          MediaItem.create({
-            images: {
-              url: '/images/' + req.file.filename,
-            },
-            type: 'image',
-            comments: [],
-            likes: [],
-            tags: tags,
-            caption: req.body.caption,
-            user: req.userId,
-            location: req.body.location
-          }, function(error,mediaItem) {
-            if(error) {
-              var message = JSON.stringify({error: "error occurred when trying to add new mediaItem with " + error});
-              return res.status(500).send(message);
-            }
-         
-            User.findById(req.userId, function(err, user) {
-              if (err) return res.status(500).json({error: 'error occurred when binding mediaItem to user'});
-              if (!user) return res.status(500).json({error: 'error occurred trying to fetch user'});
-              user.mediaItems.push(mediaItem._id);
-              user.save();
-              return res.status(200).json(mediaItem);
             });
           });
         }
@@ -103,6 +134,7 @@ router.post('/', [VerifyToken, upload.single('data')],function(req,res) {
 
 router.get('/',VerifyToken, function(req,res) {
   MediaItem.find({user: {$nin: req.userId }})
+    .sort({createdAt: 'desc' })
     .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
     .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
     .populate({path: 'tags'})
@@ -119,6 +151,7 @@ router.get('/',VerifyToken, function(req,res) {
 
 router.get('/all', function(req,res) {
   MediaItem.find()
+    .sort({createdAt: 'desc' })
     .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
     .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
     .populate({path: 'tags'})
@@ -154,6 +187,7 @@ router.get('/follows', VerifyToken, function(req,res) {
 });
 router.get('/selfe',VerifyToken, function(req,res) {
   MediaItem.find({user: req.userId})
+    .sort({createdAt: 'desc' })
     .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
     .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
     .populate({path: 'tags'})
@@ -169,6 +203,7 @@ router.get('/selfe',VerifyToken, function(req,res) {
 });
 router.get('/:userId', function(req,res) {
   MediaItem.find({user: req.params.userId})
+    .sort({createdAt: 'desc' })
     .populate({path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']})
     .populate({path: 'comments', populate: {path: 'user', select: ['_id', 'username', 'fullname', 'profilePicture']}})
     .populate({path: 'tags'})
@@ -193,8 +228,13 @@ router.delete('/:id',VerifyToken, function(req,res) {
           if (mediaItem == req.params.id) {
             user.mediaItems.splice(index,1);
             user.save();
-            fs.unlinkSync('./public'+req.body.path);
-            return res.status(200).json({message: 'deleted mediaItem and attached comments and removed attachemt from user'});
+            cloudinary.v2.uploader.destroy(req.body.publicId,function(error, cloudinaryD) {
+              if (error)  {
+                var message = {message: 'error trying to remove image from cloudinary with error: ' + error };
+                return res.status(200).json(message);
+              }   
+              return res.status(200).json({message: 'deleted mediaItem and attached comments and removed attachemt from user'});
+            });  
           }
         });
       });

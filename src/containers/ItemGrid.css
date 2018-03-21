@@ -7,8 +7,12 @@
   padding: 0;
   max-width: 100%
 }
-
-.imgGrid img {
+.imgGrid .smalImgContainer {
   margin: 1em;
-  max-width: 250px;
+  width: 250px;
+  height: 250px;
+
+}
+.imgGrid img {
+ width: 100%;
 }

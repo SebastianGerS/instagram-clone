@@ -4,6 +4,7 @@ const MediaItem = Immutable.Record({
   _id: String,
   images: {
     url: String,
+    id: String
   },
   type: String,
   comments: Array,

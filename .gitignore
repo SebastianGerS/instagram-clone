@@ -25,4 +25,5 @@ yarn-error.log*
 copygram-backend/dbpasswords.js
 copygram-backend/public/images/*
 copygram-backend/.env
+copygram-backend/config.js
 

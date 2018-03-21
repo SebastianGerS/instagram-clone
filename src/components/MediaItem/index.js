@@ -5,7 +5,7 @@ import uuidv1 from "uuid";
 import {toggleLike, createComment, toggleFollow, deleteMediaItem, updateMediaItem} from '../../actions';
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
-import {SERVER_URL} from '../../data/config';
+
 const mapStateToProps = state => {
   return {
     token:  state.token,
@@ -105,7 +105,7 @@ class ConnectedMediaItem extends Component {
 
 
   removeMediaItem() {
-    this.props.dispatch(deleteMediaItem(this.props.mediaItem._id, this.props.mediaItem.images.url, this.props.token.value));
+    this.props.dispatch(deleteMediaItem(this.props.mediaItem._id, this.props.mediaItem.images.id, this.props.token.value));
   }
 
   removeTag(e) {
@@ -204,7 +204,7 @@ class ConnectedMediaItem extends Component {
         <div className="profileBanner">
           <Link className="userLink" to={userLink}>
             <div>
-              <img src={SERVER_URL + this.props.mediaItem.user.profilePicture} alt="profileimage"/>
+              <img src={this.props.mediaItem.user.profilePicture} alt="profileimage"/>
               <div>
                 <p className="bold">{this.props.mediaItem.user.username}</p>
                 <p>{this.props.mediaItem.location}</p>
@@ -241,7 +241,7 @@ class ConnectedMediaItem extends Component {
           </div>
         </div>
         <figure className="imgContainer">
-          <img className="img" src={SERVER_URL +this.props.mediaItem.images.url} alt={this.props.mediaItem.caption}/>
+          <img className="img" src={this.props.mediaItem.images.url} alt={this.props.mediaItem.caption}/>
         </figure>
         <div className="itemInfo">
           <div>

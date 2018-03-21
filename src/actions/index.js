@@ -504,7 +504,7 @@ export const uploadItem = (item, token) => dispatch => {
     });
 };
 
-export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch => {
+export const deleteMediaItem = (mediaItemId, publicId, token ) => dispatch => {
   dispatch(startDeletingMediaItem());
   fetch(`${SERVER_URL}/mediaitems/${mediaItemId}`,
     {
@@ -514,7 +514,7 @@ export const deleteMediaItem = (mediaItemId, mediaItemPath ,token) => dispatch =
         'content-type': 'application/json',
         'accept': 'application/json'
       },
-      body: JSON.stringify({path: mediaItemPath})
+      body: JSON.stringify({publicId: publicId})
     })
     .then(res => res.json())
     .then(res => {
@@ -551,7 +551,7 @@ export const updateUserInfo = (token, data) => dispatch => {
   dispatch(startCreatingMediaItem());
   fetch(`${SERVER_URL}/auth/me`,
     {
-      method: 'POST', 
+      method: 'PUT', 
       headers: {
         'x-access-token': token,
       },

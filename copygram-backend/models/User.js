@@ -7,6 +7,7 @@ var UserSchema = new Schema({
   password: {type: String, minlength: [8, 'passwords must be 8 characters or longer']},
   fullname: String,
   profilePicture: String,
+  profilePictureId: String,
   bio: String,
   website: String,
   mediaItems: [{type: Schema.Types.ObjectId, ref: 'MediaItem' }],

@@ -3,7 +3,7 @@ import './style.css';
 import {connect} from 'react-redux';
 import uuidv1 from "uuid";
 import {SettingsModal} from '../';
-import {SERVER_URL} from '../../data/config';
+
 const mapStateToProps = state => {
   return { currentUser: state.currentUser, isLogedin: state.isLogedin, user: state.user};
 }
@@ -57,7 +57,7 @@ class ConnectedUserProfile extends Component {
         <button key={uuidv1()} className="btn-mobile-settings"></button>];
       }
       if (this.state.user.profilePicture.length !== 0) {
-        profileImage = <img className="profile-img" src={SERVER_URL + this.state.user.profilePicture} alt="profileimg"/>;
+        profileImage = <img className="profile-img" src={this.state.user.profilePicture} alt="profileimg"/>;
       }
       const img =
           <figure key={uuidv1()}className="profile-img-container">

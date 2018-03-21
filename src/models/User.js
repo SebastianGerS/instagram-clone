@@ -6,6 +6,7 @@ const User = Immutable.Record({
   username: String,
   fullname: String,
   profilePicture: String,
+  profilePictureId: String,
   bio: String,
   website: String,
   mediaItems: Array,

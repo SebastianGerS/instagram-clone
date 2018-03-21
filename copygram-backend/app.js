@@ -12,6 +12,8 @@ var db = require('./db');
 
 var app = express();
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 // view engine setup
 
 app.use(logger('dev'));

@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var MediaItemSchema = Schema({
   images: {
     url: String,
+    id: String
   },
   type: String,
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment' }],

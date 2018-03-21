@@ -9,6 +9,14 @@ var VerifyToken = require('../middleware/verifyToken');
 var multer = require('multer');
 var uuidv1 = require("uuid");
 var fs = require('fs');
+var config = require('../config');
+var cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: config.cloudName,
+  api_key: config.cloudKey,
+  api_secret: config.cloudSecret,
+});
 
 var storage = multer.diskStorage({
   destination: './public/images',
@@ -28,6 +36,7 @@ router.post('/register', function(req, res) {
     password: req.body.password,
     fullname: req.body.fullname,
     profilePicture: '',
+    profilePictureId: '',
     bio: '',
     website: '',
     mediaItems: [],
@@ -77,19 +86,13 @@ router.get('/me',VerifyToken ,function(req,res) {
   });
 });
 
-router.post('/me',[VerifyToken,upload.single('profilePicture')] ,function(req,res) {
+router.put('/me',[VerifyToken,upload.single('profilePicture')] ,function(req,res) {
   User.findById(req.userId,function(error,user) {
 
     if(error) return res.status(500).send("error occurred when trying to get user from database" +  error);
     if (!user) return res.status(500).send("no user was found");
 
-    if (req.file) {
-      if(user.profilePicture.length !== 0) {
-        fs.unlinkSync('./public'+user.profilePicture);
-      }
-      user.profilePicture =  '/images/' + req.file.filename;
-    }
-
+    
     if (req.body.username) {
       user.username = req.body.username;
     }
@@ -102,9 +105,42 @@ router.post('/me',[VerifyToken,upload.single('profilePicture')] ,function(req,re
       user.email = req.body.email;
     }
 
-    user.save();
+    if (req.file) {
+      cloudinary.v2.uploader.upload(req.file.path, 
+        { eager: 
+          [
+            { width: 150, height: 150, crop: "fill" }
+          ]                              
+       },
+        function(error, cloudinaryResult) {
+        if (error)  {
+          var message = {message: 'error trying to upload images to cloudinary with error: ' + error };
+          return res.status(200).json(message);
+        }
+        if(user.profilePicture.length !== 0) {
+          cloudinary.v2.uploader.destroy(user.profilePictureId,function(error, cloudinaryD) {
+            if (error)  {
+              var message = {message: 'error trying to remove image from cloudinary with error: ' + error };
+              return res.status(200).json(message);
+            }   
+          }); 
+        }
+        user.profilePicture =  cloudinaryResult.eager[0].secure_url;
+        user.profilePictureId = cloudinaryResult.public_id;
+        user.save();
+        if(!req.body.username && !req.body.email && !req.body.fullname) {
+          return res.status(200).json({message: 'user was sucessfully updated'});
+        }
+      });
+    }
 
-    return res.status(200).json({message: 'user was sucessfully updated'});
+
+  
+    if(!req.file) {
+      user.save();
+      return res.status(200).json({message: 'user was sucessfully updated'});
+    }
+   
   
   });
 });

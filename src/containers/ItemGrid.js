@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './ItemGrid.css';
 import uuidv1 from "uuid";
-import {SERVER_URL} from '../data/config';
 
 class ItemGrid extends Component {
   constructor(props) {
@@ -17,7 +16,7 @@ class ItemGrid extends Component {
     if (this.props.mediaItems) {
       this.props.mediaItems.forEach(mediaItem => {
         if (mediaItem) {
-          let img = <img key={uuidv1()} src={ SERVER_URL + mediaItem.images.url} alt={mediaItem.caption}/>;
+          let img = <figure key={uuidv1()} className="smalImgContainer"><img src={mediaItem.images.url} alt={mediaItem.caption}/></figure>;
           content.push(img);
         }
       });
