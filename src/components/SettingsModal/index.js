@@ -88,7 +88,7 @@ class ConnectedSettingsModal extends Component {
           <label htmlFor="email" >Email</label>
           <input name="email" type="email" placeholder="Email" value={this.state.email} onChange={this.updateStateValue}/>
           <div>
-            <button className="warning" type="cancel" onClick={this.closeModal}>Cancel</button>
+            <button className="warning" type="button" onClick={this.closeModal}>Cancel</button>
             <button className="success" type="submit">Submit</button>
           </div>
         </form>
