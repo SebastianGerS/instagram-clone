@@ -1,0 +1,10 @@
+var config = {
+  username: "mlabdb_username",
+  password: "mlabdb_password",
+  secret: "", //can be annything (used by bcrypt to create cryptated passwords)
+  cloudName: "cloudinary_cloudname",
+  cloudKey: "cloudinary_cloudkey",
+  cloudSecret: "cloudinary_cloudsecret",
+};
+
+module.exports = config;
