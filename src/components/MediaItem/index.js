@@ -263,10 +263,12 @@ class ConnectedMediaItem extends Component {
           <div>
           {comments}
           </div>
+          {this.props.isLogedin &&
           <form className="commentForm" onSubmit={(e) => this.addComment(e)}>
             <textarea name="comment" placeholder="kommentera..." value={this.state.comment} onChange={(e) => this.updateStateValue(e)}/>
             <button type="submit" className="submitButton">Publish</button>
           </form>
+          }
         </div>
       </section>
     );
