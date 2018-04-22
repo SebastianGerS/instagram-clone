@@ -105,8 +105,8 @@ class ConnectedHeader extends Component {
             <li onClick={this.toggleLoginModal}>
               <Link className="link" to="/explore">Explore</Link>
             </li>
-            <li>
-             <button onClick={(e) => this.logout(e)}>Logout</button>
+            <li onClick={(e) => this.logout(e)}>
+              <Link className="link" to="/" >Logout</Link>
             </li>
           </ul>
         </div>;
