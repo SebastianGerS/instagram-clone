@@ -22,8 +22,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #keys
-copygram-backend/dbpasswords.js
 copygram-backend/public/images/*
-copygram-backend/.env
-copygram-backend/config.js
-
+config.js
