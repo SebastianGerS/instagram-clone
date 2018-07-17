@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon copygram-api.js"
   },
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.2",
     "cloudinary": "^1.11.0",
     "cookie-parser": "~1.4.3",
@@ -21,8 +21,5 @@
     "nodemon": "^1.17.2",
     "serve-favicon": "~2.4.5",
     "uuid": "^3.2.1"
-  },
-  "engines": {
-    "nodemon": "^1.17.2"
   }
 }
