@@ -9,6 +9,7 @@ var AuthController = require('./controllers/AuthController');
 var MediaItemController = require('./controllers/MediaItemController');
 var CommentController = require('./controllers/CommentController');
 var db = require('./db');
+var config = require('./config');
 
 var app = express();
 
@@ -21,7 +22,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ limit: '50mb',extended: false }));
 app.use(cookieParser());
 app.use(function(req,res,next){
-  res.header('Access-Control-Allow-Origin', 'http://lab6.sebastiangerstelsollerman.chas.academy');
+  res.header('Access-Control-Allow-Origin', config.allowOrigin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', ['Content-Type', 'x-access-token']);
 
