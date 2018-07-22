@@ -1,0 +1,10 @@
+.wraper {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.app{
+  max-width: 100%;
+}
