@@ -1,8 +1,4 @@
-## Site deployed at http://lab6.sebastiangerstelsollerman.chas.academy/
-
-## backend deployed at https://copygram-backend.herokuapp.com
-
-## example resultset from server: https://copygram-backend.herokuapp.com/mediaItems/all
+## Site deployed at http://copygram.sebastiangerstelsollerman.me
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
