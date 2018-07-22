@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/copygram-backend/node_modules
+
 
 # testing
 /coverage
@@ -22,5 +22,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #keys
-copygram-backend/public/images/*
+/copygram-backend
 config.js
