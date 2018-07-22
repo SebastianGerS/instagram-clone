@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch} from 'react-router-dom';
 import { Home, Profile, Explore, ErrorPage, SignUp, ItemUpload } from '../views';
 import {connect} from 'react-redux';
+import CommonRoute from '../components/CommonRoute';
 
 const mapStateToProps = state => {
   return { isLogedin: state.isLogedin};
@@ -11,25 +12,31 @@ class ConnectedRoot  extends Component {
 
   render() {
     return (
+   
       this.props.isLogedin ?
+      <BrowserRouter>
       <Switch>
-        <Route exact path="/home" component={Home}/>
-        <Route exact path="/profile" component={Profile}/>
-        <Route exact path="/explore" component={Explore}/>
-        <Route exact path="/upload" component={ItemUpload} />
-        <Route exact path="/" component={Explore}/>
-        <Route path="/users/:userId" component={Profile}/>
-        <Route exact path="/register" component={SignUp}/>
-        <Route component={ErrorPage}/>
+        <CommonRoute exact={true} path="/home" component={Home}/>
+        <CommonRoute exact={true} path="/profile" component={Profile}/>
+        <CommonRoute exact={true} path="/explore" component={Explore}/>
+        <CommonRoute exact={true} path="/upload" component={ItemUpload} />
+        <CommonRoute exact={true} path="/" component={Explore}/>
+        <CommonRoute exact={false} path="/users/:userId" component={Profile}/>
+        <CommonRoute exact={true} path="/register" component={SignUp}/>
+        <CommonRoute exact={false} path="" component={ErrorPage}/>
       </Switch>
+      </BrowserRouter>
       : 
+      <BrowserRouter>
       <Switch>
-        <Route exact path="/explore" component={Explore}/>
-        <Route exact path="/" component={Explore}/>
-        <Route path="/users/:userId" component={Profile}/>
-        <Route exact path="/register" component={SignUp}/>
-        <Route component={ErrorPage}/>
+        <CommonRoute exact={true} path="/explore" component={Explore}/>
+        <CommonRoute exact={true} path="/" component={Explore}/>
+        <CommonRoute exact={false} path="/users/:userId" component={Profile}/>
+        <CommonRoute exact={true} path="/register" component={SignUp}/>
+        <CommonRoute exact={false} path="" component={ErrorPage}/>
       </Switch>
+      </BrowserRouter>
+      
     )
   }
 
